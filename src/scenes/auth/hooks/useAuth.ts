@@ -1,4 +1,5 @@
 import { IResponseType } from "constant/commonType";
+import { useLocales } from "locales";
 import { isEmpty } from "lodash";
 import { useSnackbar } from "notistack";
 import { useAppDispatch } from "store";
@@ -8,15 +9,17 @@ import { IRequestLogin, IResLogin } from "../redux/types";
 
 const useAuth = () => {
   const dispatch = useAppDispatch();
+  const { translate } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
 
   const onSignIn = async (payload: IRequestLogin) => {
     try {
       const result: IResponseType<IResLogin> = await apiLogin(payload);
-      if (result?.errors) {
-        payload.callbackError &&
-          payload.callbackError(result?.errors?.messages);
-      } else if (result?.data) {
+      // if (result?.errors) {
+      //   payload.callbackError &&
+      //     payload.callbackError(result?.errors?.messages);
+      // } else
+      if (result?.data) {
         const { token, user } = result.data || {};
         if (token) {
           dispatch(authActions.setTokenSuccess(token));
@@ -45,11 +48,11 @@ const useAuth = () => {
       const result = await apiLogout();
       if (result.data) {
         dispatch(authActions.resetData());
-        enqueueSnackbar("Logout success", { variant: "success" });
+        enqueueSnackbar(translate("logoutSuccess"), { variant: "success" });
       }
     } catch (error) {
       console.error(error);
-      enqueueSnackbar("Unable to logout!", { variant: "error" });
+      enqueueSnackbar(translate("logoutFail"), { variant: "error" });
     }
   };
   return {

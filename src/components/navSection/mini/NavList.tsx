@@ -83,7 +83,10 @@ export default function NavList({ data, depth, hasChild }: NavListRootProps) {
             onMouseLeave: handleClose,
           }}
         >
-          <NavSubList data={data.children} depth={depth} />
+          <NavSubList
+            data={data.children?.filter((e) => !e.hideMenu) || []}
+            depth={depth}
+          />
         </StyledPopover>
       )}
     </>

@@ -1,4 +1,5 @@
 import React from "react";
+import { navigate } from "gatsby";
 import { m } from "framer-motion";
 // @mui
 import { Button, Typography } from "@mui/material";
@@ -6,8 +7,10 @@ import { Button, Typography } from "@mui/material";
 import MotionContainer from "components/animate/MotionLazyContainer";
 // assets
 import PageNotFoundIllustration from "assets/illustrations/PageNotFoundIllustration";
-import { Link } from "gatsby";
+import { AuthSelector } from "scenes/auth/redux/slice";
+import { useAppSelector } from "store";
 import CompactLayout from "layouts/compactLayout";
+import { PATH_AUTH } from "constant/routeConstant";
 
 const animatedIn = {
   animate: {
@@ -21,6 +24,14 @@ const animatedIn = {
   },
 };
 export default function Page404() {
+  const token = useAppSelector(AuthSelector.getToken);
+  const onNavigate = () => {
+    if (token) {
+      navigate("/");
+    } else {
+      navigate(PATH_AUTH.login);
+    }
+  };
   return (
     <CompactLayout>
       <header>
@@ -50,7 +61,7 @@ export default function Page404() {
           />
         </m.div>
 
-        <Button href="/" size="large" variant="contained">
+        <Button onClick={onNavigate} size="large" variant="contained">
           Go to Home
         </Button>
       </MotionContainer>

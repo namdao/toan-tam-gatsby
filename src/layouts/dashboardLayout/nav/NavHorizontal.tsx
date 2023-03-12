@@ -9,7 +9,7 @@ import { bgBlur } from "utils/cssStyles";
 // components
 import { NavSectionHorizontal } from "components/navSection";
 //
-import navConfig from "./config-navigation";
+import navConfig from "constant/navConstant";
 
 // ----------------------------------------------------------------------
 

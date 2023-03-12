@@ -1,4 +1,10 @@
+import authLangs from "scenes/auth/langs/vi";
+
 const vi = {
+  hi: "Xin chào",
+  logout: "Đăng xuất",
+  logoutSuccess: "Đăng xuất thành công",
+  logoutFail: "Đăng xuất thất bại",
   wellcomeCompany: "Chào mừng đến với Toàn Tâm Print Pro Co.,Ltd",
   statistic: {
     title: "Thống kê",
@@ -71,4 +77,7 @@ const vi = {
   },
 };
 
-export default vi;
+export default {
+  ...vi,
+  auth: authLangs,
+};

@@ -1,5 +1,11 @@
+import authLangs from "scenes/auth/langs/en";
+
 const en = {
-  wellcomeCompany: "Chào mừng đến với Toàn Tâm Print Pro Co.,Ltd",
+  hi: "Hi",
+  logout: "Logout",
+  logoutSuccess: "Logout success",
+  logoutFail: "Logout fail",
+  wellcomeCompany: "Wellcome to Toan Tam Print Pro Co.,Ltd",
   statistic: {
     title: "Statistic",
     sumary: "Sumary",
@@ -28,4 +34,7 @@ const en = {
   },
 };
 
-export default en;
+export default {
+  ...en,
+  auth: authLangs,
+};

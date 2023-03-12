@@ -20,7 +20,7 @@ export type NavListProps = {
   caption?: string;
   disabled?: boolean;
   roles?: string[];
-  hideMenu: boolean;
+  hideMenu?: boolean;
   children?: NavListProps[];
 };
 

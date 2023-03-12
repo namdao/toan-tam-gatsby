@@ -1,5 +1,5 @@
 export interface IResErrors {
-  messages: string;
+  messages: string | Array<string> | Record<string, string>;
   code: number;
 }
 export interface IResponseType<T> {

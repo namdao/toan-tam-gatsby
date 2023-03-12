@@ -3,15 +3,15 @@ import React from "react";
 import { Stack, Button, Typography, Box } from "@mui/material";
 import { useAppSelector } from "store";
 import Svg from "utils/svg";
-import { PATH_APP } from "constant/routeConstant";
 import { AuthSelector } from "scenes/auth/redux/slice";
 import { useLocales } from "locales";
+import useAuth from "scenes/auth/hooks/useAuth";
 
 // ----------------------------------------------------------------------
 
 export default function NavDocs() {
   const user = useAppSelector(AuthSelector.getProfile);
-
+  const { onSignOut } = useAuth();
   const { translate } = useLocales();
 
   return (
@@ -30,24 +30,12 @@ export default function NavDocs() {
 
       <div>
         <Typography gutterBottom variant="subtitle1">
-          {`${translate("docs.hi")}, ${user?.userName}`}
-        </Typography>
-
-        <Typography
-          variant="body2"
-          sx={{ color: "text.secondary", whiteSpace: "pre-line" }}
-        >
-          {`${translate("docs.description")}`}
+          {`${translate("hi")}, ${user?.userName}`}
         </Typography>
       </div>
 
-      <Button
-        href={PATH_APP.root}
-        target="_blank"
-        rel="noopener"
-        variant="contained"
-      >
-        {`${translate("docs.documentation")}`}
+      <Button variant="contained" onClick={onSignOut}>
+        {`${translate("logout")}`}
       </Button>
     </Stack>
   );

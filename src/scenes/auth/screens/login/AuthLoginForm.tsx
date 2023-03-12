@@ -12,6 +12,7 @@ import { useAppSelector } from "store";
 import { AuthSelector } from "scenes/auth/redux/slice";
 import { IRequestLogin } from "scenes/auth/redux/types";
 import useAuth from "scenes/auth/hooks/useAuth";
+import { useLocales } from "locales";
 
 type FormValuesProps = {
   email: string;
@@ -21,6 +22,7 @@ type FormValuesProps = {
 
 export default function AuthLoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const { translate } = useLocales();
   const { onSignIn } = useAuth();
   const token = useAppSelector(AuthSelector.getToken);
 
@@ -125,7 +127,7 @@ export default function AuthLoginForm() {
           },
         }}
       >
-        Login
+        {translate("auth.login")}
       </LoadingButton>
     </FormProvider>
   );

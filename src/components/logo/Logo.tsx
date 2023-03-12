@@ -5,10 +5,11 @@ import { Box, Link, BoxProps } from "@mui/material";
 
 export interface LogoProps extends BoxProps {
   disabledLink?: boolean;
+  sizeLogo?: number;
 }
 
 const Logo = forwardRef<HTMLDivElement, LogoProps>(
-  ({ disabledLink = false, sx, ...other }, ref) => {
+  ({ disabledLink = false, sx, sizeLogo = 200, ...other }, ref) => {
     const theme = useTheme();
 
     const PRIMARY_LIGHT = theme.palette.primary.light;
@@ -22,7 +23,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
         ref={ref}
         component="div"
         sx={{
-          width: 200,
+          width: sizeLogo,
           height: "auto",
           alignItems: "center",
           margin: "auto",

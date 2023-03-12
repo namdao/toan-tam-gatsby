@@ -10,7 +10,7 @@ import Logo from "components/logo";
 import Scrollbar from "components/scrollbar";
 import { NavSectionVertical } from "components/navSection";
 //
-import navConfig from "./config-navigation";
+import navConfig from "constant/navConstant";
 import NavDocs from "./NavDocs";
 import NavAccount from "./NavAccount";
 import NavToggleButton from "./NavToggleButton";

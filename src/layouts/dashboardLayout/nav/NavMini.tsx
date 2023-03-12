@@ -9,7 +9,7 @@ import { hideScrollbarX } from "utils/cssStyles";
 import Logo from "components/logo";
 import { NavSectionMini } from "components/navSection";
 //
-import navConfig from "./config-navigation";
+import navConfig from "constant/navConstant";
 import NavToggleButton from "./NavToggleButton";
 
 // ----------------------------------------------------------------------
@@ -40,7 +40,7 @@ export default function NavMini() {
           ...hideScrollbarX,
         }}
       >
-        <Logo sx={{ mx: "auto", my: 2 }} />
+        <Logo sx={{ mx: "auto", my: 2 }} sizeLogo={60} />
 
         <NavSectionMini data={navConfig} />
       </Stack>

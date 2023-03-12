@@ -1,6 +1,8 @@
 import axios, { AxiosResponse, AxiosError } from "axios";
 import appConstant from "constant/appConstant";
+import { enqueueSnackbar } from "notistack";
 import { IResponseType } from "constant/commonType";
+import { isArray } from "lodash";
 
 const TIMEOUT = 1 * 60 * 1000;
 axios.defaults.timeout = TIMEOUT;
@@ -62,6 +64,26 @@ const setupOnResponseInterceptors = () => {
   const onResponseSuccess = (
     response: AxiosResponse<IResponseType<any>>
   ): any => {
+    if (response.data?.errors) {
+      let { messages } = response.data.errors;
+      if (typeof messages === "object") {
+        messages = Object.values(messages);
+      }
+      if (isArray(messages)) {
+        const firstMessage = messages.find((e) => {
+          if (typeof e === "string") {
+            return e;
+          } else if (isArray(e)) {
+            return e[0];
+          } else {
+            return "lỗi không xác định";
+          }
+        });
+        const messageFinal = firstMessage?.[0] || firstMessage;
+        return enqueueSnackbar(messageFinal, { variant: "error" });
+      }
+      return enqueueSnackbar(messages, { variant: "error" });
+    }
     return response?.data;
   };
   const onResponseError = (errors: AxiosError): Promise<AxiosResponse<any>> => {

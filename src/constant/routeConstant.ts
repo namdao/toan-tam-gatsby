@@ -1,5 +1,5 @@
 const ROOTS_AUTH = "/auth";
-const ROOTS_APP = "/app";
+const ROOT_STATISTIC = "/thong-ke";
 const ROOT_USER = "/user";
 const ROOT_CUSTOMER = "/customer";
 const ROOT_COMPANY = "/company";
@@ -7,73 +7,83 @@ const ROOT_PRINTTYPE = "/print-type";
 const ROOT_CATEGORIES = "/categories";
 const ROOT_PAPERTYPE = "/paper-type";
 const ROOT_OUTSOURC = "/oursource";
+const ROOT_ORDER = "/order";
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
   login: `${ROOTS_AUTH}/login`,
   register: `${ROOTS_AUTH}/register`,
 };
 export const PATH_APP = {
-  root: ROOTS_APP,
   statistic: {
-    summary: `${ROOTS_APP}/thong-ke-tong-quat`,
-    sale: `${ROOTS_APP}/thong-ke-don-hang-sale`,
-    customer: `${ROOTS_APP}/doanh-so-khach-hang`,
-    debit: `${ROOTS_APP}/doanh-so-cong-no`,
+    root: ROOT_STATISTIC,
+    summary: `${ROOT_STATISTIC}/thong-ke-tong-quat`,
+    sale: `${ROOT_STATISTIC}/thong-ke-don-hang-sale`,
+    customer: `${ROOT_STATISTIC}/doanh-so-khach-hang`,
+    debit: `${ROOT_STATISTIC}/doanh-so-cong-no`,
   },
-  profile: `${ROOTS_APP}/profile`,
+  profile: `/profile`,
   user: {
-    root: `${ROOTS_APP}${ROOT_USER}`,
-    list: `${ROOTS_APP}${ROOT_USER}/list`,
-    add: `${ROOTS_APP}${ROOT_USER}/add`,
-    view: `${ROOTS_APP}${ROOT_USER}/view/:userId`,
-    update: `${ROOTS_APP}${ROOT_USER}/edit/:userId`,
-    profile: `${ROOTS_APP}${ROOT_USER}/profile`,
+    root: ROOT_USER,
+    list: `${ROOT_USER}/list`,
+    add: `${ROOT_USER}/add`,
+    view: `${ROOT_USER}/view/:userId`,
+    update: `${ROOT_USER}/edit/:userId`,
+    profile: `${ROOT_USER}/profile`,
   },
   customer: {
-    root: `${ROOTS_APP}${ROOT_CUSTOMER}`,
-    list: `${ROOTS_APP}${ROOT_CUSTOMER}/list`,
-    add: `${ROOTS_APP}${ROOT_CUSTOMER}/add`,
-    view: `${ROOTS_APP}${ROOT_CUSTOMER}/view/:customerId`,
-    update: `${ROOTS_APP}${ROOT_CUSTOMER}/edit/:customerId`,
+    root: `${ROOT_CUSTOMER}`,
+    list: `${ROOT_CUSTOMER}/list`,
+    add: `${ROOT_CUSTOMER}/add`,
+    view: `${ROOT_CUSTOMER}/view/:customerId`,
+    update: `${ROOT_CUSTOMER}/edit/:customerId`,
   },
   company: {
-    root: `${ROOTS_APP}${ROOT_COMPANY}`,
-    list: `${ROOTS_APP}${ROOT_COMPANY}/list`,
-    add: `${ROOTS_APP}${ROOT_COMPANY}/add`,
-    view: `${ROOTS_APP}${ROOT_COMPANY}/view/:companyId`,
-    update: `${ROOTS_APP}${ROOT_COMPANY}/edit/:companyId`,
+    root: `${ROOT_COMPANY}`,
+    list: `${ROOT_COMPANY}/list`,
+    add: `${ROOT_COMPANY}/add`,
+    view: `${ROOT_COMPANY}/view/:companyId`,
+    update: `${ROOT_COMPANY}/edit/:companyId`,
   },
   printType: {
-    root: `${ROOTS_APP}${ROOT_PRINTTYPE}`,
-    list: `${ROOTS_APP}${ROOT_PRINTTYPE}/list`,
-    add: `${ROOTS_APP}${ROOT_PRINTTYPE}/add`,
-    view: `${ROOTS_APP}${ROOT_PRINTTYPE}/view/:printTypeId`,
-    update: `${ROOTS_APP}${ROOT_PRINTTYPE}/edit/:printTypeId`,
+    root: `${ROOT_PRINTTYPE}`,
+    list: `${ROOT_PRINTTYPE}/list`,
+    add: `${ROOT_PRINTTYPE}/add`,
+    view: `${ROOT_PRINTTYPE}/view/:printTypeId`,
+    update: `${ROOT_PRINTTYPE}/edit/:printTypeId`,
   },
   categories: {
-    root: `${ROOTS_APP}${ROOT_CATEGORIES}`,
-    list: `${ROOTS_APP}${ROOT_CATEGORIES}/list`,
-    add: `${ROOTS_APP}${ROOT_CATEGORIES}/add`,
-    view: `${ROOTS_APP}${ROOT_CATEGORIES}/view/:categoryId`,
-    update: `${ROOTS_APP}${ROOT_CATEGORIES}/edit/:categoryId`,
+    root: `${ROOT_CATEGORIES}`,
+    list: `${ROOT_CATEGORIES}/list`,
+    add: `${ROOT_CATEGORIES}/add`,
+    view: `${ROOT_CATEGORIES}/view/:categoryId`,
+    update: `${ROOT_CATEGORIES}/edit/:categoryId`,
   },
   paperType: {
-    root: `${ROOTS_APP}${ROOT_PAPERTYPE}`,
-    list: `${ROOTS_APP}${ROOT_PAPERTYPE}/list`,
-    add: `${ROOTS_APP}${ROOT_PAPERTYPE}/add`,
-    view: `${ROOTS_APP}${ROOT_PAPERTYPE}/view/:paperTypeId`,
-    update: `${ROOTS_APP}${ROOT_PAPERTYPE}/edit/:paperTypeId`,
+    root: `${ROOT_PAPERTYPE}`,
+    list: `${ROOT_PAPERTYPE}/list`,
+    add: `${ROOT_PAPERTYPE}/add`,
+    view: `${ROOT_PAPERTYPE}/view/:paperTypeId`,
+    update: `${ROOT_PAPERTYPE}/edit/:paperTypeId`,
   },
   outsource: {
-    root: `${ROOTS_APP}${ROOT_OUTSOURC}`,
-    list: `${ROOTS_APP}${ROOT_OUTSOURC}/list`,
-    add: `${ROOTS_APP}${ROOT_OUTSOURC}/add`,
-    view: `${ROOTS_APP}${ROOT_OUTSOURC}/view/:outsourceId`,
-    update: `${ROOTS_APP}${ROOT_OUTSOURC}/edit/:outsourceId`,
+    root: `${ROOT_OUTSOURC}`,
+    list: `${ROOT_OUTSOURC}/list`,
+    add: `${ROOT_OUTSOURC}/add`,
+    view: `${ROOT_OUTSOURC}/view/:outsourceId`,
+    update: `${ROOT_OUTSOURC}/edit/:outsourceId`,
+  },
+  order: {
+    root: ROOT_ORDER,
+    search: `${ROOT_ORDER}/tim-kiem-don-hang`,
+    processing: `${ROOT_ORDER}/don-hang-dang-thuc-hien`,
+    needPaid: `${ROOT_ORDER}/don-hang-can-thanh-toan`,
+    needCheck: `${ROOT_ORDER}/don-hang-can-kiem-tra`,
+    needConfirm: `${ROOT_ORDER}/don-hang-can-xac-nhan`,
+    stored: `${ROOT_ORDER}/don-hang-luu-kho`,
   },
 
   orther: {
-    permissionDenied: `${ROOTS_APP}/permission-denied`,
-    blank: `${ROOTS_APP}/blank`,
+    permissionDenied: `/permission-denied`,
+    blank: `/blank`,
   },
 };
