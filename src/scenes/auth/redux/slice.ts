@@ -55,7 +55,8 @@ const authSlice = createSlice({
 // Selectors
 const getToken = (state: RootState) => state.data.auth.token;
 const getProfile = (state: RootState) => state.data.auth.profile;
-export const AuthSelector = { getToken, getProfile };
+const getRolesUser = (state: RootState) => state.data.auth.profile.roles;
+export const AuthSelector = { getToken, getProfile, getRolesUser };
 
 // Actions
 export const authActions = authSlice.actions;

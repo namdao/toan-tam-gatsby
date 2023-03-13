@@ -22,6 +22,7 @@ export type NavListProps = {
   roles?: string[];
   hideMenu?: boolean;
   children?: NavListProps[];
+  iconify?: string;
 };
 
 export interface NavSectionProps extends StackProps {

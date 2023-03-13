@@ -7,5 +7,15 @@ const appConstant = {
     SESSION: "users/session",
   },
   LANGS_DEFAULT: "vi",
+  ROLES: {
+    ADMIN: "Admin",
+    SALER: "Saler",
+    DESIGNER: "Designer",
+    PRINTER: "Printer",
+    STORE: "Store",
+    DELIVER: "Deliver",
+    ACCOUNTANT: "Accountant",
+    MANAGER: "Manager",
+  },
 };
 export default appConstant;

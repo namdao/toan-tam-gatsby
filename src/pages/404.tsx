@@ -11,6 +11,7 @@ import { AuthSelector } from "scenes/auth/redux/slice";
 import { useAppSelector } from "store";
 import CompactLayout from "layouts/compactLayout";
 import { PATH_AUTH } from "constant/routeConstant";
+import { useLocales } from "locales";
 
 const animatedIn = {
   animate: {
@@ -25,6 +26,7 @@ const animatedIn = {
 };
 export default function Page404() {
   const token = useAppSelector(AuthSelector.getToken);
+  const { translate } = useLocales();
   const onNavigate = () => {
     if (token) {
       navigate("/");
@@ -35,20 +37,13 @@ export default function Page404() {
   return (
     <CompactLayout>
       <header>
-        <title> 404 Page Not Found</title>
+        <title>{translate("notfound")}</title>
       </header>
 
       <MotionContainer>
         <m.div variants={animatedIn}>
           <Typography variant="h3" paragraph>
-            Sorry, page not found!
-          </Typography>
-        </m.div>
-
-        <m.div variants={animatedIn}>
-          <Typography sx={{ color: "text.secondary" }}>
-            Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve
-            mistyped the URL? Be sure to check your spelling.
+            {translate("notfound")}
           </Typography>
         </m.div>
 
@@ -62,7 +57,7 @@ export default function Page404() {
         </m.div>
 
         <Button onClick={onNavigate} size="large" variant="contained">
-          Go to Home
+          {translate("gotoHome")}
         </Button>
       </MotionContainer>
     </CompactLayout>

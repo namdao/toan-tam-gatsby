@@ -5,14 +5,12 @@ import navConfig from "constant/navConstant";
 import DashboardLayout from "layouts/dashboardLayout";
 import { PATH_APP } from "constant/routeConstant";
 import { navigate } from "gatsby";
-import { useLocales } from "locales";
 
 const NotFoundTemp = () => {
   const location = useLocation();
   const { pathname } = location;
 
   useEffect(() => {
-    console.log(pathname);
     if (pathname === "/") {
       navigate(PATH_APP.order.processing);
       return;
@@ -21,50 +19,43 @@ const NotFoundTemp = () => {
   }, []);
   return <></>;
 };
-const Title = ({ title, ...rest }: { title: string }): JSX.Element => {
-  const { translate } = useLocales();
-  return <div>{translate(title)}</div>;
-};
 
 const AppPages = () => {
   const listRoutingApp = () => {
-    const listRoute = navConfig.map((e) => e.items);
+    const listRoute = navConfig.map((e) => e.items).flat(1);
     return listRoute.map((e) => {
-      return e.map((x) => {
-        const pathNav = x.path;
-        const component = x?.component || Title;
-        if (x.children) {
-          return (
-            <AuthGuard
-              key={pathNav}
-              path={pathNav}
-              component={component}
-              title={x.title}
-            >
-              {x.children.map((y) => {
-                const subPath = y.path.replace(pathNav, "");
-                const subComponent = y?.component || Title;
-                return (
-                  <AuthGuard
-                    key={subPath}
-                    path={subPath}
-                    component={subComponent}
-                    title={y.title}
-                  />
-                );
-              })}
-            </AuthGuard>
-          );
-        }
+      const pathNav = e.path;
+      if (e.children.length >= 1) {
         return (
           <AuthGuard
             key={pathNav}
             path={pathNav}
-            component={component}
-            title={x.title}
-          />
+            component={e.component}
+            roles={e.roles}
+          >
+            {e.children.map((child) => {
+              const subPath = child.path.replace(pathNav, "");
+              const subComponent = child?.component;
+              return (
+                <AuthGuard
+                  key={subPath}
+                  path={subPath}
+                  component={subComponent}
+                  roles={e.roles}
+                />
+              );
+            })}
+          </AuthGuard>
         );
-      });
+      }
+      return (
+        <AuthGuard
+          key={pathNav}
+          path={pathNav}
+          component={e.component}
+          roles={e.roles}
+        />
+      );
     });
   };
   return (

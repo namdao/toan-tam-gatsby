@@ -5,9 +5,6 @@ import { Link } from "gatsby";
 
 // locales
 import { useLocales } from "locales";
-// auth
-// import RoleBasedGuard from '../../../auth/RoleBasedGuard';
-//
 import Iconify from "components/iconify";
 //
 import { NavItemProps } from "../types";
@@ -71,7 +68,7 @@ export default function NavItem({
         </Box>
       )}
 
-      {!!children && (
+      {!!children && children.length > 0 && (
         <Iconify
           width={16}
           icon={
@@ -93,7 +90,7 @@ export default function NavItem({
       );
 
     // Has child
-    if (children) {
+    if (children && children.length > 0) {
       return renderContent;
     }
 
@@ -105,6 +102,4 @@ export default function NavItem({
     );
   };
   return renderItem();
-
-  // return <RoleBasedGuard roles={roles}> {renderItem()} </RoleBasedGuard>;
 }
