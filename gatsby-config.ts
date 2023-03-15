@@ -15,7 +15,6 @@ const config: GatsbyConfig = {
   plugins: [
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-root-import",
-    "gatsby-plugin-material-ui",
     "gatsby-theme-material-ui",
     "gatsby-plugin-image",
     {
