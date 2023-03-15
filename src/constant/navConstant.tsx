@@ -71,274 +71,6 @@ const navConfig = [
     ],
   },
 
-  // Basic info
-  {
-    subheader: "basicInfo.title",
-    items: [
-      // USER
-      {
-        title: "basicInfo.user.title",
-        path: PATH_APP.user.root,
-        icon: iconify("mdi:user-group"),
-        component: () => <></>,
-        roles: [],
-        children: [
-          {
-            title: "basicInfo.user.list",
-            path: PATH_APP.user.list,
-            component: UserList,
-            roles: [ROLES.ADMIN],
-          },
-          {
-            title: "basicInfo.user.add",
-            path: PATH_APP.user.add,
-            component: UserAdd,
-            roles: [ROLES.ADMIN],
-          },
-          {
-            title: "basicInfo.user.update",
-            path: PATH_APP.user.update,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN],
-          },
-          {
-            title: "basicInfo.user.view",
-            path: PATH_APP.user.view,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN],
-          },
-          {
-            title: "basicInfo.user.profile",
-            path: PATH_APP.user.profile,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [],
-          },
-        ],
-      },
-
-      // Customer
-      {
-        title: "basicInfo.customer.title",
-        path: PATH_APP.customer.root,
-        icon: iconify("mdi:user"),
-        component: () => <></>,
-        roles: [],
-        children: [
-          {
-            title: "basicInfo.customer.list",
-            path: PATH_APP.customer.list,
-            component: CustomerList,
-            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
-          },
-          {
-            title: "basicInfo.customer.add",
-            path: PATH_APP.customer.add,
-            component: CustomerAdd,
-            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
-          },
-          {
-            title: "basicInfo.customer.update",
-            path: PATH_APP.customer.update,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
-          },
-          {
-            title: "basicInfo.customer.view",
-            path: PATH_APP.customer.view,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
-          },
-        ],
-      },
-
-      // Company
-      {
-        title: "basicInfo.company.title",
-        path: PATH_APP.company.root,
-        icon: iconify("mdi:company"),
-        component: () => <></>,
-        roles: [],
-        children: [
-          {
-            title: "basicInfo.company.list",
-            path: PATH_APP.company.list,
-            component: CompanyList,
-            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
-          },
-          {
-            title: "basicInfo.company.add",
-            path: PATH_APP.company.add,
-            component: CompanyAdd,
-            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
-          },
-          {
-            title: "basicInfo.company.update",
-            path: PATH_APP.company.update,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
-          },
-          {
-            title: "basicInfo.company.view",
-            path: PATH_APP.company.view,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
-          },
-        ],
-      },
-      // Print type
-      {
-        title: "basicInfo.printType.title",
-        path: PATH_APP.printType.root,
-        icon: iconify("material-symbols:print"),
-        component: () => <></>,
-        roles: [],
-        children: [
-          {
-            title: "basicInfo.printType.list",
-            path: PATH_APP.printType.list,
-            component: PrintTypeList,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.printType.add",
-            path: PATH_APP.printType.add,
-            component: PrintTypeAdd,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.printType.update",
-            path: PATH_APP.printType.update,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.printType.view",
-            path: PATH_APP.printType.view,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-        ],
-      },
-      // Categories
-      {
-        title: "basicInfo.categories.title",
-        path: PATH_APP.categories.root,
-        icon: iconify("carbon:categories"),
-        component: () => <></>,
-        roles: [],
-        children: [
-          {
-            title: "basicInfo.categories.list",
-            path: PATH_APP.categories.list,
-            component: CategoryList,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.categories.add",
-            path: PATH_APP.categories.add,
-            component: CategoryAdd,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.categories.update",
-            path: PATH_APP.categories.update,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.categories.view",
-            path: PATH_APP.categories.view,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-        ],
-      },
-      // paperType
-      {
-        title: "basicInfo.paperType.title",
-        path: PATH_APP.paperType.root,
-        icon: iconify("mdi:paper-check"),
-        component: () => <></>,
-        roles: [],
-        children: [
-          {
-            title: "basicInfo.paperType.list",
-            path: PATH_APP.paperType.list,
-            component: PaperList,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.paperType.add",
-            path: PATH_APP.paperType.add,
-            component: PaperAdd,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.paperType.update",
-            path: PATH_APP.paperType.update,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.paperType.view",
-            path: PATH_APP.paperType.view,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-        ],
-      },
-      // outsource
-      {
-        title: "basicInfo.outsource.title",
-        path: PATH_APP.outsource.root,
-        icon: iconify("mdi:paper-text-outline"),
-        component: () => <></>,
-        roles: [],
-        children: [
-          {
-            title: "basicInfo.outsource.list",
-            path: PATH_APP.outsource.list,
-            component: OutsourceList,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.outsource.add",
-            path: PATH_APP.outsource.add,
-            component: OutsourceAdd,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.outsource.update",
-            path: PATH_APP.outsource.update,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.outsource.view",
-            path: PATH_APP.outsource.view,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-        ],
-      },
-    ],
-  },
-
   // Order
   // ----------------------------------------------------------------------
   {
@@ -350,7 +82,13 @@ const navConfig = [
         icon: iconify("material-symbols:screen-search-desktop-rounded"),
         component: OrderSearch,
         children: [],
-        roles: [],
+        roles: [
+          ROLES.ADMIN,
+          ROLES.MANAGER,
+          ROLES.ACCOUNTANT,
+          ROLES.SALER,
+          ROLES.STORE,
+        ],
       },
       {
         title: "order.processing",
@@ -397,11 +135,279 @@ const navConfig = [
         component: OrderListStored,
         children: [],
         roles: [
-          // ROLES.ADMIN,
+          ROLES.ADMIN,
           ROLES.MANAGER,
           ROLES.ACCOUNTANT,
           ROLES.SALER,
           ROLES.STORE,
+        ],
+      },
+    ],
+  },
+
+  // Basic info
+  {
+    subheader: "basicInfo.title",
+    items: [
+      // USER
+      {
+        title: "basicInfo.user.title",
+        path: PATH_APP.user.root,
+        icon: iconify("mdi:user-group"),
+        component: () => <></>,
+        roles: [ROLES.ADMIN],
+        children: [
+          {
+            title: "basicInfo.user.list",
+            path: PATH_APP.user.list,
+            component: UserList,
+            roles: [ROLES.ADMIN],
+          },
+          {
+            title: "basicInfo.user.add",
+            path: PATH_APP.user.add,
+            component: UserAdd,
+            roles: [ROLES.ADMIN],
+          },
+          {
+            title: "basicInfo.user.update",
+            path: PATH_APP.user.update,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [ROLES.ADMIN],
+          },
+          {
+            title: "basicInfo.user.view",
+            path: PATH_APP.user.view,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [ROLES.ADMIN],
+          },
+          {
+            title: "basicInfo.user.profile",
+            path: PATH_APP.user.profile,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [],
+          },
+        ],
+      },
+
+      // Customer
+      {
+        title: "basicInfo.customer.title",
+        path: PATH_APP.customer.root,
+        icon: iconify("mdi:user"),
+        component: () => <></>,
+        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
+        children: [
+          {
+            title: "basicInfo.customer.list",
+            path: PATH_APP.customer.list,
+            component: CustomerList,
+            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
+          },
+          {
+            title: "basicInfo.customer.add",
+            path: PATH_APP.customer.add,
+            component: CustomerAdd,
+            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
+          },
+          {
+            title: "basicInfo.customer.update",
+            path: PATH_APP.customer.update,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
+          },
+          {
+            title: "basicInfo.customer.view",
+            path: PATH_APP.customer.view,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
+          },
+        ],
+      },
+
+      // Company
+      {
+        title: "basicInfo.company.title",
+        path: PATH_APP.company.root,
+        icon: iconify("mdi:company"),
+        component: () => <></>,
+        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
+        children: [
+          {
+            title: "basicInfo.company.list",
+            path: PATH_APP.company.list,
+            component: CompanyList,
+            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
+          },
+          {
+            title: "basicInfo.company.add",
+            path: PATH_APP.company.add,
+            component: CompanyAdd,
+            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
+          },
+          {
+            title: "basicInfo.company.update",
+            path: PATH_APP.company.update,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
+          },
+          {
+            title: "basicInfo.company.view",
+            path: PATH_APP.company.view,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
+          },
+        ],
+      },
+      // Print type
+      {
+        title: "basicInfo.printType.title",
+        path: PATH_APP.printType.root,
+        icon: iconify("material-symbols:print"),
+        component: () => <></>,
+        roles: [ROLES.ADMIN, ROLES.MANAGER],
+        children: [
+          {
+            title: "basicInfo.printType.list",
+            path: PATH_APP.printType.list,
+            component: PrintTypeList,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+          {
+            title: "basicInfo.printType.add",
+            path: PATH_APP.printType.add,
+            component: PrintTypeAdd,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+          {
+            title: "basicInfo.printType.update",
+            path: PATH_APP.printType.update,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+          {
+            title: "basicInfo.printType.view",
+            path: PATH_APP.printType.view,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+        ],
+      },
+      // Categories
+      {
+        title: "basicInfo.categories.title",
+        path: PATH_APP.categories.root,
+        icon: iconify("carbon:categories"),
+        component: () => <></>,
+        roles: [ROLES.ADMIN, ROLES.MANAGER],
+        children: [
+          {
+            title: "basicInfo.categories.list",
+            path: PATH_APP.categories.list,
+            component: CategoryList,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+          {
+            title: "basicInfo.categories.add",
+            path: PATH_APP.categories.add,
+            component: CategoryAdd,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+          {
+            title: "basicInfo.categories.update",
+            path: PATH_APP.categories.update,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+          {
+            title: "basicInfo.categories.view",
+            path: PATH_APP.categories.view,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+        ],
+      },
+      // paperType
+      {
+        title: "basicInfo.paperType.title",
+        path: PATH_APP.paperType.root,
+        icon: iconify("mdi:paper-check"),
+        component: () => <></>,
+        roles: [ROLES.ADMIN, ROLES.MANAGER],
+        children: [
+          {
+            title: "basicInfo.paperType.list",
+            path: PATH_APP.paperType.list,
+            component: PaperList,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+          {
+            title: "basicInfo.paperType.add",
+            path: PATH_APP.paperType.add,
+            component: PaperAdd,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+          {
+            title: "basicInfo.paperType.update",
+            path: PATH_APP.paperType.update,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+          {
+            title: "basicInfo.paperType.view",
+            path: PATH_APP.paperType.view,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+        ],
+      },
+      // outsource
+      {
+        title: "basicInfo.outsource.title",
+        path: PATH_APP.outsource.root,
+        icon: iconify("mdi:paper-text-outline"),
+        component: () => <></>,
+        roles: [ROLES.ADMIN, ROLES.MANAGER],
+        children: [
+          {
+            title: "basicInfo.outsource.list",
+            path: PATH_APP.outsource.list,
+            component: OutsourceList,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+          {
+            title: "basicInfo.outsource.add",
+            path: PATH_APP.outsource.add,
+            component: OutsourceAdd,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+          {
+            title: "basicInfo.outsource.update",
+            path: PATH_APP.outsource.update,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
+          {
+            title: "basicInfo.outsource.view",
+            path: PATH_APP.outsource.view,
+            hideMenu: true,
+            component: () => <></>,
+            roles: [ROLES.ADMIN, ROLES.MANAGER],
+          },
         ],
       },
     ],

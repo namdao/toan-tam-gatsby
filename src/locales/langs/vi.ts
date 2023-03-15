@@ -1,5 +1,5 @@
 import authLangs from "scenes/auth/langs/vi";
-
+import orderLangs from "scenes/orders/langs/vi";
 const vi = {
   hi: "Xin chào",
   logout: "Đăng xuất",
@@ -83,4 +83,5 @@ const vi = {
 export default {
   ...vi,
   auth: authLangs,
+  orders: orderLangs,
 };

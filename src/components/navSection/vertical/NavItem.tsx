@@ -1,7 +1,7 @@
 import React from "react";
 // @mui
-import { Box, Tooltip, Link as LinkMui, ListItemText } from "@mui/material";
-import { Link } from "gatsby";
+import { Box, Tooltip, ListItemText } from "@mui/material";
+import { Link } from "gatsby-theme-material-ui";
 
 // locales
 import { useLocales } from "locales";
@@ -84,9 +84,9 @@ export default function NavItem({
     // ExternalLink
     if (isExternalLink)
       return (
-        <LinkMui href={path} target="_blank" rel="noopener" underline="none">
+        <Link href={path} target="_blank" rel="noopener" underline="none">
           {renderContent}
-        </LinkMui>
+        </Link>
       );
 
     // Has child
@@ -96,7 +96,7 @@ export default function NavItem({
 
     // Default
     return (
-      <Link to={path} style={{ textDecoration: "none" }}>
+      <Link to={path} underline="none">
         {renderContent}
       </Link>
     );

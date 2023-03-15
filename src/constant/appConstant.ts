@@ -5,6 +5,8 @@ const appConstant = {
   },
   API_URL: {
     SESSION: "users/session",
+    TOTAL_INPROGRESS: "total-inprogress",
+    ORDERS2: "orders2",
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

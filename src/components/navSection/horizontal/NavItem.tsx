@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 // @mui
-import { Box, Tooltip, Link as LinkMui, ListItemText } from "@mui/material";
-import { Link } from "@reach/router";
+import { Box, Tooltip, ListItemText } from "@mui/material";
+import { Link } from "gatsby-theme-material-ui";
 
 //
 import Iconify from "components/iconify";
@@ -68,20 +68,18 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
       // ExternalLink
       if (isExternalLink)
         return (
-          <LinkMui href={path} target="_blank" rel="noopener" underline="none">
+          <Link href={path} target="_blank" rel="noopener" underline="none">
             {renderContent}
-          </LinkMui>
+          </Link>
         );
 
-      // Default
       return (
-        <Link to={path} style={{ textDecoration: "none" }}>
+        <Link to={path} underline="none">
           {renderContent}
         </Link>
       );
     };
     return renderItem();
-    // return <RoleBasedGuard roles={roles}> {renderItem()} </RoleBasedGuard>;
   }
 );
 

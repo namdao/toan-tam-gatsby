@@ -25,7 +25,6 @@ export default function ThemeColorPresets({ children }: Props) {
   );
 
   const presetsColor = getPresets(themeColorPresets);
-
   const themeOptions = useMemo(() => {
     return {
       palette: {

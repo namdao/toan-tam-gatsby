@@ -5,7 +5,7 @@ import { Theme } from "@mui/material/styles";
 // import Chip from "./Chip";
 // import Tabs from "./Tabs";
 // import Menu from "./Menu";
-// import Link from "./Link";
+import Link from "./Link";
 import Lists from "./List";
 // import Table from "./Table";
 // import Alert from "./Alert";
@@ -49,7 +49,7 @@ export default function ComponentsOverrides(theme: Theme) {
     // Chip(theme),
     // Card(theme),
     // Menu(theme),
-    // Link(theme),
+    Link(theme),
     // Input(theme),
     // Radio(theme),
     // Badge(theme),
