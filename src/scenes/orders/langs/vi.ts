@@ -1,7 +1,7 @@
 const OrderLangs = {
   orderProcessing: {
     title: "Đơn hàng đang thực hiện",
-    totalDebit: "Tổng công nợ {{money}} VNĐ",
+    totalDebit: "{{money}} VNĐ",
     designed: "Đã thiết kế",
     waitingPrint: "Chờ in",
     printed: "Đã in",

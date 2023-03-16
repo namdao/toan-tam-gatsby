@@ -5,6 +5,7 @@ import { SettingsSelector } from "services/settings/redux/slice";
 import { useAppSelector } from "store";
 import Header from "./BlockHeader";
 import BlockSummary from "./BlockSummary";
+import BasicTable from "./Table";
 
 const OrderProcessing = () => {
   const themeStretch = useAppSelector(SettingsSelector.getThemeStretch);
@@ -17,6 +18,7 @@ const OrderProcessing = () => {
       <Container maxWidth={themeStretch ? false : "lg"}>
         <Header />
         <BlockSummary />
+        <BasicTable />
       </Container>
     </>
   );

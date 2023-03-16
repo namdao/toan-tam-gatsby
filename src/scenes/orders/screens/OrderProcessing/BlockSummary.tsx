@@ -1,4 +1,4 @@
-import { Card, Divider, Skeleton, Stack, useTheme, Box } from "@mui/material";
+import { Card, Divider, Skeleton, Stack, useTheme } from "@mui/material";
 import Scrollbar from "components/scrollbar";
 import { useLocales } from "locales";
 import React, { useEffect } from "react";
