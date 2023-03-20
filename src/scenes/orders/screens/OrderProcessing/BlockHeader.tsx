@@ -13,7 +13,6 @@ const Header = () => {
     useTotalMoneyProgress();
 
   useEffect(() => {
-    console.log("onTotalProcess");
     onTotalProcess();
   }, []);
   return (

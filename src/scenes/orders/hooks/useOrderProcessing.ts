@@ -1,9 +1,12 @@
 import { IResponseType } from "constant/commonType";
+import { isArray } from "lodash";
 import isNumber from "lodash/isNumber";
 import { enqueueSnackbar, useSnackbar } from "notistack";
 import { useState } from "react";
+import { useAppDispatch } from "store";
 import { ORDER_STATUS_NAME } from "../helper/OrderConstant";
 import { apiOrderStatus, apiTotalInProgress } from "../redux/api";
+import { ordersAction } from "../redux/slice";
 import {
   IOrder,
   IReqOrderStatus,
@@ -43,40 +46,45 @@ export const useTotalMoneyProgress = () => {
   };
 };
 
-export const useTotalOrderAllStatus = (status: typeof ORDER_STATUS_NAME) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [totalOrder, setTotalOrder] = useState<number>(0);
-  const [listOrder, setListOrder] = useState<IOrder[]>([]);
-  const onOrderWithStatus = async () => {
+export const useOrderAllStatus = (status: ORDER_STATUS_NAME) => {
+  const dispatch = useAppDispatch();
+  const onOrderWithStatus = async (page = 1, perPage = 20) => {
     try {
-      setLoading(true);
+      dispatch(ordersAction.requestOrderByStatus(status));
       const payload: IReqOrderStatus = {
-        status: status,
-        page: 1,
-        per_page: 20,
+        status,
+        page,
+        per_page: perPage,
         search_by: "all",
       };
       const result: IResponseType<IResOrder2Status> = await apiOrderStatus(
         payload
       );
       if (result?.data) {
-        if (isNumber(result.data.total)) {
-          setTotalOrder(result.data.total);
-        }
-        if (result.data.item) {
-          setListOrder(result.data.item);
+        if (isNumber(result.data.total) && isArray(result.data.items)) {
+          const data = result.data;
+          dispatch(
+            ordersAction.requestOrderByStatusSuccess({
+              status,
+              total: data.total,
+              list: data.items,
+            })
+          );
         }
       }
     } catch (error) {
-      enqueueSnackbar((error as Error)?.message || "onOrderWithStatus error");
-    } finally {
-      setLoading(false);
+      enqueueSnackbar((error as Error)?.message || "onOrderWithStatus error", {
+        variant: "error",
+      });
+      dispatch(ordersAction.requestOrderByStatusFailed(status));
     }
   };
+
+  const onNextPage = (page: number, perPage?: number) => {
+    onOrderWithStatus(page, perPage);
+  };
   return {
-    loading,
-    totalOrder,
-    listOrder,
     onOrderWithStatus,
+    onNextPage,
   };
 };

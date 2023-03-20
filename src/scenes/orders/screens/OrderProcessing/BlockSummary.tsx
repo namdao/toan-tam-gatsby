@@ -2,9 +2,12 @@ import { Card, Divider, Skeleton, Stack, useTheme } from "@mui/material";
 import Scrollbar from "components/scrollbar";
 import { useLocales } from "locales";
 import React, { useEffect } from "react";
+import BlockTotalSkeleton from "scenes/orders/components/BlockTotalSkeleton";
 import CircleAnalytic from "scenes/orders/components/CircleAnalytic";
 import { ORDER_STATUS_NAME } from "scenes/orders/helper/OrderConstant";
-import { useTotalOrderAllStatus } from "scenes/orders/hooks/useOrderProcessing";
+import { useOrderAllStatus } from "scenes/orders/hooks/useOrderProcessing";
+import { OrdersSelector } from "scenes/orders/redux/slice";
+import { useAppSelector } from "store";
 
 const BlockItem = ({
   status,
@@ -13,59 +16,30 @@ const BlockItem = ({
   subTitle,
   icon,
 }: {
-  status: typeof ORDER_STATUS_NAME;
+  status: ORDER_STATUS_NAME;
   color: string;
   title: string;
   subTitle: string;
   icon: string;
 }) => {
-  const { onOrderWithStatus, loading, totalOrder } =
-    useTotalOrderAllStatus(status);
+  const { onOrderWithStatus } = useOrderAllStatus(status);
+  const total = useAppSelector((state) =>
+    OrdersSelector.getTotalByStatus(state, status)
+  );
+  const loading = useAppSelector((state) =>
+    OrdersSelector.getLoadingByStatus(state, status)
+  );
   useEffect(() => {
     onOrderWithStatus();
   }, []);
   if (loading) {
-    return (
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="center"
-        sx={{ width: 1, minWidth: 200 }}
-      >
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-          sx={{ position: "relative" }}
-        >
-          <Skeleton
-            sx={{ bgcolor: color, ml: 3 }}
-            variant="circular"
-            width={56}
-            height={56}
-          />
-        </Stack>
-        <Stack spacing={2} sx={{ ml: 3 }}>
-          <Skeleton
-            sx={{ mt: 1, bgcolor: color }}
-            variant="rectangular"
-            width={80}
-            height={10}
-          />
-          <Skeleton
-            variant="rectangular"
-            width={80}
-            height={10}
-            sx={{ bgcolor: color }}
-          />
-        </Stack>
-      </Stack>
-    );
+    return <BlockTotalSkeleton color={color} />;
   }
   return (
     <CircleAnalytic
       title={title}
       subTitle={subTitle}
-      total={totalOrder || 0}
+      total={total}
       percent={100}
       icon={icon}
       color={color}

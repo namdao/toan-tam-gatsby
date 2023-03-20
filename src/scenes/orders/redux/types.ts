@@ -6,10 +6,10 @@ export type IResTotalDebigProgress = {
 };
 
 export type IReqOrderStatus = {
-  status: typeof ORDER_STATUS_NAME;
+  status: ORDER_STATUS_NAME;
   search_by: "all";
   per_page: number;
-  page: 1;
+  page: number;
 };
 
 export type IOrder = {
@@ -76,6 +76,6 @@ export type IOrder = {
   who_collect_money: string;
 };
 export type IResOrder2Status = {
-  item: IOrder[];
+  items: IOrder[];
   total: number;
 };

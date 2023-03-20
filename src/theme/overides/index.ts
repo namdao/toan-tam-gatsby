@@ -3,7 +3,7 @@ import { Theme } from "@mui/material/styles";
 // import Fab from "./Fab";
 // import Card from "./Card";
 // import Chip from "./Chip";
-// import Tabs from "./Tabs";
+import Tabs from "./Tabs";
 // import Menu from "./Menu";
 import Link from "./Link";
 import Lists from "./List";
@@ -45,7 +45,7 @@ import Typography from "./Typography";
 export default function ComponentsOverrides(theme: Theme) {
   return Object.assign(
     // Fab(theme),
-    // Tabs(theme),
+    Tabs(theme),
     // Chip(theme),
     // Card(theme),
     // Menu(theme),
