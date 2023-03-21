@@ -4,9 +4,10 @@ const appConstant = {
     PROD: "https://api.inantoantam.com/",
   },
   API_URL: {
-    SESSION: "users/session",
-    TOTAL_INPROGRESS: "total-inprogress",
-    ORDERS2: "orders2",
+    SESSION: "/users/session",
+    TOTAL_INPROGRESS: "/total-inprogress",
+    ORDERS2: "/orders2",
+    PAPER_TYPE: "/paper-type",
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

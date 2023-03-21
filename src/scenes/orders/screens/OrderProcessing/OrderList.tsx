@@ -23,7 +23,8 @@ import { IOrderTabProcessing } from "scenes/orders/helper/OrderConstant";
 import { useOrderAllStatus } from "scenes/orders/hooks/useOrderProcessing";
 import { useAppSelector } from "store";
 import { OrdersSelector } from "scenes/orders/redux/slice";
-import OrderTable from "./Table";
+import OrderTable from "./OrderTable";
+import BlockFilter from "./BlockFilter";
 
 const tabChild = (
   tab: IOrderTabProcessing,
@@ -80,6 +81,7 @@ const OrderList = () => {
           return tabChild(tab, filterStatus);
         })}
       </Tabs>
+      <BlockFilter />
       <OrderTable status={filterStatus} />
     </Card>
   );

@@ -11,7 +11,7 @@ import Lists from "./List";
 // import Alert from "./Alert";
 // import Badge from "./Badge";
 // import Paper from "./Paper";
-// import Input from "./Input";
+import Input from "./Input";
 // import Radio from "./Radio";
 // import Drawer from "./Drawer";
 // import Dialog from "./Dialog";
@@ -50,7 +50,7 @@ export default function ComponentsOverrides(theme: Theme) {
     // Card(theme),
     // Menu(theme),
     Link(theme),
-    // Input(theme),
+    Input(theme),
     // Radio(theme),
     // Badge(theme),
     Lists(theme),

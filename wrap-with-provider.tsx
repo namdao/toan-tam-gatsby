@@ -1,11 +1,13 @@
 import React from "react";
 import { Provider } from "react-redux";
+import { CacheProvider } from "@emotion/react";
+import { Helmet } from "react-helmet";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { createStore } from "./src/store";
 // Template theme
-import { Helmet } from "react-helmet";
-import { CacheProvider } from "@emotion/react";
 import createEmotionCache from "./src/utils/emotionCache";
 import CommonManager from "./src/manager/commonManager";
 import MotionLazyContainer from "./src/components/animate/MotionLazyContainer";
@@ -39,15 +41,17 @@ export const wrapPageProvider = ({ element }) => {
       <Helmet>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Helmet>
-      <MotionLazyContainer>
-        <ThemeProvider>
-          <ThemeSettings>
-            <ThemeLocalization>
-              <SnackbarProvider>{element}</SnackbarProvider>
-            </ThemeLocalization>
-          </ThemeSettings>
-        </ThemeProvider>
-      </MotionLazyContainer>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <MotionLazyContainer>
+          <ThemeProvider>
+            <ThemeSettings>
+              <ThemeLocalization>
+                <SnackbarProvider>{element}</SnackbarProvider>
+              </ThemeLocalization>
+            </ThemeSettings>
+          </ThemeProvider>
+        </MotionLazyContainer>
+      </LocalizationProvider>
     </CacheProvider>
   );
 };

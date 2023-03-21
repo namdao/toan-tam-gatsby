@@ -2,11 +2,8 @@ import React, { useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
 import { DataGridPro, GridRow, GridColumnHeaders } from "@mui/x-data-grid-pro";
 import { useDemoData } from "@mui/x-data-grid-generator";
-import { GridBaseColDef } from "@mui/x-data-grid/internals";
-import {
-  OrderColumnTable,
-  ORDER_STATUS_NAME,
-} from "scenes/orders/helper/OrderConstant";
+import { ORDER_STATUS_NAME } from "scenes/orders/helper/OrderConstant";
+import { OrderColumnTable } from "scenes/orders/helper/OrderTableColumns";
 import { useAppSelector } from "store";
 import { OrdersSelector } from "scenes/orders/redux/slice";
 import { useOrderAllStatus } from "scenes/orders/hooks/useOrderProcessing";

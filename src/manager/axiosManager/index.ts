@@ -87,7 +87,7 @@ const setupOnResponseInterceptors = () => {
     return response?.data;
   };
   const onResponseError = (errors: AxiosError): Promise<AxiosResponse<any>> => {
-    throw errors.response;
+    throw errors;
   };
   axios.interceptors.response.use(onResponseSuccess, onResponseError);
 };

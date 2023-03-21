@@ -6,9 +6,11 @@ import {
   SettingsSelector,
 } from "services/settings/redux/slice";
 import { useAppDispatch, useAppSelector } from "store";
+import { usePaperTypes } from "scenes/papers/hooks/usePaperTypes";
 
 const CommonManager = () => {
   const dispatch = useAppDispatch();
+  const { onGetPaperList } = usePaperTypes();
   const token = useAppSelector(AuthSelector.getToken);
   const url = useAppSelector(SettingsSelector.getUrl);
   useLayoutEffect(() => {
@@ -23,6 +25,7 @@ const CommonManager = () => {
   useLayoutEffect(() => {
     if (token !== "") {
       SetupAxios.setHeaderToken(token);
+      onGetPaperList();
     } else {
       SetupAxios.clearHeaderToken();
     }

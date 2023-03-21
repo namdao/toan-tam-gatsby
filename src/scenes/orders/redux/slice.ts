@@ -17,7 +17,9 @@ const ordersSlice = createSlice({
   reducers: {
     requestOrderByStatus: (state, action: PayloadAction<ORDER_STATUS_NAME>) => {
       if (state[action.payload]) {
-        state[action.payload].loading = true;
+        if (state[action.payload].list.length < 1) {
+          state[action.payload].loading = true;
+        }
       }
     },
     requestOrderByStatusSuccess: (
