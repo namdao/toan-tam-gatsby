@@ -13,6 +13,7 @@ import { useAppSelector } from "store";
 import { OrdersSelector } from "scenes/orders/redux/slice";
 import OrderTable from "./OrderTable";
 import BlockFilter from "./BlockFilter";
+import BlockDescription from "./BlockDescription";
 
 const tabChild = (
   tab: IOrderTabProcessing,
@@ -55,6 +56,7 @@ const OrderList = () => {
 
   return (
     <Card>
+      <BlockDescription />
       <Tabs
         value={filterStatus}
         onChange={onChangeStatus}

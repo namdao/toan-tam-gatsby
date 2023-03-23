@@ -18,8 +18,9 @@ export default function NavItem({
   open,
   active,
   isExternalLink,
+  hasChild,
   ...other
-}: NavItemProps) {
+}: NavItemProps & { hasChild: boolean }) {
   const { translate } = useLocales();
 
   const { title, path, icon, info, children, disabled, caption, roles } = item;
@@ -68,7 +69,7 @@ export default function NavItem({
         </Box>
       )}
 
-      {!!children && children.length > 0 && (
+      {hasChild && (
         <Iconify
           width={16}
           icon={

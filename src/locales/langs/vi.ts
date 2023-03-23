@@ -71,6 +71,8 @@ const vi = {
   },
   order: {
     title: "Đơn hàng",
+    detail: "Chi tiết đơn hàng",
+    update: "Cập nhật đơn hàng",
     search: "Tìm kiếm đơn hàng",
     processing: "Đơn hàng đang thực hiện",
     needPaid: "Đơn hàng cần thanh toán",

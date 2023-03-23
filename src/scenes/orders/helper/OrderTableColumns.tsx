@@ -4,7 +4,6 @@ import {
   GridRowParams,
   GridActionsCellItem,
   GridRenderCellParams,
-  GridValueGetterParams,
 } from "@mui/x-data-grid-pro";
 import Iconify from "components/iconify";
 import { ICON } from "constant/layoutConstant";
@@ -15,6 +14,11 @@ import Label from "components/label";
 import { fCurrency, fNumber } from "utils/formatNumber";
 import { getTotalAmount } from "utils/utility";
 import { useTheme } from "@mui/material/styles";
+import { formatISO, parseISO } from "date-fns";
+import { LabelColor } from "components/label/types";
+import { ORDER_STATUS_NAME } from "./OrderConstant";
+import { Link } from "gatsby-theme-material-ui";
+import { PATH_APP } from "constant/routeConstant";
 
 const PaperType = ({ paperId }: { paperId: number }) => {
   const listPaper = useAppSelector(PaperTypeSelector.getListPaper);
@@ -25,9 +29,45 @@ export const OrderColumnTable: GridColDef[] = [
   {
     field: "order_no",
     headerName: "Mã đơn hàng",
+    headerAlign: "center",
+    align: "center",
     minWidth: 150,
-    renderCell: ({ value }: GridRenderCellParams<IOrder>) => {
-      return <Label color="primary">{value}</Label>;
+    renderCell: ({ value, row }: GridRenderCellParams<IOrder>) => {
+      const theme = useTheme();
+      const updatedTime = parseISO(formatISO(row.updated_time)).getTime();
+      const daysNoAction =
+        (new Date().getTime() - updatedTime) / (24 * 60 * 60 * 1000);
+      let icon: JSX.Element | null = <></>;
+      let colorOrder: LabelColor = "primary";
+      if (
+        row.status === ORDER_STATUS_NAME.CANCEL ||
+        row.status === ORDER_STATUS_NAME.DONE
+      ) {
+        icon = null;
+      } else if (daysNoAction >= 3 && daysNoAction < 5) {
+        icon = (
+          <Iconify
+            width={ICON.NAV_ITEM}
+            icon="mdi:number-three-circle-outline"
+            color={theme.palette.warning.main}
+          />
+        );
+        colorOrder = "warning";
+      } else if (daysNoAction >= 5) {
+        icon = (
+          <Iconify
+            width={ICON.NAV_ITEM}
+            icon="mdi:number-five-circle-outline"
+            color={theme.palette.error.main}
+          />
+        );
+        colorOrder = "error";
+      }
+      return (
+        <Label color={colorOrder} endIcon={icon}>
+          {value}
+        </Label>
+      );
     },
   },
   {
@@ -120,9 +160,7 @@ export const OrderColumnTable: GridColDef[] = [
     minWidth: 50,
     renderCell: ({ row }: GridRenderCellParams<IOrder>) => {
       const theme = useTheme();
-      const iconVat = row.vat
-        ? "material-symbols:warning-outline-rounded"
-        : "healthicons:yes-outline";
+      const iconVat = row.vat ? "ic:outline-info" : "healthicons:yes-outline";
       const colorVat = row.vat ? theme.palette.error : theme.palette.primary;
       return (
         <Iconify width={ICON.NAV_ITEM} icon={iconVat} color={colorVat.main} />
@@ -134,17 +172,23 @@ export const OrderColumnTable: GridColDef[] = [
     type: "actions",
     headerName: "Hành động",
     minWidth: 100,
-    getActions: (params: GridRowParams<IOrder>) => [
+    getActions: ({ row }: GridRowParams<IOrder>) => [
       <GridActionsCellItem
-        icon={<Iconify width={ICON.NAV_ITEM} icon="mdi:show" />}
+        icon={
+          <Link to={`${PATH_APP.order.detail.link(row.id)}`} color="GrayText">
+            <Iconify width={ICON.NAV_ITEM} icon="mdi:show" />
+          </Link>
+        }
         label="Chi tiết"
       />,
       <GridActionsCellItem
         icon={
-          <Iconify
-            width={ICON.NAV_ITEM}
-            icon="material-symbols:edit-document-outline"
-          />
+          <Link to={`${PATH_APP.order.update.link(row.id)}`} color="GrayText">
+            <Iconify
+              width={ICON.NAV_ITEM}
+              icon="material-symbols:edit-document-outline"
+            />
+          </Link>
         }
         label="Cập nhật"
       />,

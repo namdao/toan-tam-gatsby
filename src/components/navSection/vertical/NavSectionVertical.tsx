@@ -31,7 +31,7 @@ export default function NavSectionVertical({
                 key={list.title + list.path}
                 data={list}
                 depth={1}
-                hasChild={!!list.children}
+                hasChild={!!list.children && list.children.length > 0}
               />
             ))}
           </List>

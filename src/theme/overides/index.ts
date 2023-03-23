@@ -1,7 +1,7 @@
 import { Theme } from "@mui/material/styles";
 //
 // import Fab from "./Fab";
-// import Card from "./Card";
+import Card from "./Card";
 // import Chip from "./Chip";
 import Tabs from "./Tabs";
 // import Menu from "./Menu";
@@ -13,12 +13,12 @@ import Lists from "./List";
 // import Paper from "./Paper";
 import Input from "./Input";
 // import Radio from "./Radio";
-// import Drawer from "./Drawer";
+import Drawer from "./Drawer";
 // import Dialog from "./Dialog";
 // import Avatar from "./Avatar";
 // import Rating from "./Rating";
 // import Slider from "./Slider";
-// import Button from "./Button";
+import Button from "./Button";
 // import Switch from "./Switch";
 // import Select from "./Select";
 // import SvgIcon from "./SvgIcon";
@@ -47,7 +47,7 @@ export default function ComponentsOverrides(theme: Theme) {
     // Fab(theme),
     Tabs(theme),
     // Chip(theme),
-    // Card(theme),
+    Card(theme),
     // Menu(theme),
     Link(theme),
     Input(theme),
@@ -59,12 +59,12 @@ export default function ComponentsOverrides(theme: Theme) {
     // Alert(theme),
     // Switch(theme),
     // Select(theme),
-    // Button(theme),
+    Button(theme),
     // Rating(theme),
     // Dialog(theme),
     // Avatar(theme),
     // Slider(theme),
-    // Drawer(theme),
+    Drawer(theme),
     // Stepper(theme),
     // Tooltip(theme),
     // Popover(theme),

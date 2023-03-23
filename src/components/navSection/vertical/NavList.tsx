@@ -32,7 +32,7 @@ export default function NavList({ data, depth, hasChild }: NavListRootProps) {
   const handleClose = () => {
     setOpen(false);
   };
-
+  if (data.hideMenu) return <></>;
   return (
     <>
       <NavItem
@@ -42,6 +42,7 @@ export default function NavList({ data, depth, hasChild }: NavListRootProps) {
         active={active}
         isExternalLink={isExternalLink}
         onClick={handleToggle}
+        hasChild={hasChild}
       />
 
       {hasChild && (
@@ -69,7 +70,7 @@ function NavSubList({ data, depth }: NavListSubProps) {
           key={list.title + list.path}
           data={list}
           depth={depth + 1}
-          hasChild={!!list.children}
+          hasChild={!!list.children && list.children.length > 0}
         />
       ))}
     </>

@@ -28,6 +28,8 @@ import OrderNeedPaid from "scenes/orders/screens/OrderNeedPaid";
 import OrderNeedCheck from "scenes/orders/screens/OrderNeedCheck";
 import OrderNeedConfirm from "scenes/orders/screens/OrderNeedConfirm";
 import OrderListStored from "scenes/orders/screens/OrderListStored";
+import OrderDetail from "scenes/orders/screens/OrderDetail";
+import OrderUpdate from "scenes/orders/screens/OrderUpdate";
 
 const { ROLES } = appConstant;
 const iconify = (name: string) => <Iconify width={ICON.NAV_ITEM} icon={name} />;
@@ -89,6 +91,28 @@ const navConfig = [
           ROLES.SALER,
           ROLES.STORE,
         ],
+      },
+      {
+        title: "order.detail",
+        path: PATH_APP.order.detail.route,
+        component: OrderDetail,
+        hideMenu: true,
+        children: [],
+        roles: [
+          ROLES.ADMIN,
+          ROLES.MANAGER,
+          ROLES.ACCOUNTANT,
+          ROLES.SALER,
+          ROLES.STORE,
+        ],
+      },
+      {
+        title: "order.update",
+        path: PATH_APP.order.update.route,
+        component: OrderUpdate,
+        hideMenu: true,
+        children: [],
+        roles: [ROLES.ADMIN, ROLES.MANAGER, ROLES.ACCOUNTANT],
       },
       {
         title: "order.processing",

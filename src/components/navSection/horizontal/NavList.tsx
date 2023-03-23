@@ -23,16 +23,11 @@ export default function NavList({ data, depth, hasChild }: NavListRootProps) {
 
   const [open, setOpen] = useState(false);
 
-  useEffect(
-    () => {
-      if (open) {
-        handleClose();
-      }
-    },
-    [
-      // pathname
-    ]
-  );
+  useEffect(() => {
+    if (open) {
+      handleClose();
+    }
+  }, [pathname]);
 
   useEffect(() => {
     const appBarEl = Array.from(
@@ -63,7 +58,7 @@ export default function NavList({ data, depth, hasChild }: NavListRootProps) {
   const handleClose = () => {
     setOpen(false);
   };
-
+  if (data.hideMenu) return <></>;
   return (
     <>
       <NavItem
@@ -75,6 +70,7 @@ export default function NavList({ data, depth, hasChild }: NavListRootProps) {
         isExternalLink={isExternalLink}
         onMouseEnter={handleOpen}
         onMouseLeave={handleClose}
+        hasChild={hasChild}
       />
 
       {hasChild && (

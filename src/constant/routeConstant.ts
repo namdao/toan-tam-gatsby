@@ -75,6 +75,14 @@ export const PATH_APP = {
   order: {
     root: ROOT_ORDER,
     search: `${ROOT_ORDER}/tim-kiem-don-hang`,
+    detail: {
+      route: `${ROOT_ORDER}/thong-tin-don-hang/:orderId`,
+      link: (orderId: number) => `${ROOT_ORDER}/thong-tin-don-hang/${orderId}`,
+    },
+    update: {
+      route: `${ROOT_ORDER}/cap-nhat-don-hang/:orderId`,
+      link: (orderId: number) => `${ROOT_ORDER}/cap-nhat-don-hang/${orderId}`,
+    },
     processing: `${ROOT_ORDER}/don-hang-dang-thuc-hien`,
     needPaid: `${ROOT_ORDER}/don-hang-can-thanh-toan`,
     needCheck: `${ROOT_ORDER}/don-hang-can-kiem-tra`,

@@ -72,7 +72,7 @@ export type IOrder = {
   receiver_phone: null | string;
   reference_order: null | string;
   shipping_fee: number;
-  status: typeof ORDER_STATUS_VALUE;
+  status: ORDER_STATUS_NAME;
   template_number: number;
   total_cost: number;
   tracking_id: string;
