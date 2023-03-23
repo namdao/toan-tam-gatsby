@@ -1,4 +1,5 @@
 import { LabelColor } from "components/label/types";
+import { IReqParams } from "../redux/types";
 
 export const ORDER_STATUS_VALUE = {
   "-1": "Đã hủy",
@@ -29,7 +30,13 @@ export enum ORDER_STATUS_NAME {
   DELIVER = 9,
   DONE = 10,
 }
-
+export enum SEARCH_BY {
+  ALL = "all",
+  CUSTOMER_NAME = "customer_name",
+  COMPANY_NAME = "company_name",
+  ORDER_NO = "order_no",
+  ORDER_NAME = "order_name",
+}
 export type IOrderTabProcessing = {
   name: string;
   value: ORDER_STATUS_NAME;
@@ -84,3 +91,9 @@ export const ORDER_FILTER = [
     value: "order_name",
   },
 ];
+
+export const initParams: IReqParams = {
+  page: 1,
+  per_page: 20,
+  search_by: "all",
+};

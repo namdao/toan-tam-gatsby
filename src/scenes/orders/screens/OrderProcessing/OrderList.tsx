@@ -1,21 +1,9 @@
 import React, { FC, useEffect, useState } from "react";
-import {
-  Tab,
-  Tabs,
-  Card,
-  Table,
-  Stack,
-  Button,
-  Tooltip,
-  Divider,
-  TableBody,
-  Container,
-  IconButton,
-  TableContainer,
-} from "@mui/material";
+import { Tab, Tabs, Card } from "@mui/material";
 import {
   ORDER_STATUS_NAME,
   ORDER_TAB_PROCESSING,
+  initParams,
 } from "scenes/orders/helper/OrderConstant";
 import { useLocales } from "locales";
 import Label from "components/label";
@@ -37,7 +25,7 @@ const tabChild = (
   );
   useEffect(() => {
     if (filterStatus === tab.value) {
-      onOrderWithStatus();
+      onOrderWithStatus(initParams);
     }
   }, [filterStatus]);
   return (
@@ -58,8 +46,6 @@ const OrderList = () => {
     ORDER_STATUS_NAME.DESIGNED
   );
 
-  useEffect(() => {}, [filterStatus]);
-
   const onChangeStatus = (
     _event: React.SyntheticEvent<Element, Event>,
     newValue: ORDER_STATUS_NAME
@@ -77,11 +63,9 @@ const OrderList = () => {
           bgcolor: "background.neutral",
         }}
       >
-        {ORDER_TAB_PROCESSING.map((tab) => {
-          return tabChild(tab, filterStatus);
-        })}
+        {ORDER_TAB_PROCESSING.map((tab) => tabChild(tab, filterStatus))}
       </Tabs>
-      <BlockFilter />
+      <BlockFilter status={filterStatus} />
       <OrderTable status={filterStatus} />
     </Card>
   );

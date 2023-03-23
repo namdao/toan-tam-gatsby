@@ -1,4 +1,8 @@
-import { ORDER_STATUS_NAME, ORDER_STATUS_VALUE } from "../helper/OrderConstant";
+import {
+  ORDER_STATUS_NAME,
+  ORDER_STATUS_VALUE,
+  SEARCH_BY,
+} from "../helper/OrderConstant";
 
 export type IResTotalDebigProgress = {
   total_debit: number;
@@ -7,10 +11,14 @@ export type IResTotalDebigProgress = {
 
 export type IReqOrderStatus = {
   status: ORDER_STATUS_NAME;
-  search_by: "all";
+  search_by: SEARCH_BY;
   per_page: number;
   page: number;
+  created_date?: string;
+  updated_date?: string;
+  search?: string;
 };
+export type IReqParams = Omit<IReqOrderStatus, "status">;
 
 export type IOrder = {
   cash: number;

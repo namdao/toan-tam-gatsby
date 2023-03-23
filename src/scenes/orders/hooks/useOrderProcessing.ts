@@ -8,8 +8,8 @@ import { ORDER_STATUS_NAME } from "../helper/OrderConstant";
 import { apiOrderStatus, apiTotalInProgress } from "../redux/api";
 import { ordersAction } from "../redux/slice";
 import {
-  IOrder,
   IReqOrderStatus,
+  IReqParams,
   IResOrder2Status,
   IResTotalDebigProgress,
 } from "../redux/types";
@@ -48,14 +48,12 @@ export const useTotalMoneyProgress = () => {
 
 export const useOrderAllStatus = (status: ORDER_STATUS_NAME) => {
   const dispatch = useAppDispatch();
-  const onOrderWithStatus = async (page = 1, perPage = 20) => {
+  const onOrderWithStatus = async (dataRequest: IReqParams) => {
     try {
       dispatch(ordersAction.requestOrderByStatus(status));
       const payload: IReqOrderStatus = {
         status,
-        page,
-        per_page: perPage,
-        search_by: "all",
+        ...dataRequest,
       };
       const result: IResponseType<IResOrder2Status> = await apiOrderStatus(
         payload
@@ -80,8 +78,12 @@ export const useOrderAllStatus = (status: ORDER_STATUS_NAME) => {
     }
   };
 
-  const onNextPage = (page: number, perPage?: number) => {
-    onOrderWithStatus(page, perPage);
+  const onNextPage = (payload: IReqParams) => {
+    const data: IReqParams = {
+      ...payload,
+      page: payload.page + 1,
+    };
+    onOrderWithStatus(data);
   };
   return {
     onOrderWithStatus,

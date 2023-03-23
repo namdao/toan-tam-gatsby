@@ -1,45 +1,81 @@
-import React, { useState } from "react";
-import { Stack, InputAdornment, TextField, MenuItem } from "@mui/material";
+import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
+import {
+  Stack,
+  InputAdornment,
+  TextField,
+  MenuItem,
+  Box,
+  TextFieldProps,
+  Button,
+} from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import Iconify from "components/iconify";
-import { ORDER_FILTER } from "scenes/orders/helper/OrderConstant";
+import {
+  initParams,
+  ORDER_FILTER,
+  ORDER_STATUS_NAME,
+  SEARCH_BY,
+} from "scenes/orders/helper/OrderConstant";
 import { useLocales } from "locales";
+import { useOrderAllStatus } from "scenes/orders/hooks/useOrderProcessing";
+import { IReqParams } from "scenes/orders/redux/types";
+import { format } from "date-fns";
 
 const INPUT_WIDTH = 160;
 const DATE_PICKER_WIDTH = 200;
 
 type Props = {
-  filterName: string;
-  isFiltered: boolean;
-  filterService: string;
-  optionsService: string[];
-  filterEndDate: Date | null;
-  onResetFilter: VoidFunction;
-  filterStartDate: Date | null;
-  onFilterName: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onFilterService: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onFilterStartDate: (value: Date | null) => void;
-  onFilterEndDate: (value: Date | null) => void;
+  status: ORDER_STATUS_NAME;
 };
-
-const inputDate = (params) => {
-  return (
-    <TextField
-      {...params}
-      fullWidth
-      sx={{
-        maxWidth: { md: DATE_PICKER_WIDTH },
-      }}
-    />
-  );
-};
-export default function BlockFilter() {
+export default function BlockFilter({ status }: Props) {
   const { translate } = useLocales();
-  const [filterType, setFilterType] =
-    useState<React.ChangeEvent<HTMLInputElement>>();
-  const [filterStartDate, setFilterStartDate] = useState();
-  const [filterEndDate, setFilterEndDate] = useState();
-  const [filterName, setFilterName] = useState();
+  const { onOrderWithStatus } = useOrderAllStatus(status);
+  const [filterType, setFilterType] = useState<SEARCH_BY>(SEARCH_BY.ALL);
+  const [filterCreatedDate, setFilterCreatedDate] = useState<Date | null>();
+  const [filterUpdatedDate, setFilterUpdatedDate] = useState<Date | null>();
+  const [filterName, setFilterName] = useState<string>("");
+  const onChangeType = (e: ChangeEvent<HTMLInputElement>) => {
+    setFilterType(e.target.value as SEARCH_BY);
+  };
+
+  const onSetFilterName = (e: ChangeEvent<HTMLInputElement>) => {
+    setFilterName(e.target.value);
+  };
+  useEffect(() => {
+    const dataRequestOrder: IReqParams = {
+      ...initParams,
+    };
+    if (filterCreatedDate) {
+      dataRequestOrder.created_date = format(filterCreatedDate, "yyyy/MM/dd");
+    }
+    if (filterUpdatedDate) {
+      dataRequestOrder.updated_date = format(filterUpdatedDate, "yyyy/MM/dd");
+    }
+    if (filterName) {
+      dataRequestOrder.search = filterName.trim();
+    }
+    if (filterType) {
+      dataRequestOrder.search_by = filterType;
+    }
+    onOrderWithStatus(dataRequestOrder);
+  }, [filterType, filterCreatedDate, filterUpdatedDate, filterName]);
+
+  const onResetFilter = () => {
+    setFilterCreatedDate(null);
+    setFilterUpdatedDate(null);
+    setFilterName("");
+    setFilterType(SEARCH_BY.ALL);
+  };
+
+  const onClearStartDate = () => {
+    setFilterCreatedDate(null);
+  };
+  const onClearUpdatedDate = () => {
+    setFilterUpdatedDate(null);
+  };
+
+  const isFiltered = filterCreatedDate || filterUpdatedDate || filterName;
+
   return (
     <Stack
       spacing={2}
@@ -52,10 +88,11 @@ export default function BlockFilter() {
     >
       <TextField
         fullWidth
+        id="selected"
         select
         label={translate("orders.filterBy")}
         value={filterType}
-        onChange={setFilterType}
+        onChange={onChangeType}
         SelectProps={{
           MenuProps: {
             PaperProps: {
@@ -70,6 +107,7 @@ export default function BlockFilter() {
       >
         {ORDER_FILTER.map((option) => (
           <MenuItem
+            defaultValue={option.value}
             key={option.value}
             value={option.value}
             sx={{
@@ -86,23 +124,69 @@ export default function BlockFilter() {
 
       <DatePicker
         label={translate("orders.createdDate")}
-        value={filterStartDate}
-        onViewChange={(state) => console.log(state)}
-        onChange={setFilterStartDate}
-        slots={{ textField: inputDate }}
+        onChange={setFilterCreatedDate}
+        inputFormat="dd / MM / yyyy"
+        value={filterCreatedDate}
+        renderInput={({ InputProps, ...rest }) => {
+          return (
+            <TextField
+              {...rest}
+              InputProps={{
+                endAdornment: (
+                  <>
+                    {filterCreatedDate && (
+                      <Iconify
+                        sx={{ cursor: "pointer" }}
+                        onClick={onClearStartDate}
+                        icon="material-symbols:close"
+                      />
+                    )}
+                    {InputProps?.endAdornment}
+                  </>
+                ),
+              }}
+              sx={{
+                minWidth: { md: DATE_PICKER_WIDTH },
+              }}
+            />
+          );
+        }}
       />
-
       <DatePicker
         label={translate("orders.updatedDate")}
-        value={filterEndDate}
-        onChange={setFilterEndDate}
-        slots={{ textField: inputDate }}
+        value={filterUpdatedDate}
+        onChange={setFilterUpdatedDate}
+        inputFormat="dd / MM / yyyy"
+        renderInput={({ InputProps, ...rest }) => {
+          return (
+            <TextField
+              {...rest}
+              InputProps={{
+                endAdornment: (
+                  <>
+                    {filterCreatedDate && (
+                      <Iconify
+                        sx={{ cursor: "pointer" }}
+                        onClick={onClearUpdatedDate}
+                        icon="material-symbols:close"
+                      />
+                    )}
+                    {InputProps?.endAdornment}
+                  </>
+                ),
+              }}
+              sx={{
+                minWidth: { md: DATE_PICKER_WIDTH },
+              }}
+            />
+          );
+        }}
       />
 
       <TextField
         fullWidth
         value={filterName}
-        onChange={setFilterName}
+        onChange={onSetFilterName}
         placeholder={translate("orders.searchByPlaceHolder")}
         InputProps={{
           startAdornment: (
@@ -113,16 +197,16 @@ export default function BlockFilter() {
         }}
       />
 
-      {/* {isFiltered && (
+      {isFiltered && (
         <Button
           color="error"
           sx={{ flexShrink: 0 }}
           onClick={onResetFilter}
           startIcon={<Iconify icon="eva:trash-2-outline" />}
         >
-          Clear
+          {translate("orders.delete")}
         </Button>
-      )} */}
+      )}
     </Stack>
   );
 }

@@ -14,6 +14,7 @@ const OrderLangs = {
   createdDate: "Ngày tạo",
   updatedDate: "Ngày cập nhật",
   name: "đơn",
+  delete: "Xoá",
   filterGroup: {
     all: "Tất cả",
     customerName: "Tên khách hàng",

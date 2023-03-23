@@ -1,12 +1,15 @@
 import React, { useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
 import { DataGridPro, GridRow, GridColumnHeaders } from "@mui/x-data-grid-pro";
-import { useDemoData } from "@mui/x-data-grid-generator";
-import { ORDER_STATUS_NAME } from "scenes/orders/helper/OrderConstant";
+import {
+  initParams,
+  ORDER_STATUS_NAME,
+} from "scenes/orders/helper/OrderConstant";
 import { OrderColumnTable } from "scenes/orders/helper/OrderTableColumns";
 import { useAppSelector } from "store";
 import { OrdersSelector } from "scenes/orders/redux/slice";
 import { useOrderAllStatus } from "scenes/orders/hooks/useOrderProcessing";
+import { IReqParams } from "scenes/orders/redux/types";
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
@@ -35,15 +38,14 @@ const OrderTable: React.FC<IPropsOrderTable> = ({ status }) => {
     []
   );
   useEffect(() => {
-    onNextPage(paginationModel.page + 1, paginationModel.pageSize);
+    const dataNextPage: IReqParams = {
+      ...initParams,
+      page: paginationModel.page,
+      per_page: paginationModel.pageSize,
+    };
+    onNextPage(dataNextPage);
   }, [paginationModel, status]);
 
-  const { data } = useDemoData({
-    dataSet: "Commodity",
-    rowLength: 100,
-    editable: true,
-  });
-  console.log(data);
   return (
     <Box sx={{ height: 600, width: "100%" }}>
       <DataGridPro
@@ -66,7 +68,6 @@ const OrderTable: React.FC<IPropsOrderTable> = ({ status }) => {
         pagination
         paginationMode="server"
         onPaginationModelChange={setPaginationModel}
-        // {...data}
       />
     </Box>
   );

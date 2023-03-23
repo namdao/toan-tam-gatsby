@@ -4,7 +4,7 @@ import { CacheProvider } from "@emotion/react";
 import { Helmet } from "react-helmet";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { createStore } from "./src/store";
 // Template theme
@@ -41,7 +41,7 @@ export const wrapPageProvider = ({ element }) => {
       <Helmet>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Helmet>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
         <MotionLazyContainer>
           <ThemeProvider>
             <ThemeSettings>
