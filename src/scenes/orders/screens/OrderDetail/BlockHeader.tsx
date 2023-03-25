@@ -5,7 +5,7 @@ import Iconify from "components/iconify";
 import { PATH_APP } from "constant/routeConstant";
 import { useLocales } from "locales";
 type IProps = {
-  orderId: string;
+  orderId: number;
 };
 const BlockHeader = ({ orderId }: IProps) => {
   const { translate } = useLocales();

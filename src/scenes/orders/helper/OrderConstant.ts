@@ -95,5 +95,5 @@ export const ORDER_FILTER = [
 export const initParams: IReqParams = {
   page: 1,
   per_page: 20,
-  search_by: "all",
+  search_by: SEARCH_BY.ALL,
 };

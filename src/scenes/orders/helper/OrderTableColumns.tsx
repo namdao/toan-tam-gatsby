@@ -34,10 +34,12 @@ export const OrderColumnTable: GridColDef[] = [
     minWidth: 150,
     renderCell: ({ value, row }: GridRenderCellParams<IOrder>) => {
       const theme = useTheme();
-      const updatedTime = parseISO(formatISO(row.updated_time)).getTime();
+      const updatedTime = parseISO(
+        formatISO(row.updated_time * 1000)
+      ).getTime();
       const daysNoAction =
         (new Date().getTime() - updatedTime) / (24 * 60 * 60 * 1000);
-      let icon: JSX.Element | null = <></>;
+      let icon: JSX.Element | null = null;
       let colorOrder: LabelColor = "primary";
       if (
         row.status === ORDER_STATUS_NAME.CANCEL ||

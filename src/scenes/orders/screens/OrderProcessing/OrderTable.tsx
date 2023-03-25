@@ -1,15 +1,16 @@
 import React, { useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
-import { DataGridPro, GridRow, GridColumnHeaders } from "@mui/x-data-grid-pro";
 import {
-  initParams,
-  ORDER_STATUS_NAME,
-} from "scenes/orders/helper/OrderConstant";
+  DataGridPro,
+  GridRow,
+  GridColumnHeaders,
+  GridPaginationModel,
+} from "@mui/x-data-grid-pro";
+import { ORDER_STATUS_NAME } from "scenes/orders/helper/OrderConstant";
 import { OrderColumnTable } from "scenes/orders/helper/OrderTableColumns";
-import { useAppSelector } from "store";
-import { OrdersSelector } from "scenes/orders/redux/slice";
+import { useAppDispatch, useAppSelector } from "store";
+import { ordersAction, OrdersSelector } from "scenes/orders/redux/slice";
 import { useOrderAllStatus } from "scenes/orders/hooks/useOrderProcessing";
-import { IReqParams } from "scenes/orders/redux/types";
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
@@ -19,16 +20,18 @@ type IPropsOrderTable = {
 };
 const OrderTable: React.FC<IPropsOrderTable> = ({ status }) => {
   const { onNextPage } = useOrderAllStatus(status);
-  const [paginationModel, setPaginationModel] = React.useState({
-    page: 0,
-    pageSize: 20,
-  });
+  const dispatch = useAppDispatch();
+  const filter = useAppSelector(OrdersSelector.getFilterOrder);
   const orders = useAppSelector((state) =>
     OrdersSelector.getListByStatus(state, status)
   );
   const totalRow = useAppSelector((state) =>
     OrdersSelector.getTotalByStatus(state, status)
   );
+  const paginationModel = {
+    page: filter.page,
+    pageSize: filter.pageSize,
+  };
   const pinOrderLeft = useMemo(
     () => OrderColumnTable.find((e) => e.field === "order_no"),
     []
@@ -37,14 +40,16 @@ const OrderTable: React.FC<IPropsOrderTable> = ({ status }) => {
     () => OrderColumnTable.find((e) => e.field === "action"),
     []
   );
+
+  const setPagination = (model: GridPaginationModel) => {
+    if (model.page === 0) {
+      model.page = 1;
+    }
+    dispatch(ordersAction.setPagination({ data: model }));
+  };
   useEffect(() => {
-    const dataNextPage: IReqParams = {
-      ...initParams,
-      page: paginationModel.page,
-      per_page: paginationModel.pageSize,
-    };
-    onNextPage(dataNextPage);
-  }, [paginationModel, status]);
+    onNextPage(filter.page ?? 1, filter.pageSize ?? 20);
+  }, [filter.page, filter.pageSize, status]);
 
   return (
     <Box sx={{ height: 600, width: "100%" }}>
@@ -67,7 +72,7 @@ const OrderTable: React.FC<IPropsOrderTable> = ({ status }) => {
         }}
         pagination
         paginationMode="server"
-        onPaginationModelChange={setPaginationModel}
+        onPaginationModelChange={setPagination}
       />
     </Box>
   );

@@ -1,14 +1,10 @@
 import { Card, Divider, Skeleton, Stack, useTheme } from "@mui/material";
 import Scrollbar from "components/scrollbar";
 import { useLocales } from "locales";
-import React, { useEffect } from "react";
+import React from "react";
 import BlockTotalSkeleton from "scenes/orders/components/BlockTotalSkeleton";
 import CircleAnalytic from "scenes/orders/components/CircleAnalytic";
-import {
-  ORDER_STATUS_NAME,
-  initParams,
-} from "scenes/orders/helper/OrderConstant";
-import { useOrderAllStatus } from "scenes/orders/hooks/useOrderProcessing";
+import { ORDER_STATUS_NAME } from "scenes/orders/helper/OrderConstant";
 import { OrdersSelector } from "scenes/orders/redux/slice";
 import { useAppSelector } from "store";
 
@@ -25,16 +21,13 @@ const BlockItem = ({
   subTitle: string;
   icon: string;
 }) => {
-  const { onOrderWithStatus } = useOrderAllStatus(status);
   const total = useAppSelector((state) =>
     OrdersSelector.getTotalByStatus(state, status)
   );
   const loading = useAppSelector((state) =>
     OrdersSelector.getLoadingByStatus(state, status)
   );
-  useEffect(() => {
-    onOrderWithStatus(initParams);
-  }, []);
+
   if (loading) {
     return <BlockTotalSkeleton color={color} />;
   }

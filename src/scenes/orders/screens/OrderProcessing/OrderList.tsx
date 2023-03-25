@@ -3,7 +3,6 @@ import { Tab, Tabs, Card } from "@mui/material";
 import {
   ORDER_STATUS_NAME,
   ORDER_TAB_PROCESSING,
-  initParams,
 } from "scenes/orders/helper/OrderConstant";
 import { useLocales } from "locales";
 import Label from "components/label";
@@ -14,21 +13,24 @@ import { OrdersSelector } from "scenes/orders/redux/slice";
 import OrderTable from "./OrderTable";
 import BlockFilter from "./BlockFilter";
 import BlockDescription from "./BlockDescription";
+import { shallowEqual } from "react-redux";
 
 const tabChild = (
   tab: IOrderTabProcessing,
   filterStatus: ORDER_STATUS_NAME
 ) => {
   const { translate } = useLocales();
+  const dataFilter = useAppSelector(
+    OrdersSelector.getFilterOrder,
+    shallowEqual
+  );
   const { onOrderWithStatus } = useOrderAllStatus(tab.value);
   const total = useAppSelector((state) =>
     OrdersSelector.getTotalByStatus(state, tab.value)
   );
   useEffect(() => {
-    if (filterStatus === tab.value) {
-      onOrderWithStatus(initParams);
-    }
-  }, [filterStatus]);
+    onOrderWithStatus();
+  }, [filterStatus, dataFilter]);
   return (
     <Tab
       key={tab.value}

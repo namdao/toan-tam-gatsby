@@ -1,16 +1,38 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "store";
 import { IOrder } from "./types";
-import { ORDER_STATUS_NAME } from "../helper/OrderConstant";
+import { ORDER_STATUS_NAME, SEARCH_BY } from "../helper/OrderConstant";
 
+type IFilter = {
+  search?: string;
+  createDate?: Date | null;
+  updateDate?: Date | null;
+  type?: SEARCH_BY;
+  page?: number;
+  pageSize?: number;
+};
 type IDataOrder = {
   list: IOrder[];
   loading: boolean;
   total: number;
 };
-export type IOrdersState = Record<ORDER_STATUS_NAME, IDataOrder>;
-const initialState: IOrdersState = {} as IOrdersState;
-// Slice
+type IPagination = {
+  page: number;
+  pageSize: number;
+};
+export type IOrdersState = Record<ORDER_STATUS_NAME, IDataOrder> & {
+  filter: IFilter;
+};
+const initialState: IOrdersState = {
+  filter: {
+    page: 1,
+    pageSize: 20,
+    type: SEARCH_BY.ALL,
+    search: "",
+    createDate: null,
+    updateDate: null,
+  },
+} as IOrdersState;
 const ordersSlice = createSlice({
   name: "orders",
   initialState,
@@ -45,6 +67,33 @@ const ordersSlice = createSlice({
         state[action.payload].loading = false;
       }
     },
+    setDataFilter: (state, action: PayloadAction<IFilter>) => {
+      state.filter = {
+        ...state.filter,
+        ...action.payload,
+      };
+    },
+    setPagination: (state, action: PayloadAction<{ data: IPagination }>) => {
+      state.filter = {
+        ...state.filter,
+        ...action.payload.data,
+      };
+    },
+    resetFilter: (state) => {
+      state.filter = initialState.filter;
+    },
+    clearCreateDateFilter: (state) => {
+      state.filter = {
+        ...state.filter,
+        createDate: null,
+      };
+    },
+    clearUpdateDateFilter: (state) => {
+      state.filter = {
+        ...state.filter,
+        updateDate: null,
+      };
+    },
   },
 });
 
@@ -60,11 +109,13 @@ const getLoadingByStatus = (
   state: RootState,
   status: ORDER_STATUS_NAME
 ): boolean => state.data.order[status]?.loading ?? true;
+const getFilterOrder = (state: RootState) => state.data.order.filter;
 // Selectors
 export const OrdersSelector = {
   getTotalByStatus,
   getListByStatus,
   getLoadingByStatus,
+  getFilterOrder,
 };
 
 // Actions

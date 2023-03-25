@@ -1,8 +1,12 @@
 import {
-  ORDER_STATUS_NAME,
-  ORDER_STATUS_VALUE,
-  SEARCH_BY,
-} from "../helper/OrderConstant";
+  ICustomer,
+  INotes,
+  IOurSources,
+  IPaper,
+  IPrintTypes,
+} from "constant/commonType";
+import { IResUser } from "scenes/auth/redux/types";
+import { ORDER_STATUS_NAME, SEARCH_BY } from "../helper/OrderConstant";
 
 export type IResTotalDebigProgress = {
   total_debit: number;
@@ -86,4 +90,65 @@ export type IOrder = {
 export type IResOrder2Status = {
   items: IOrder[];
   total: number;
+};
+export type IOrderDetail = {
+  cash: number;
+  category: {
+    category_name: string;
+    deleted_at: string | null;
+    id: number;
+    parent_id: number;
+  };
+  category_id: number;
+  cod: number;
+  company_debit: string;
+  confirmed_money: boolean;
+  created_time: string;
+  creator_id: number;
+  customer: ICustomer;
+  customer_id: number;
+  date_collect_money: null | string;
+  debt: boolean;
+  deliver: string;
+  deliver_provider: string;
+  delivery_address: string;
+  delivery_date: string;
+  deposite: number;
+  design_fee: number;
+  design_file_name: string | null;
+  done: boolean;
+  id: number;
+  method: string;
+  money_source: string;
+  name: string;
+  need_check: boolean;
+  notes: INotes[];
+  number_print_face: number;
+  order_no: string;
+  order_type: "CUSTOM";
+  outsource_date: string | null;
+  outsource_ids: number[];
+  outsources: IOurSources[];
+  paper: IPaper;
+  paper_id: number;
+  payment_method: string;
+  print_type_ids: number[];
+  print_types: IPrintTypes[];
+  quantity: number;
+  receiver_info: string;
+  receiver_phone: null | string;
+  reference_order: null | string;
+  saler: IResUser;
+  shipping_fee: number;
+  status: ORDER_STATUS_NAME;
+  template_number: number;
+  total_cost: number;
+  tracking_id: string;
+  unit_price: number;
+  updated_time: string;
+  user: IResUser;
+  user_id: null | number;
+  vat: boolean;
+  vat_value: number;
+  who_collect_money: string;
 };

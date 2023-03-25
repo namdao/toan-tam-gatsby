@@ -1,12 +1,17 @@
 import { IResponseType } from "constant/commonType";
+import { format } from "date-fns";
 import { isArray } from "lodash";
 import isNumber from "lodash/isNumber";
 import { enqueueSnackbar, useSnackbar } from "notistack";
 import { useState } from "react";
-import { useAppDispatch } from "store";
-import { ORDER_STATUS_NAME } from "../helper/OrderConstant";
+import { useAppDispatch, useAppSelector } from "store";
+import {
+  initParams,
+  ORDER_STATUS_NAME,
+  SEARCH_BY,
+} from "../helper/OrderConstant";
 import { apiOrderStatus, apiTotalInProgress } from "../redux/api";
-import { ordersAction } from "../redux/slice";
+import { ordersAction, OrdersSelector } from "../redux/slice";
 import {
   IReqOrderStatus,
   IReqParams,
@@ -48,12 +53,23 @@ export const useTotalMoneyProgress = () => {
 
 export const useOrderAllStatus = (status: ORDER_STATUS_NAME) => {
   const dispatch = useAppDispatch();
-  const onOrderWithStatus = async (dataRequest: IReqParams) => {
+  const dataFilter = useAppSelector(OrdersSelector.getFilterOrder);
+
+  const onOrderWithStatus = async (page = 1, pageSize = 20) => {
     try {
       dispatch(ordersAction.requestOrderByStatus(status));
       const payload: IReqOrderStatus = {
         status,
-        ...dataRequest,
+        created_date: dataFilter.createDate
+          ? format(dataFilter.createDate, "yyyy/MM/dd")
+          : undefined,
+        updated_date: dataFilter.updateDate
+          ? format(dataFilter.updateDate, "yyyy/MM/dd")
+          : undefined,
+        search: dataFilter.search || undefined,
+        search_by: dataFilter.type ?? initParams.search_by,
+        page: dataFilter.page ?? page ?? initParams.page,
+        per_page: dataFilter.pageSize ?? pageSize ?? initParams.per_page,
       };
       const result: IResponseType<IResOrder2Status> = await apiOrderStatus(
         payload
@@ -78,12 +94,8 @@ export const useOrderAllStatus = (status: ORDER_STATUS_NAME) => {
     }
   };
 
-  const onNextPage = (payload: IReqParams) => {
-    const data: IReqParams = {
-      ...payload,
-      page: payload.page + 1,
-    };
-    onOrderWithStatus(data);
+  const onNextPage = (page: number, pageSize: number) => {
+    onOrderWithStatus(page + 1, pageSize);
   };
   return {
     onOrderWithStatus,

@@ -11,15 +11,13 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 import Iconify from "components/iconify";
 import {
-  initParams,
   ORDER_FILTER,
   ORDER_STATUS_NAME,
   SEARCH_BY,
 } from "scenes/orders/helper/OrderConstant";
 import { useLocales } from "locales";
-import { useOrderAllStatus } from "scenes/orders/hooks/useOrderProcessing";
-import { IReqParams } from "scenes/orders/redux/types";
-import { format } from "date-fns";
+import { useAppDispatch, useAppSelector } from "store";
+import { ordersAction, OrdersSelector } from "scenes/orders/redux/slice";
 
 const INPUT_WIDTH = 160;
 const DATE_PICKER_WIDTH = 200;
@@ -29,52 +27,38 @@ type Props = {
 };
 export default function BlockFilter({ status }: Props) {
   const { translate } = useLocales();
-  const { onOrderWithStatus } = useOrderAllStatus(status);
-  const [filterType, setFilterType] = useState<SEARCH_BY>(SEARCH_BY.ALL);
-  const [filterCreatedDate, setFilterCreatedDate] = useState<Date | null>();
-  const [filterUpdatedDate, setFilterUpdatedDate] = useState<Date | null>();
-  const [filterName, setFilterName] = useState<string>("");
+  const dispatch = useAppDispatch();
+  const dataFilter = useAppSelector(OrdersSelector.getFilterOrder);
+
   const onChangeType = (e: ChangeEvent<HTMLInputElement>) => {
-    setFilterType(e.target.value as SEARCH_BY);
+    dispatch(ordersAction.setDataFilter({ type: e.target.value as SEARCH_BY }));
   };
 
-  const onSetFilterName = (e: ChangeEvent<HTMLInputElement>) => {
-    setFilterName(e.target.value);
+  const onSetCreatedDate = (e: Date | null) => {
+    dispatch(ordersAction.setDataFilter({ createDate: e }));
   };
-  useEffect(() => {
-    const dataRequestOrder: IReqParams = {
-      ...initParams,
-    };
-    if (filterCreatedDate) {
-      dataRequestOrder.created_date = format(filterCreatedDate, "yyyy/MM/dd");
-    }
-    if (filterUpdatedDate) {
-      dataRequestOrder.updated_date = format(filterUpdatedDate, "yyyy/MM/dd");
-    }
-    if (filterName) {
-      dataRequestOrder.search = filterName.trim();
-    }
-    if (filterType) {
-      dataRequestOrder.search_by = filterType;
-    }
-    onOrderWithStatus(dataRequestOrder);
-  }, [filterType, filterCreatedDate, filterUpdatedDate, filterName]);
+  const onSetUpdatedDate = (e: Date | null) => {
+    dispatch(ordersAction.setDataFilter({ updateDate: e }));
+  };
+
+  const onSetFilterSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(ordersAction.setDataFilter({ search: e.target.value }));
+  };
 
   const onResetFilter = () => {
-    setFilterCreatedDate(null);
-    setFilterUpdatedDate(null);
-    setFilterName("");
-    setFilterType(SEARCH_BY.ALL);
+    dispatch(ordersAction.resetFilter());
   };
 
-  const onClearStartDate = () => {
-    setFilterCreatedDate(null);
+  const onClearCreatedDate = () => {
+    dispatch(ordersAction.clearCreateDateFilter());
   };
+
   const onClearUpdatedDate = () => {
-    setFilterUpdatedDate(null);
+    dispatch(ordersAction.clearUpdateDateFilter());
   };
 
-  const isFiltered = filterCreatedDate || filterUpdatedDate || filterName;
+  const { createDate, updateDate, search, type } = dataFilter || {};
+  const isFiltered = createDate || updateDate || search;
 
   return (
     <Stack
@@ -91,7 +75,7 @@ export default function BlockFilter({ status }: Props) {
         id="selected"
         select
         label={translate("orders.filterBy")}
-        value={filterType}
+        value={type}
         onChange={onChangeType}
         SelectProps={{
           MenuProps: {
@@ -124,9 +108,9 @@ export default function BlockFilter({ status }: Props) {
 
       <DatePicker
         label={translate("orders.createdDate")}
-        onChange={setFilterCreatedDate}
+        value={createDate}
+        onChange={onSetCreatedDate}
         inputFormat="dd / MM / yyyy"
-        value={filterCreatedDate}
         renderInput={({ InputProps, ...rest }) => {
           return (
             <TextField
@@ -134,10 +118,10 @@ export default function BlockFilter({ status }: Props) {
               InputProps={{
                 endAdornment: (
                   <>
-                    {filterCreatedDate && (
+                    {createDate && (
                       <Iconify
                         sx={{ cursor: "pointer" }}
-                        onClick={onClearStartDate}
+                        onClick={onClearCreatedDate}
                         icon="material-symbols:close"
                       />
                     )}
@@ -154,8 +138,8 @@ export default function BlockFilter({ status }: Props) {
       />
       <DatePicker
         label={translate("orders.updatedDate")}
-        value={filterUpdatedDate}
-        onChange={setFilterUpdatedDate}
+        value={updateDate}
+        onChange={onSetUpdatedDate}
         inputFormat="dd / MM / yyyy"
         renderInput={({ InputProps, ...rest }) => {
           return (
@@ -164,7 +148,7 @@ export default function BlockFilter({ status }: Props) {
               InputProps={{
                 endAdornment: (
                   <>
-                    {filterCreatedDate && (
+                    {updateDate && (
                       <Iconify
                         sx={{ cursor: "pointer" }}
                         onClick={onClearUpdatedDate}
@@ -185,8 +169,8 @@ export default function BlockFilter({ status }: Props) {
 
       <TextField
         fullWidth
-        value={filterName}
-        onChange={onSetFilterName}
+        value={search}
+        onChange={onSetFilterSearch}
         placeholder={translate("orders.searchByPlaceHolder")}
         InputProps={{
           startAdornment: (
