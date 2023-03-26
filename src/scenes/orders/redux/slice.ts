@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "store";
 import { IOrder } from "./types";
 import { ORDER_STATUS_NAME, SEARCH_BY } from "../helper/OrderConstant";
+import { isEqual } from "lodash";
 
 type IFilter = {
   search?: string;
@@ -15,6 +16,8 @@ type IDataOrder = {
   list: IOrder[];
   loading: boolean;
   total: number;
+  loadingSumary: boolean;
+  totalSumary: number;
 };
 type IPagination = {
   page: number;
@@ -25,7 +28,7 @@ export type IOrdersState = Record<ORDER_STATUS_NAME, IDataOrder> & {
 };
 const initialState: IOrdersState = {
   filter: {
-    page: 1,
+    page: 0,
     pageSize: 20,
     type: SEARCH_BY.ALL,
     search: "",
@@ -42,6 +45,9 @@ const ordersSlice = createSlice({
         if (state[action.payload].list.length < 1) {
           state[action.payload].loading = true;
         }
+        if (state[action.payload].totalSumary < 1) {
+          state[action.payload].loadingSumary = true;
+        }
       }
     },
     requestOrderByStatusSuccess: (
@@ -53,10 +59,16 @@ const ordersSlice = createSlice({
       }>
     ) => {
       const { status, total, list } = action.payload;
+      const isResetFilter = isEqual(state.filter, initialState.filter);
       state[status] = {
         loading: false,
         list,
         total,
+        loadingSumary: false,
+        totalSumary:
+          !isResetFilter && state[status]?.totalSumary
+            ? state[status].totalSumary
+            : total,
       };
     },
     requestOrderByStatusFailed: (
@@ -65,6 +77,7 @@ const ordersSlice = createSlice({
     ) => {
       if (state[action.payload]) {
         state[action.payload].loading = false;
+        state[action.payload].loadingSumary = false;
       }
     },
     setDataFilter: (state, action: PayloadAction<IFilter>) => {
@@ -77,6 +90,13 @@ const ordersSlice = createSlice({
       state.filter = {
         ...state.filter,
         ...action.payload.data,
+      };
+    },
+    resetPagination: (state) => {
+      state.filter = {
+        ...state.filter,
+        page: initialState.filter.page,
+        pageSize: initialState.filter.pageSize,
       };
     },
     resetFilter: (state) => {
@@ -101,6 +121,10 @@ const getTotalByStatus = (
   state: RootState,
   status: ORDER_STATUS_NAME
 ): number => state.data.order[status]?.total || 0;
+const getTotalFixByStatus = (
+  state: RootState,
+  status: ORDER_STATUS_NAME
+): number => state.data.order[status]?.totalSumary || 0;
 const getListByStatus = (
   state: RootState,
   status: ORDER_STATUS_NAME
@@ -109,6 +133,10 @@ const getLoadingByStatus = (
   state: RootState,
   status: ORDER_STATUS_NAME
 ): boolean => state.data.order[status]?.loading ?? true;
+const getLoadingBySumary = (
+  state: RootState,
+  status: ORDER_STATUS_NAME
+): boolean => state.data.order[status]?.loadingSumary ?? true;
 const getFilterOrder = (state: RootState) => state.data.order.filter;
 // Selectors
 export const OrdersSelector = {
@@ -116,6 +144,8 @@ export const OrdersSelector = {
   getListByStatus,
   getLoadingByStatus,
   getFilterOrder,
+  getTotalFixByStatus,
+  getLoadingBySumary,
 };
 
 // Actions

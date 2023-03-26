@@ -22,10 +22,10 @@ const BlockItem = ({
   icon: string;
 }) => {
   const total = useAppSelector((state) =>
-    OrdersSelector.getTotalByStatus(state, status)
+    OrdersSelector.getTotalFixByStatus(state, status)
   );
   const loading = useAppSelector((state) =>
-    OrdersSelector.getLoadingByStatus(state, status)
+    OrdersSelector.getLoadingBySumary(state, status)
   );
 
   if (loading) {

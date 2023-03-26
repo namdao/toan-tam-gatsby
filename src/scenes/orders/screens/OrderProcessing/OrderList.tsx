@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tab, Tabs, Card } from "@mui/material";
 import {
   ORDER_STATUS_NAME,
@@ -8,8 +8,8 @@ import { useLocales } from "locales";
 import Label from "components/label";
 import { IOrderTabProcessing } from "scenes/orders/helper/OrderConstant";
 import { useOrderAllStatus } from "scenes/orders/hooks/useOrderProcessing";
-import { useAppSelector } from "store";
-import { OrdersSelector } from "scenes/orders/redux/slice";
+import { useAppDispatch, useAppSelector } from "store";
+import { ordersAction, OrdersSelector } from "scenes/orders/redux/slice";
 import OrderTable from "./OrderTable";
 import BlockFilter from "./BlockFilter";
 import BlockDescription from "./BlockDescription";
@@ -20,6 +20,7 @@ const tabChild = (
   filterStatus: ORDER_STATUS_NAME
 ) => {
   const { translate } = useLocales();
+  const dispatch = useAppDispatch();
   const dataFilter = useAppSelector(
     OrdersSelector.getFilterOrder,
     shallowEqual
@@ -30,7 +31,14 @@ const tabChild = (
   );
   useEffect(() => {
     onOrderWithStatus();
-  }, [filterStatus, dataFilter]);
+    dispatch(ordersAction.resetPagination());
+  }, [
+    filterStatus,
+    dataFilter.createDate,
+    dataFilter.search,
+    dataFilter.type,
+    dataFilter.updateDate,
+  ]);
   return (
     <Tab
       key={tab.value}

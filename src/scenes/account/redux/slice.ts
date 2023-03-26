@@ -1,4 +1,4 @@
-import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PersistConfig } from "redux-persist/lib/types";
 import { persistReducer } from "redux-persist";
 import { RootState } from "store";

@@ -68,8 +68,8 @@ export const useOrderAllStatus = (status: ORDER_STATUS_NAME) => {
           : undefined,
         search: dataFilter.search || undefined,
         search_by: dataFilter.type ?? initParams.search_by,
-        page: dataFilter.page ?? page ?? initParams.page,
-        per_page: dataFilter.pageSize ?? pageSize ?? initParams.per_page,
+        page: page ?? dataFilter.page ?? initParams.page,
+        per_page: pageSize ?? dataFilter.pageSize ?? initParams.per_page,
       };
       const result: IResponseType<IResOrder2Status> = await apiOrderStatus(
         payload

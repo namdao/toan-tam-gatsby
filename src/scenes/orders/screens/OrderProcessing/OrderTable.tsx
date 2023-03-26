@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import Box from "@mui/material/Box";
 import {
   DataGridPro,
@@ -29,8 +29,8 @@ const OrderTable: React.FC<IPropsOrderTable> = ({ status }) => {
     OrdersSelector.getTotalByStatus(state, status)
   );
   const paginationModel = {
-    page: filter.page,
-    pageSize: filter.pageSize,
+    page: filter.page ?? 0,
+    pageSize: filter.pageSize ?? 20,
   };
   const pinOrderLeft = useMemo(
     () => OrderColumnTable.find((e) => e.field === "order_no"),
@@ -42,14 +42,9 @@ const OrderTable: React.FC<IPropsOrderTable> = ({ status }) => {
   );
 
   const setPagination = (model: GridPaginationModel) => {
-    if (model.page === 0) {
-      model.page = 1;
-    }
     dispatch(ordersAction.setPagination({ data: model }));
+    onNextPage(model.page, model.pageSize);
   };
-  useEffect(() => {
-    onNextPage(filter.page ?? 1, filter.pageSize ?? 20);
-  }, [filter.page, filter.pageSize, status]);
 
   return (
     <Box sx={{ height: 600, width: "100%" }}>
@@ -71,6 +66,7 @@ const OrderTable: React.FC<IPropsOrderTable> = ({ status }) => {
           ColumnHeaders: MemoizedColumnHeaders,
         }}
         pagination
+        paginationModel={paginationModel}
         paginationMode="server"
         onPaginationModelChange={setPagination}
       />
