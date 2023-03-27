@@ -73,6 +73,33 @@ export const OrderColumnTable: GridColDef[] = [
     },
   },
   {
+    field: "action",
+    type: "actions",
+    headerName: "Hành động",
+    minWidth: 100,
+    getActions: ({ row }: GridRowParams<IOrder>) => [
+      <GridActionsCellItem
+        icon={
+          <Link to={`${PATH_APP.order.detail.link(row.id)}`} color="GrayText">
+            <Iconify width={ICON.NAV_ITEM} icon="mdi:show" />
+          </Link>
+        }
+        label="Chi tiết"
+      />,
+      <GridActionsCellItem
+        icon={
+          <Link to={`${PATH_APP.order.update.link(row.id)}`} color="GrayText">
+            <Iconify
+              width={ICON.NAV_ITEM}
+              icon="material-symbols:edit-document-outline"
+            />
+          </Link>
+        }
+        label="Cập nhật"
+      />,
+    ],
+  },
+  {
     field: "customer_name",
     headerName: "Tên khách hàng",
     minWidth: 200,
@@ -168,32 +195,5 @@ export const OrderColumnTable: GridColDef[] = [
         <Iconify width={ICON.NAV_ITEM} icon={iconVat} color={colorVat.main} />
       );
     },
-  },
-  {
-    field: "action",
-    type: "actions",
-    headerName: "Hành động",
-    minWidth: 100,
-    getActions: ({ row }: GridRowParams<IOrder>) => [
-      <GridActionsCellItem
-        icon={
-          <Link to={`${PATH_APP.order.detail.link(row.id)}`} color="GrayText">
-            <Iconify width={ICON.NAV_ITEM} icon="mdi:show" />
-          </Link>
-        }
-        label="Chi tiết"
-      />,
-      <GridActionsCellItem
-        icon={
-          <Link to={`${PATH_APP.order.update.link(row.id)}`} color="GrayText">
-            <Iconify
-              width={ICON.NAV_ITEM}
-              icon="material-symbols:edit-document-outline"
-            />
-          </Link>
-        }
-        label="Cập nhật"
-      />,
-    ],
   },
 ];
