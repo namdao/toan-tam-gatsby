@@ -73,7 +73,7 @@ export const OrderColumnTable: GridColDef[] = [
     },
   },
   {
-    field: "action",
+    field: "actions",
     type: "actions",
     headerName: "Hành động",
     minWidth: 100,

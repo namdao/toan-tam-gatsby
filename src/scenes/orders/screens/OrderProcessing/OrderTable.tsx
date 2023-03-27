@@ -33,14 +33,12 @@ const OrderTable: React.FC<IPropsOrderTable> = ({ status }) => {
     pageSize: filter.pageSize ?? 20,
   };
   const pinOrderLeft = useMemo(
-    () => OrderColumnTable.find((e) => e.field === "order_no"),
+    () =>
+      OrderColumnTable.filter(
+        (e) => e.field === "order_no" || e.field === "actions"
+      ).map((e) => e.field),
     []
   );
-  const pinOrderRight = useMemo(
-    () => OrderColumnTable.find((e) => e.field === "action"),
-    []
-  );
-
   const setPagination = (model: GridPaginationModel) => {
     dispatch(ordersAction.setPagination({ data: model }));
     onNextPage(model.page, model.pageSize);
@@ -55,8 +53,7 @@ const OrderTable: React.FC<IPropsOrderTable> = ({ status }) => {
         disableRowSelectionOnClick
         initialState={{
           pinnedColumns: {
-            left: pinOrderLeft && [pinOrderLeft?.field],
-            right: pinOrderRight && [pinOrderRight?.field],
+            left: pinOrderLeft,
           },
           pagination: { paginationModel },
         }}
