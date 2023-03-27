@@ -26,7 +26,7 @@ const OrderDetail: FC<IProps> = ({ orderId }) => {
   return (
     <Container maxWidth={themeStretch ? false : "lg"}>
       <Helmet title={translate("orders.orderProcessing.detail", { orderId })} />
-      <BlockHeader orderId={orderId} />
+      {/* <BlockHeader orderId={orderId} /> */}
       <BlockInfoCustomer data={orderDetail} loading={loading} />
       <BlockInfoOrder data={orderDetail} loading={loading} />
       <BlockPriceOrder data={orderDetail} loading={loading} />

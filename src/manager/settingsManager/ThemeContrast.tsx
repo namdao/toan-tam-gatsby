@@ -18,8 +18,9 @@ export default function ThemeContrast({ children }: Props) {
 
   const isContrastBold = themeContrast === "bold";
 
-  const themeOptions = useMemo(
-    () => ({
+  const themeOptions = useMemo(() => {
+    console.log(isLight, isContrastBold, themeContrast);
+    return {
       palette: {
         background: {
           ...(isContrastBold && {
@@ -40,10 +41,8 @@ export default function ThemeContrast({ children }: Props) {
           },
         },
       },
-    }),
-
-    [isLight, themeContrast]
-  );
+    };
+  }, [isLight, isContrastBold, themeContrast]);
   const theme = createTheme(merge(outerTheme, themeOptions));
 
   return (

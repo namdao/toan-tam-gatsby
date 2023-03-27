@@ -19,6 +19,7 @@ import { LabelColor } from "components/label/types";
 import { ORDER_STATUS_NAME } from "./OrderConstant";
 import { Link } from "gatsby-theme-material-ui";
 import { PATH_APP } from "constant/routeConstant";
+import FullScreenDialogs from "../screens/OrderProcessing/DialogOrderSelected";
 
 const PaperType = ({ paperId }: { paperId: number }) => {
   const listPaper = useAppSelector(PaperTypeSelector.getListPaper);
@@ -29,8 +30,6 @@ export const OrderColumnTable: GridColDef[] = [
   {
     field: "order_no",
     headerName: "Mã đơn hàng",
-    headerAlign: "center",
-    align: "center",
     minWidth: 150,
     renderCell: ({ value, row }: GridRenderCellParams<IOrder>) => {
       const theme = useTheme();
@@ -79,11 +78,7 @@ export const OrderColumnTable: GridColDef[] = [
     minWidth: 100,
     getActions: ({ row }: GridRowParams<IOrder>) => [
       <GridActionsCellItem
-        icon={
-          <Link to={`${PATH_APP.order.detail.link(row.id)}`} color="GrayText">
-            <Iconify width={ICON.NAV_ITEM} icon="mdi:show" />
-          </Link>
-        }
+        icon={<FullScreenDialogs orderId={row.id} orderName={row.order_no} />}
         label="Chi tiết"
       />,
       <GridActionsCellItem

@@ -14,7 +14,7 @@ import Lists from "./List";
 import Input from "./Input";
 // import Radio from "./Radio";
 import Drawer from "./Drawer";
-// import Dialog from "./Dialog";
+import Dialog from "./Dialog";
 // import Avatar from "./Avatar";
 // import Rating from "./Rating";
 // import Slider from "./Slider";
@@ -25,7 +25,7 @@ import Button from "./Button";
 // import Tooltip from "./Tooltip";
 // import Popover from "./Popover";
 // import Stepper from "./Stepper";
-// import DataGrid from "./DataGrid";
+import DataGrid from "./DataGrid";
 // import Skeleton from "./Skeleton";
 // import Backdrop from "./Backdrop";
 // import Progress from "./Progress";
@@ -61,7 +61,7 @@ export default function ComponentsOverrides(theme: Theme) {
     // Select(theme),
     Button(theme),
     // Rating(theme),
-    // Dialog(theme),
+    Dialog(theme),
     // Avatar(theme),
     // Slider(theme),
     Drawer(theme),
@@ -70,7 +70,7 @@ export default function ComponentsOverrides(theme: Theme) {
     // Popover(theme),
     // SvgIcon(theme),
     // Checkbox(theme),
-    // DataGrid(theme),
+    DataGrid(theme),
     // Skeleton(theme),
     Timeline(theme),
     // TreeView(theme),
