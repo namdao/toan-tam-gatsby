@@ -6,6 +6,9 @@ export function fNumber(number: InputValue) {
   return numeral(number).format();
 }
 
+export function parseToNumber(number: string) {
+  return numeral(number).value() || 0;
+}
 export function fCurrency(number: InputValue) {
   const format = number ? numeral(number).format("0,0.00") : "";
   return result(format, ".00");

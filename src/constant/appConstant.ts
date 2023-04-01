@@ -8,7 +8,7 @@ const appConstant = {
     TOTAL_INPROGRESS: "/total-inprogress",
     ORDERS2: "/orders2",
     PAPER_TYPE: "/paper-type",
-    ORDERS_DETAIL: (id: number) => `/orders/${id}`,
+    ORDERS_ACTIONS: (id: number) => `/orders/${id}`,
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

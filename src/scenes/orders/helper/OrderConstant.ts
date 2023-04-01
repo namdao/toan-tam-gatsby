@@ -97,3 +97,5 @@ export const initParams: IReqParams = {
   per_page: 20,
   search_by: SEARCH_BY.ALL,
 };
+
+export const listPayment = ["Công nợ", "Chuyển khoản", "Tiền mặt"];

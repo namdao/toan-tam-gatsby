@@ -71,5 +71,25 @@ const OrderLangs = {
       dateStorePO: "Ngày lưu kho:",
     },
   },
+  orderUpdate: {
+    error: {
+      notes: "Vui lòng nhập ghi chú",
+      paymentMethod: "Vui lòng chọn phương thức thanh toán",
+      whoCollectionMoney: "Vui lòng nhập tên người thu tiền",
+      number: "Chỉ được nhập số",
+      orderProcessing: "Cập nhật đơn hàng thất bại",
+    },
+    success: {
+      orderProcessing: "Cập nhật đơn hàng thành công",
+    },
+    form: {
+      paymentMethod: "Phương thức thanh toán",
+      amount: "Tổng tiền",
+      deposite: "Tạm ứng",
+      note: "Ghi chú",
+      cod: "Thành tiền",
+    },
+    save: "Cập nhật",
+  },
 };
 export default OrderLangs;

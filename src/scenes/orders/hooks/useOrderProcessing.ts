@@ -1,22 +1,24 @@
 import { IResponseType } from "constant/commonType";
 import { format } from "date-fns";
+import { useLocales } from "locales";
 import { isArray } from "lodash";
 import isNumber from "lodash/isNumber";
 import { enqueueSnackbar, useSnackbar } from "notistack";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "store";
+import { initParams, ORDER_STATUS_NAME } from "../helper/OrderConstant";
 import {
-  initParams,
-  ORDER_STATUS_NAME,
-  SEARCH_BY,
-} from "../helper/OrderConstant";
-import { apiOrderStatus, apiTotalInProgress } from "../redux/api";
+  apiOrderStatus,
+  apiOrderUpdate,
+  apiTotalInProgress,
+} from "../redux/api";
 import { ordersAction, OrdersSelector } from "../redux/slice";
 import {
   IReqOrderStatus,
-  IReqParams,
+  IRequestUpdateOrder,
   IResOrder2Status,
   IResTotalDebigProgress,
+  IResUpdateOrderProcessing,
 } from "../redux/types";
 
 export const useTotalMoneyProgress = () => {
@@ -100,5 +102,33 @@ export const useOrderAllStatus = (status: ORDER_STATUS_NAME) => {
   return {
     onOrderWithStatus,
     onNextPage,
+  };
+};
+
+export const useUpdateOrder = (orderId: number) => {
+  const { translate } = useLocales();
+  const onUpdateOrderProcessing = async (
+    payload: IRequestUpdateOrder,
+    callbackSuccess: () => void
+  ) => {
+    try {
+      const result: IResponseType<IResUpdateOrderProcessing> =
+        await apiOrderUpdate(orderId, payload);
+      if (result.data) {
+        callbackSuccess();
+        enqueueSnackbar(
+          translate("orders.orderUpdate.success.orderProcessing")
+        );
+      } else {
+        enqueueSnackbar(translate("orders.orderUpdate.error.orderProcessing"));
+      }
+    } catch (error) {
+      enqueueSnackbar((error as Error)?.message || "onOrderWithStatus error", {
+        variant: "error",
+      });
+    }
+  };
+  return {
+    onUpdateOrderProcessing,
   };
 };

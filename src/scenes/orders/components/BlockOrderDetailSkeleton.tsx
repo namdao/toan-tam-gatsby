@@ -46,3 +46,20 @@ export const BlockInfoOrderSkelekton = () => (
     </Card>
   </Grid>
 );
+
+export const BlockUpdateOrderSkeleton = () => (
+  <Grid item xs={12} md={12}>
+    <Card>
+      <Stack spacing={2} sx={{ p: 3 }}>
+        {[0, 1, 2].map((value) => (
+          <Skeleton
+            key={value}
+            variant="rectangular"
+            width="100%"
+            height={20}
+          />
+        ))}
+      </Stack>
+    </Card>
+  </Grid>
+);

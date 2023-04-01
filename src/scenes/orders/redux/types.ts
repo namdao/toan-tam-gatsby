@@ -152,3 +152,23 @@ export type IOrderDetail = {
   vat_value: number;
   who_collect_money: string;
 };
+
+export type IRequestUpdateOrder = {
+  note: string;
+  payment_method?: string;
+  deposite?: number;
+  cash?: number;
+  code?: number;
+  done?: boolean;
+  debt?: boolean;
+  need_check?: boolean;
+  date_collect_money?: string;
+  money_source?: number;
+  who_collect_money?: string;
+  company_debit?: number;
+  confirmed_money?: boolean;
+};
+
+export type IResUpdateOrderProcessing = {
+  message: string;
+};

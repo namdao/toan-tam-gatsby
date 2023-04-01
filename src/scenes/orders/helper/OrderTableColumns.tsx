@@ -20,6 +20,7 @@ import { ORDER_STATUS_NAME } from "./OrderConstant";
 import { Link } from "gatsby-theme-material-ui";
 import { PATH_APP } from "constant/routeConstant";
 import FullScreenDialogs from "../screens/OrderProcessing/DialogOrderSelected";
+import DialogOrderUpdate from "../screens/OrderUpdate";
 
 const PaperType = ({ paperId }: { paperId: number }) => {
   const listPaper = useAppSelector(PaperTypeSelector.getListPaper);
@@ -82,14 +83,7 @@ export const OrderColumnTable: GridColDef[] = [
         label="Chi tiết"
       />,
       <GridActionsCellItem
-        icon={
-          <Link to={`${PATH_APP.order.update.link(row.id)}`} color="GrayText">
-            <Iconify
-              width={ICON.NAV_ITEM}
-              icon="material-symbols:edit-document-outline"
-            />
-          </Link>
-        }
+        icon={<DialogOrderUpdate orderId={row.id} orderName={row.order_no} />}
         label="Cập nhật"
       />,
     ],
@@ -163,6 +157,12 @@ export const OrderColumnTable: GridColDef[] = [
     minWidth: 100,
     headerAlign: "center",
     align: "center",
+    valueGetter: ({ value }) => (value ? fCurrency(value) : "-"),
+  },
+  {
+    field: "deposite",
+    headerName: "Tạm ứng",
+    minWidth: 200,
     valueGetter: ({ value }) => (value ? fCurrency(value) : "-"),
   },
   {
