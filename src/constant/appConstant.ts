@@ -9,6 +9,9 @@ const appConstant = {
     ORDERS2: "/orders2",
     PAPER_TYPE: "/paper-type",
     ORDERS_ACTIONS: (id: number) => `/orders/${id}`,
+    TOTAL_RECEIVABLES: "/total-receivables",
+    ORDERS3: "/orders3",
+    CUSTOMERS: "/customers",
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

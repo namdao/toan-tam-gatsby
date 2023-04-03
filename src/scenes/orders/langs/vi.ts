@@ -91,5 +91,12 @@ const OrderLangs = {
     },
     save: "Cập nhật",
   },
+  orderNeedCollect: {
+    title: "Đơn hàng cần thanh toán",
+    totalMoneyReceive: "Tổng tiền phải thu: {{money}}",
+    filterCustomer: "Lọc khách hàng",
+    debit: "Công nợ",
+    emailDebit: "Gửi email công nợ",
+  },
 };
 export default OrderLangs;

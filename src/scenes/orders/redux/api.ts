@@ -1,6 +1,11 @@
 import axios from "axios";
 import appConstant from "constant/appConstant";
-import { IReqOrderStatus, IRequestUpdateOrder } from "./types";
+import { ORDER_STATUS_NAME } from "../helper/OrderConstant";
+import {
+  IReqOrderListCollect,
+  IReqOrderStatus,
+  IRequestUpdateOrder,
+} from "./types";
 
 const { API_URL } = appConstant;
 export const apiTotalInProgress = () => axios.get(API_URL.TOTAL_INPROGRESS);
@@ -12,3 +17,17 @@ export const apiOrderDetail = (orderId: number) =>
 
 export const apiOrderUpdate = (orderId: number, payload: IRequestUpdateOrder) =>
   axios.put(API_URL.ORDERS_ACTIONS(orderId), payload);
+
+export const apiTotalReceivables = () => axios.get(API_URL.TOTAL_RECEIVABLES);
+
+export const apiOrderListReceivable = (payload: IReqOrderListCollect) =>
+  axios.get(API_URL.ORDERS3, {
+    params: {
+      status: ORDER_STATUS_NAME.DONE,
+      seearch_by: "all",
+      done: false,
+      need_check: false,
+      debt: false,
+      ...payload,
+    },
+  });

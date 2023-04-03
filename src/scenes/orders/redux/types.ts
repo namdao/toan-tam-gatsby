@@ -12,12 +12,13 @@ export type IResTotalDebigProgress = {
   total_debit: number;
   total_paid: number;
 };
-
-export type IReqOrderStatus = {
-  status: ORDER_STATUS_NAME;
-  search_by: SEARCH_BY;
+export type IPage = {
   per_page: number;
   page: number;
+};
+export type IReqOrderStatus = IPage & {
+  status: ORDER_STATUS_NAME;
+  search_by: SEARCH_BY;
   created_date?: string;
   updated_date?: string;
   search?: string;
@@ -172,3 +173,16 @@ export type IRequestUpdateOrder = {
 export type IResUpdateOrderProcessing = {
   message: string;
 };
+
+export type IResTotalReceive = {
+  total_debit: number;
+  total_paid: number;
+};
+
+export type IReqOrderListCollect = IPage & {
+  customer_id?: number;
+  created_date?: string;
+  updated_date?: string;
+};
+
+export type IResOrderListCollect = IResOrder2Status;

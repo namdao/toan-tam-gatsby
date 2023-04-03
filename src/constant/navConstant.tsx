@@ -24,7 +24,7 @@ import OutsourceList from "scenes/outsources/screens/OutsourcesList";
 import OutsourceAdd from "scenes/outsources/screens/OutsourcesAdd";
 import OrderSearch from "scenes/orders/screens/OrderSearch";
 import OrderProcessing from "scenes/orders/screens/OrderProcessing";
-import OrderNeedPaid from "scenes/orders/screens/OrderNeedPaid";
+import OrderNeedCollect from "scenes/orders/screens/OrderNeedCollect";
 import OrderNeedCheck from "scenes/orders/screens/OrderNeedCheck";
 import OrderNeedConfirm from "scenes/orders/screens/OrderNeedConfirm";
 import OrderListStored from "scenes/orders/screens/OrderListStored";
@@ -132,7 +132,7 @@ const navConfig = [
         title: "order.needPaid",
         path: PATH_APP.order.needPaid,
         icon: iconify("mdi:payment-clock"),
-        component: OrderNeedPaid,
+        component: OrderNeedCollect,
         children: [],
         roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.SALER, ROLES.STORE],
       },
