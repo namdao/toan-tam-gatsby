@@ -186,3 +186,7 @@ export type IReqOrderListCollect = IPage & {
 };
 
 export type IResOrderListCollect = IResOrder2Status;
+
+export type IResOrderListDetail = IOrderDetail & {
+  real_delivery_date: string;
+};

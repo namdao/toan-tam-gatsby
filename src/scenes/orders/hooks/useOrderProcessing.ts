@@ -40,7 +40,9 @@ export const useTotalMoneyProgress = () => {
         setMoneyDebitProgress(totalDebit);
       }
     } catch (error) {
-      enqueueSnackbar((error as Error)?.message || "onTotalProcess error");
+      enqueueSnackbar((error as Error)?.message || "onTotalProcess error", {
+        variant: "error",
+      });
     } finally {
       setLoading(false);
     }

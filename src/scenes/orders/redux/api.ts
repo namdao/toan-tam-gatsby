@@ -31,3 +31,6 @@ export const apiOrderListReceivable = (payload: IReqOrderListCollect) =>
       ...payload,
     },
   });
+
+export const apiOrderDetailList = (payload: { order_ids: number[] }) =>
+  axios.post(API_URL.ORDER_DETAILS_LIST, payload);

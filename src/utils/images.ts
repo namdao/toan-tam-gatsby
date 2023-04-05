@@ -5,6 +5,7 @@ import bgLoginDark from "assets/illustrations/bgLoginDark.png";
 import overlay2 from "assets/background/overlay_2.jpg";
 import bgTransparent from "assets/background/transparent.png";
 import character6 from "assets/illustrations/character_6.png";
+import logoPrint from "assets/images/logo-print.png";
 const Images = {
   illustrationDashboard,
   bgLogin,
@@ -16,5 +17,6 @@ const Images = {
   character: {
     character6,
   },
+  logoPrint,
 };
 export default Images;

@@ -12,6 +12,7 @@ const appConstant = {
     TOTAL_RECEIVABLES: "/total-receivables",
     ORDERS3: "/orders3",
     CUSTOMERS: "/customers",
+    ORDER_DETAILS_LIST: "/order-detail",
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

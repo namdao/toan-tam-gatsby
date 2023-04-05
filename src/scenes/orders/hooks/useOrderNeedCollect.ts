@@ -31,7 +31,9 @@ export const useTotalMoneyReceive = () => {
         setMoneyReceive(totalDebit);
       }
     } catch (error) {
-      enqueueSnackbar((error as Error)?.message || "onTotalReceive error");
+      enqueueSnackbar((error as Error)?.message || "onTotalReceive error", {
+        variant: "error",
+      });
     } finally {
       setLoading(false);
     }

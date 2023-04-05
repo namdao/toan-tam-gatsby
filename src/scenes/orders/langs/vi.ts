@@ -97,6 +97,9 @@ const OrderLangs = {
     filterCustomer: "Lọc khách hàng",
     debit: "Công nợ",
     emailDebit: "Gửi email công nợ",
+    error: {
+      notSupportMultiCustomer: "Chưa hổ trợ nhiều khách hàng",
+    },
   },
 };
 export default OrderLangs;
