@@ -16,12 +16,19 @@ import FormProvider, {
   RHFSelect,
   RHFTextField,
   RHFNumberFormat,
+  RHFRadioGroup,
 } from "components/hook-form";
 import { parseToNumber } from "utils/formatNumber";
 import { LoadingButton } from "@mui/lab";
-import { listPayment } from "scenes/orders/helper/OrderConstant";
+import {
+  listPayment,
+  LIST_MONEY_SOURCE,
+  listPaymentType,
+} from "scenes/orders/helper/OrderConstant";
 import { getTotalAmount, getTotalFee } from "utils/utility";
 import { useUpdateOrder } from "scenes/orders/hooks/useOrderProcessing";
+import RHFDatePicker from "components/hook-form/RHFDatePicker";
+import { format, parseISO } from "date-fns";
 
 type IPropsForm = {
   handleClose: (open: boolean) => void;
@@ -32,9 +39,16 @@ type FormValuesProps = {
   deposite: string;
   cod: string;
   note: string;
-  afterSubmit?: string;
+  cash: string;
+  date_collect_money: Date;
+  paymentType: string;
+  who_collect_money: string;
+  money_source: string;
+  done: boolean;
+  debt: boolean;
+  need_check: boolean;
 };
-const BlockFormAccountUpdate: FC<IPropsForm> = ({
+const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
   handleClose,
   orderDetail,
 }) => {
@@ -48,7 +62,15 @@ const BlockFormAccountUpdate: FC<IPropsForm> = ({
       translate("orders.orderUpdate.error.paymentMethod")
     ),
     cod: Yup.string(),
+    cash: Yup.string(),
     note: Yup.string().required(translate("orders.orderUpdate.error.notes")),
+    paymentType: Yup.string().required(
+      translate("orders.orderUpdate.error.paymentType")
+    ),
+    date_collect_money: Yup.date()
+      .required()
+      .typeError(translate("orders.orderUpdate.error.dateCollectMoney")),
+    who_collect_money: Yup.string(),
   });
 
   const defaultValues = {
@@ -61,6 +83,16 @@ const BlockFormAccountUpdate: FC<IPropsForm> = ({
     cod: orderDetail && getTotalAmount(orderDetail).toString(),
     note: "",
     totalAmount: orderDetail && getTotalFee(orderDetail),
+    paymentType: "",
+    // date collect money trả về là getTime
+    date_collect_money: orderDetail?.date_collect_money
+      ? parseISO(format(orderDetail.date_collect_money * 1000, "yyyy-MM-dd"))
+      : new Date(),
+    who_collect_money: orderDetail?.who_collect_money,
+    money_source: orderDetail?.money_source,
+    done: orderDetail?.done,
+    debt: orderDetail?.debt,
+    need_check: orderDetail?.need_check,
   };
 
   const methods = useForm<FormValuesProps>({
@@ -76,14 +108,38 @@ const BlockFormAccountUpdate: FC<IPropsForm> = ({
     formState: { isSubmitting },
   } = methods;
 
-  const watchDeposite = watch("deposite");
+  const [paymentType, money_source] = watch(["paymentType", "money_source"]);
 
   useEffect(() => {
-    if (orderDetail && watchDeposite) {
-      const restCod = getTotalFee(orderDetail) - parseToNumber(watchDeposite);
-      setValue("cod", restCod.toString());
+    if (orderDetail && paymentType) {
+      // Đơn đã thu đủ
+      if (paymentType === "done") {
+        setValue("cash", getTotalAmount(orderDetail).toString());
+        setValue("done", true);
+        setValue("debt", false);
+        setValue("need_check", false);
+        // Đơn thu chưa đủ nhưng đã kiểm tra rồi
+      } else if (paymentType === "debt") {
+        setValue("done", false);
+        setValue("debt", true);
+        setValue("need_check", false);
+        // Đơn thu khách thực tế đã đủ nhưng nhỏ hơn số tiền phải thu cần kiểm tra lại
+      } else if (paymentType === "need_check") {
+        setValue("done", false);
+        setValue("debt", false);
+        setValue("need_check", true);
+      }
     }
-  }, [watchDeposite]);
+  }, [paymentType]);
+
+  useEffect(() => {
+    if (
+      LIST_MONEY_SOURCE[money_source as keyof typeof LIST_MONEY_SOURCE] !==
+      LIST_MONEY_SOURCE.CASH
+    ) {
+      setValue("who_collect_money", "");
+    }
+  }, [money_source]);
 
   const onCallbackSuccess = () => {
     reset();
@@ -96,10 +152,25 @@ const BlockFormAccountUpdate: FC<IPropsForm> = ({
       note: data.note,
       deposite: parseToNumber(data.deposite),
       payment_method: data.payment_method,
+      cash: parseToNumber(data.cash),
+      done: data.done,
+      debt: data.debt,
+      need_check: data.need_check,
+      date_collect_money: data.date_collect_money,
+      money_source: data.money_source,
+      who_collect_money:
+        LIST_MONEY_SOURCE[money_source as keyof typeof LIST_MONEY_SOURCE] ===
+        LIST_MONEY_SOURCE.CASH
+          ? data.who_collect_money
+          : "",
     };
-    onUpdateOrderProcessing(payload, onCallbackSuccess);
+    console.log(payload);
+    alert("xu ly sau");
+    // onUpdateOrderProcessing(payload, onCallbackSuccess);
   };
-
+  const isShowWhoCollect =
+    LIST_MONEY_SOURCE[money_source as keyof typeof LIST_MONEY_SOURCE] ===
+    LIST_MONEY_SOURCE.CASH;
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <DialogContent>
@@ -122,12 +193,43 @@ const BlockFormAccountUpdate: FC<IPropsForm> = ({
             />
             <RHFNumberFormat
               name="deposite"
+              disabled
               label={translate("orders.orderUpdate.form.deposite")}
             />
             <RHFNumberFormat
               name="cod"
               label={translate("orders.orderUpdate.form.cod")}
             />
+            <RHFNumberFormat
+              name="cash"
+              label={translate("orders.orderUpdate.form.cash")}
+            />
+            <RHFRadioGroup row name="paymentType" options={listPaymentType} />
+            <Stack flexDirection="row" justifyContent="space-between">
+              <RHFDatePicker
+                sx={{ minWidth: 400 }}
+                name="date_collect_money"
+                label={translate("orders.orderUpdate.form.dayCollectMoney")}
+              />
+              <RHFSelect
+                sx={{ ml: 3 }}
+                name="money_source"
+                label={translate("orders.orderUpdate.form.moneySource")}
+              >
+                {Object.keys(LIST_MONEY_SOURCE).map((e) => (
+                  <MenuItem key={e} value={e}>
+                    {/* @ts-ignore */}
+                    {LIST_MONEY_SOURCE[e]}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+            </Stack>
+            {isShowWhoCollect && (
+              <RHFTextField
+                name="who_collect_money"
+                label={translate("orders.orderUpdate.form.whoCollectionMoney")}
+              />
+            )}
             <RHFTextField
               name="note"
               label={translate("orders.orderUpdate.form.note")}
@@ -162,4 +264,4 @@ const BlockFormAccountUpdate: FC<IPropsForm> = ({
   );
 };
 
-export default BlockFormAccountUpdate;
+export default BlockFormOrderNeedCollect;

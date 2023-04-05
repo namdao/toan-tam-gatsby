@@ -99,3 +99,26 @@ export const initParams: IReqParams = {
 };
 
 export const listPayment = ["Công nợ", "Chuyển khoản", "Tiền mặt"];
+export const listPaymentType = [
+  {
+    label: "Thu đủ",
+    value: "done",
+  },
+  {
+    label: "Thu chưa đủ",
+    value: "debt",
+  },
+  {
+    label: "Cần kiểm tra lại",
+    value: "need_check",
+  },
+];
+export const LIST_MONEY_SOURCE = {
+  VIB_PERSON: "VIB cá nhân",
+  VIB_COMPANY: "VIB công ty",
+  SACOMBANK_PERSON: "Sacombank cá nhân",
+  SACOMBANK_COMPANY: "Sacombank công ty",
+  ZALO_PAY: "Zalo pay",
+  MOMO: "Momo",
+  CASH: "Tiền mặt",
+};

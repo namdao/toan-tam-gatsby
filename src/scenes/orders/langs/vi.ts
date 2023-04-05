@@ -78,6 +78,8 @@ const OrderLangs = {
       whoCollectionMoney: "Vui lòng nhập tên người thu tiền",
       number: "Chỉ được nhập số",
       orderProcessing: "Cập nhật đơn hàng thất bại",
+      paymentType: "Vui lòng chọn phương thức thu tiền",
+      dateCollectMoney: "Vui lòng chọn ngày thu tiền",
     },
     success: {
       orderProcessing: "Cập nhật đơn hàng thành công",
@@ -88,6 +90,10 @@ const OrderLangs = {
       deposite: "Tạm ứng",
       note: "Ghi chú",
       cod: "Thành tiền",
+      cash: "Đã thu tiền",
+      dayCollectMoney: "Ngày thu",
+      moneySource: "Nguồn thu",
+      whoCollectionMoney: "Người thu tiền",
     },
     save: "Cập nhật",
   },
@@ -99,6 +105,11 @@ const OrderLangs = {
     emailDebit: "Gửi email công nợ",
     error: {
       notSupportMultiCustomer: "Chưa hổ trợ nhiều khách hàng",
+      printFail: "In thất bại",
+      sendEmailFail: "Gửi email thất bại",
+    },
+    success: {
+      sendEmail: "Gửi email thành công",
     },
   },
 };

@@ -83,7 +83,13 @@ export const OrderColumnTable: GridColDef[] = [
         label="Chi tiết"
       />,
       <GridActionsCellItem
-        icon={<DialogOrderUpdate orderId={row.id} orderName={row.order_no} />}
+        icon={
+          <DialogOrderUpdate
+            orderId={row.id}
+            orderName={row.order_no}
+            fromPage="ORDER_PROCESSING"
+          />
+        }
         label="Cập nhật"
       />,
     ],

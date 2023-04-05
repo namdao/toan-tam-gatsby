@@ -1,7 +1,12 @@
 import { IResponseType } from "constant/commonType";
+import { useLocales } from "locales";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
-import { apiOrderDetail, apiOrderDetailList } from "../redux/api";
+import {
+  apiOrderDetail,
+  apiOrderDetailList,
+  apiSendEmailOrder,
+} from "../redux/api";
 import { IOrderDetail, IResOrderListDetail } from "../redux/types";
 
 export const useOrderDetail = (orderId: number) => {
@@ -35,6 +40,7 @@ export const useOrderDetail = (orderId: number) => {
 
 export const useOrderDetailList = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const { translate } = useLocales();
   const [loading, setLoading] = useState<boolean>(false);
   const [orderListDetail, setOrderListDetail] = useState<IResOrderListDetail[]>(
     []
@@ -48,6 +54,10 @@ export const useOrderDetailList = () => {
         });
       if (result?.data) {
         setOrderListDetail(result.data);
+      } else {
+        enqueueSnackbar(translate("orders.orderNeedCollect.error.printFail"), {
+          variant: "error",
+        });
       }
     } catch (error) {
       enqueueSnackbar((error as Error)?.message || "onOrderListDetail error", {
@@ -57,8 +67,38 @@ export const useOrderDetailList = () => {
       setLoading(false);
     }
   };
+
+  const onSendEmailWithOrderList = async (orderId: number[]) => {
+    try {
+      setLoading(true);
+      const result: IResponseType<IResOrderListDetail[]> =
+        await apiSendEmailOrder({
+          order_ids: orderId,
+        });
+      if (result?.data) {
+        enqueueSnackbar(translate("orders.orderNeedCollect.success.sendEmail"));
+      } else {
+        enqueueSnackbar(
+          translate("orders.orderNeedCollect.error.sendEmailFail"),
+          {
+            variant: "error",
+          }
+        );
+      }
+    } catch (error) {
+      enqueueSnackbar(
+        (error as Error)?.message || "onSendEmailWithOrderList error",
+        {
+          variant: "error",
+        }
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
   return {
     onOrderListDetail,
+    onSendEmailWithOrderList,
     loading,
     orderListDetail,
   };

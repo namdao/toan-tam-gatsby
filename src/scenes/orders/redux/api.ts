@@ -34,3 +34,6 @@ export const apiOrderListReceivable = (payload: IReqOrderListCollect) =>
 
 export const apiOrderDetailList = (payload: { order_ids: number[] }) =>
   axios.post(API_URL.ORDER_DETAILS_LIST, payload);
+
+export const apiSendEmailOrder = (payload: { order_ids: number[] }) =>
+  axios.post(API_URL.SEND_EMAIL, payload);

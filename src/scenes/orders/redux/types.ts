@@ -44,7 +44,7 @@ export type IOrder = {
   customer_id: number;
   customer_name: string;
   customer_phone: string;
-  date_collect_money: null | string;
+  date_collect_money: number | string;
   debt: boolean;
   deliver: string;
   deliver_provider: string;
@@ -108,7 +108,7 @@ export type IOrderDetail = {
   creator_id: number;
   customer: ICustomer;
   customer_id: number;
-  date_collect_money: null | string;
+  date_collect_money: null | number;
   debt: boolean;
   deliver: string;
   deliver_provider: string;

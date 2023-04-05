@@ -1,33 +1,15 @@
 import React, { useEffect } from "react";
-import {
-  Slide,
-  Dialog,
-  Typography,
-  Box,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
-  Stack,
-  MenuItem,
-} from "@mui/material";
+import { Slide, Dialog, DialogTitle } from "@mui/material";
 import Iconify from "components/iconify";
 
 import { forwardRef, useState } from "react";
 import { TransitionProps } from "@mui/material/transitions";
 import { ICON } from "constant/layoutConstant";
 import { useLocales } from "locales";
-import FormProvider, { RHFSelect, RHFTextField } from "components/hook-form";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { LoadingButton } from "@mui/lab";
-import { listPayment } from "scenes/orders/helper/OrderConstant";
 import { useOrderDetail } from "scenes/orders/hooks/useOrderDetail";
 import { BlockUpdateOrderSkeleton } from "scenes/orders/components/BlockOrderDetailSkeleton";
-import { fCurrency } from "utils/formatNumber";
-import BlockFormAccountUpdate from "./BlockFormAccountUpdate";
+import BlockFormOrderProcessing from "./BlockFormOrderProcessing";
+import BlockFormOrderNeedCollect from "./BlockFormOrderNeedCollect";
 
 const Transition = forwardRef(
   (
@@ -38,13 +20,16 @@ const Transition = forwardRef(
   ) => <Slide direction="up" ref={ref} {...props} />
 );
 
+type IPropsOrderUpdate = {
+  orderId: number;
+  orderName: string;
+  fromPage: "ORDER_PROCESSING" | "ORDER_NEED_COLLECT";
+};
 const DialogOrderUpdate = ({
   orderId,
   orderName,
-}: {
-  orderId: number;
-  orderName: string;
-}) => {
+  fromPage,
+}: IPropsOrderUpdate) => {
   const [open, setOpen] = useState(false);
   const { translate } = useLocales();
   const { loading, orderDetail, onOrderDetail } = useOrderDetail(orderId);
@@ -59,6 +44,27 @@ const DialogOrderUpdate = ({
 
   const handleClickOpen = () => {
     setOpen(true);
+  };
+
+  const onShowFormOrder = () => {
+    switch (fromPage) {
+      case "ORDER_PROCESSING":
+        return (
+          <BlockFormOrderProcessing
+            handleClose={handleClose}
+            orderDetail={orderDetail}
+          />
+        );
+      case "ORDER_NEED_COLLECT":
+        return (
+          <BlockFormOrderNeedCollect
+            handleClose={handleClose}
+            orderDetail={orderDetail}
+          />
+        );
+      default:
+        return <></>;
+    }
   };
 
   return (
@@ -79,14 +85,7 @@ const DialogOrderUpdate = ({
         <DialogTitle>
           {translate("orders.orderProcessing.update", { orderId: orderName })}
         </DialogTitle>
-        {loading ? (
-          <BlockUpdateOrderSkeleton />
-        ) : (
-          <BlockFormAccountUpdate
-            handleClose={handleClose}
-            orderDetail={orderDetail}
-          />
-        )}
+        {loading ? <BlockUpdateOrderSkeleton /> : onShowFormOrder()}
       </Dialog>
     </>
   );

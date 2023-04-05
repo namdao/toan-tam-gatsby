@@ -10,6 +10,7 @@ import {
   FormHelperText,
   RadioGroupProps,
   FormControlLabel,
+  useTheme,
 } from "@mui/material";
 
 // ----------------------------------------------------------------------
@@ -32,7 +33,7 @@ export default function RHFRadioGroup({
   ...other
 }: Props) {
   const { control } = useFormContext();
-
+  const theme = useTheme();
   const labelledby = label ? `${name}-${label}` : "";
 
   return (
@@ -66,11 +67,16 @@ export default function RHFRadioGroup({
                 sx={{
                   "&:not(:last-of-type)": {
                     mb: spacing || 0,
+                    color: !!error ? theme.palette.error.main : "inherit",
+                  },
+                  "&:is(:last-of-type)": {
+                    color: !!error ? theme.palette.error.main : "inherit",
                   },
                   ...(row && {
                     mr: 0,
                     "&:not(:last-of-type)": {
                       mr: spacing || 2,
+                      color: !!error ? theme.palette.error.main : "inherit",
                     },
                   }),
                 }}

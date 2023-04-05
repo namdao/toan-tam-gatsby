@@ -22,8 +22,12 @@ export type IPropsPrint = {
 const BlockPrintAndSendEmail = React.forwardRef(
   (_props, ref: Ref<IPropsPrint>) => {
     const { translate } = useLocales();
-    const { loading, orderListDetail, onOrderListDetail } =
-      useOrderDetailList();
+    const {
+      loading,
+      orderListDetail,
+      onOrderListDetail,
+      onSendEmailWithOrderList,
+    } = useOrderDetailList();
     const printRef = useRef(null);
     const promiseResolveRef = useRef<{ triggerPrint: any }>({} as any);
     const [disablePrint, setDisablePrint] = useState<boolean>(true);
@@ -47,6 +51,10 @@ const BlockPrintAndSendEmail = React.forwardRef(
         });
       },
     });
+
+    const handleSendEmail = () => {
+      onSendEmailWithOrderList(orderIds);
+    };
     const actionParent = () => ({
       disablePrintPdf: () => setDisablePrint(true),
       disableSendEmail: () => setDisableEmail(true),
@@ -66,7 +74,11 @@ const BlockPrintAndSendEmail = React.forwardRef(
         >
           {translate("orders.orderNeedCollect.debit")}
         </LoadingButton>
-        <Button variant="outlined" disabled={disableEmail}>
+        <Button
+          variant="outlined"
+          disabled={disableEmail}
+          onClick={handleSendEmail}
+        >
           {translate("orders.orderNeedCollect.emailDebit")}
         </Button>
         <Box
