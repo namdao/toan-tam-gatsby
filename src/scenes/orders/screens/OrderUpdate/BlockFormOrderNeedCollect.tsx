@@ -26,7 +26,7 @@ import {
   listPaymentTypeViaNeedCollect,
 } from "scenes/orders/helper/OrderConstant";
 import { getTotalAmount, getTotalFee } from "utils/utility";
-import { useUpdateOrder } from "scenes/orders/hooks/useOrderProcessing";
+import { useOrderUpdate } from "scenes/orders/hooks/useOrderUpdate";
 import RHFDatePicker from "components/hook-form/RHFDatePicker";
 import { format, parseISO } from "date-fns";
 
@@ -53,7 +53,7 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
   orderDetail,
 }) => {
   const { translate } = useLocales();
-  const { onUpdateOrderProcessing } = useUpdateOrder(orderDetail?.id || -1);
+  const { onUpdateOrder } = useOrderUpdate(orderDetail?.id || -1);
   const OrderUpdateSchema = Yup.object().shape({
     deposite: Yup.string().typeError(
       translate("orders.orderUpdate.error.number")
@@ -157,16 +157,14 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
       debt: data.debt,
       need_check: data.need_check,
       date_collect_money: data.date_collect_money,
-      money_source: data.money_source,
+      money_source: parseToNumber(data.money_source),
       who_collect_money:
         LIST_MONEY_SOURCE[money_source as keyof typeof LIST_MONEY_SOURCE] ===
         LIST_MONEY_SOURCE.CASH
           ? data.who_collect_money
           : "",
     };
-    console.log(payload);
-    alert("xu ly sau");
-    // onUpdateOrderProcessing(payload, onCallbackSuccess);
+    onUpdateOrder(payload, onCallbackSuccess);
   };
   const isShowWhoCollect =
     LIST_MONEY_SOURCE[money_source as keyof typeof LIST_MONEY_SOURCE] ===

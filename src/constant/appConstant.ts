@@ -14,6 +14,7 @@ const appConstant = {
     CUSTOMERS: "/customers",
     ORDER_DETAILS_LIST: "/order-detail",
     SEND_EMAIL: "/send-receipt",
+    ORDERS4: "/orders4",
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

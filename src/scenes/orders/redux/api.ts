@@ -3,6 +3,7 @@ import appConstant from "constant/appConstant";
 import { ORDER_STATUS_NAME } from "../helper/OrderConstant";
 import {
   IReqOrderListCollect,
+  IReqOrderListConfirm,
   IReqOrderStatus,
   IRequestUpdateOrder,
 } from "./types";
@@ -37,3 +38,13 @@ export const apiOrderDetailList = (payload: { order_ids: number[] }) =>
 
 export const apiSendEmailOrder = (payload: { order_ids: number[] }) =>
   axios.post(API_URL.SEND_EMAIL, payload);
+
+export const apiOrderConfirmList = (params: IReqOrderListConfirm) =>
+  axios.get(API_URL.ORDERS4, {
+    params: {
+      ...params,
+      search_by: "all",
+      done: true,
+      status: ORDER_STATUS_NAME.DONE,
+    },
+  });

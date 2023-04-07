@@ -117,5 +117,8 @@ const OrderLangs = {
   orderNeedCheck: {
     title: "Đơn hàng cần kiểm tra",
   },
+  orderNeedConfirm: {
+    title: "Đơn hàng cần xác nhận",
+  },
 };
 export default OrderLangs;

@@ -163,14 +163,14 @@ export type IRequestUpdateOrder = {
   done?: boolean;
   debt?: boolean;
   need_check?: boolean;
-  date_collect_money?: string;
+  date_collect_money?: Date;
   money_source?: number;
   who_collect_money?: string;
   company_debit?: number;
   confirmed_money?: boolean;
 };
 
-export type IResUpdateOrderProcessing = {
+export type IResUpdateOrder = {
   message: string;
 };
 
@@ -189,4 +189,10 @@ export type IResOrderListCollect = IResOrder2Status;
 
 export type IResOrderListDetail = IOrderDetail & {
   real_delivery_date: string;
+};
+
+export type IReqOrderListConfirm = IPage & {
+  customer_id?: number;
+  start_date: string;
+  end_date: string;
 };

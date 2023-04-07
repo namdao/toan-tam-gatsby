@@ -11,7 +11,7 @@ import { BlockUpdateOrderSkeleton } from "scenes/orders/components/BlockOrderDet
 import BlockFormOrderProcessing from "./BlockFormOrderProcessing";
 import BlockFormOrderNeedCollect from "./BlockFormOrderNeedCollect";
 import BlockFormOrderNeedCheck from "./BlockFormOrderNeedCheck";
-
+import BlockFormOrderNeedConfirm from "./BlockFormOrderNeedConfirm";
 const Transition = forwardRef(
   (
     props: TransitionProps & {
@@ -24,7 +24,11 @@ const Transition = forwardRef(
 type IPropsOrderUpdate = {
   orderId: number;
   orderName: string;
-  fromPage: "ORDER_PROCESSING" | "ORDER_NEED_COLLECT" | "ORDER_NEED_CHECK";
+  fromPage:
+    | "ORDER_PROCESSING"
+    | "ORDER_NEED_COLLECT"
+    | "ORDER_NEED_CHECK"
+    | "ORDER_NEED_CONFIRM";
 };
 const DialogOrderUpdate = ({
   orderId,
@@ -66,6 +70,13 @@ const DialogOrderUpdate = ({
       case "ORDER_NEED_CHECK":
         return (
           <BlockFormOrderNeedCheck
+            handleClose={handleClose}
+            orderDetail={orderDetail}
+          />
+        );
+      case "ORDER_NEED_CONFIRM":
+        return (
+          <BlockFormOrderNeedConfirm
             handleClose={handleClose}
             orderDetail={orderDetail}
           />

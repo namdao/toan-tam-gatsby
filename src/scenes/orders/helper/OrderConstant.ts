@@ -123,6 +123,16 @@ export const listPaymentTypeViaNeedCheck = [
     value: "need_check",
   },
 ];
+export const listConfirmMoney = [
+  {
+    label: "Xác nhận đủ",
+    value: true,
+  },
+  {
+    label: "Xác nhận lại với kế toán",
+    value: false,
+  },
+];
 export const LIST_MONEY_SOURCE = {
   VIB_PERSON: "VIB cá nhân",
   VIB_COMPANY: "VIB công ty",

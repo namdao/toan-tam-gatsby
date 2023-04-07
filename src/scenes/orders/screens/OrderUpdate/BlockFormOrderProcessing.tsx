@@ -21,7 +21,7 @@ import { parseToNumber } from "utils/formatNumber";
 import { LoadingButton } from "@mui/lab";
 import { listPayment } from "scenes/orders/helper/OrderConstant";
 import { getTotalAmount, getTotalFee } from "utils/utility";
-import { useUpdateOrder } from "scenes/orders/hooks/useOrderProcessing";
+import { useOrderUpdate } from "scenes/orders/hooks/useOrderUpdate";
 
 type IPropsForm = {
   handleClose: (open: boolean) => void;
@@ -38,7 +38,7 @@ const BlockFormOrderProcessing: FC<IPropsForm> = ({
   orderDetail,
 }) => {
   const { translate } = useLocales();
-  const { onUpdateOrderProcessing } = useUpdateOrder(orderDetail?.id || -1);
+  const { onUpdateOrder } = useOrderUpdate(orderDetail?.id || -1);
   const OrderUpdateSchema = Yup.object().shape({
     deposite: Yup.string().typeError(
       translate("orders.orderUpdate.error.number")
@@ -96,7 +96,7 @@ const BlockFormOrderProcessing: FC<IPropsForm> = ({
       deposite: parseToNumber(data.deposite),
       payment_method: data.payment_method,
     };
-    onUpdateOrderProcessing(payload, onCallbackSuccess);
+    onUpdateOrder(payload, onCallbackSuccess);
   };
 
   return (
