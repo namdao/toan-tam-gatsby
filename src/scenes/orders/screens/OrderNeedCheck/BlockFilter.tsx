@@ -68,7 +68,7 @@ export default function BlockFilter({
         xs: "column",
         md: "row",
       }}
-      sx={{ py: 1 }}
+      sx={{ px: 2.5, py: 3 }}
     >
       <Autocomplete
         disablePortal

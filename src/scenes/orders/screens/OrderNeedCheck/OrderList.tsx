@@ -4,18 +4,14 @@ import {
   DataGridPro,
   GridRow,
   GridColumnHeaders,
-  GridRowSelectionModel,
   GridPaginationModel,
 } from "@mui/x-data-grid-pro";
-import { OrderCollectTableColumns } from "scenes/orders/helper/OrderCollectTableColumns";
+import { OrderNeedCheckTableColumns } from "scenes/orders/helper/OrderNeedCheckTableColumns";
 import { useListOrderColect } from "scenes/orders/hooks/useOrderNeedCollect";
 import BlockFilter from "./BlockFilter";
 import { Card } from "@mui/material";
 import { useCustomer } from "scenes/customer/hooks/useCustomer";
 import { Stack } from "@mui/system";
-import BlockPrintAndSendEmail, { IPropsPrint } from "./BlockPrintAndSendEmail";
-import { useSnackbar } from "notistack";
-import { useLocales } from "locales";
 
 const MemoizedRow = React.memo(GridRow);
 
@@ -37,19 +33,17 @@ const OrderTable: React.FC = () => {
     onOrderListCollect,
   } = useListOrderColect();
   const { getCustomerList } = useCustomer();
-  const buttonRef = useRef<IPropsPrint>(null);
-  const { translate } = useLocales();
+
   useEffect(() => {
     getCustomerList();
   }, []);
-  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     onOrderListCollect();
   }, [createdDate, updatedDate, customer]);
   const paginationModel = pageModel;
   const pinOrderLeft = useMemo(
     () =>
-      OrderCollectTableColumns.filter(
+      OrderNeedCheckTableColumns.filter(
         (e) => e.field === "order_no" || e.field === "actions"
       ).map((e) => e.field),
     []
@@ -58,45 +52,9 @@ const OrderTable: React.FC = () => {
     onNextPage(model.page, model.pageSize);
   };
 
-  const isSameCustomer = (listIds: GridRowSelectionModel) => {
-    const listCustomerId = orderList
-      .filter((e) => listIds.includes(e.id))
-      .map((f) => f.customer_id);
-    const firstCustomer = listCustomerId[0];
-    for (let i = 0; i < listCustomerId.length; i++) {
-      const currentCustomer = listCustomerId[i];
-      if (currentCustomer !== firstCustomer) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  const onRowSelect = (listIds: GridRowSelectionModel) => {
-    if (isSameCustomer(listIds)) {
-      enqueueSnackbar({
-        message: translate(
-          "orders.orderNeedCollect.error.notSupportMultiCustomer"
-        ),
-        variant: "error",
-      });
-      buttonRef?.current?.disablePrintPdf();
-      buttonRef?.current?.disableSendEmail();
-    } else {
-      buttonRef?.current?.enablePrintPdf();
-      buttonRef?.current?.enableSendEmail();
-      buttonRef?.current?.setListIds(listIds as number[]);
-    }
-  };
-
   return (
     <Card>
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        sx={{ px: 2.5, py: 3 }}
-      >
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
         <BlockFilter
           setDateCreated={setDateCreated}
           setDateUpdated={setDateUpdated}
@@ -105,16 +63,14 @@ const OrderTable: React.FC = () => {
           setCustomer={setCustomer}
           customer={customer}
         />
-        <BlockPrintAndSendEmail ref={buttonRef} />
       </Stack>
       <Box sx={{ height: 600, width: "100%" }}>
         <DataGridPro
           loading={loading}
-          checkboxSelection
           rows={orderList}
           rowCount={total}
-          columns={OrderCollectTableColumns}
-          onRowSelectionModelChange={onRowSelect}
+          columns={OrderNeedCheckTableColumns}
+          disableRowSelectionOnClick
           initialState={{
             pinnedColumns: {
               left: pinOrderLeft,

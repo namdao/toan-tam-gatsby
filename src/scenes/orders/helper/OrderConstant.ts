@@ -99,7 +99,7 @@ export const initParams: IReqParams = {
 };
 
 export const listPayment = ["Công nợ", "Chuyển khoản", "Tiền mặt"];
-export const listPaymentType = [
+export const listPaymentTypeViaNeedCollect = [
   {
     label: "Thu đủ",
     value: "done",
@@ -107,6 +107,16 @@ export const listPaymentType = [
   {
     label: "Thu chưa đủ",
     value: "debt",
+  },
+  {
+    label: "Cần kiểm tra lại",
+    value: "need_check",
+  },
+];
+export const listPaymentTypeViaNeedCheck = [
+  {
+    label: "Thu đủ",
+    value: "done",
   },
   {
     label: "Cần kiểm tra lại",

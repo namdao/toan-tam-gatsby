@@ -68,6 +68,7 @@ const BlockPrintAndSendEmail = React.forwardRef(
       <Stack direction="row" spacing={3}>
         <LoadingButton
           variant="outlined"
+          size="large"
           loading={loading}
           disabled={disablePrint}
           onClick={handlePrint}
@@ -75,6 +76,7 @@ const BlockPrintAndSendEmail = React.forwardRef(
           {translate("orders.orderNeedCollect.debit")}
         </LoadingButton>
         <Button
+          size="large"
           variant="outlined"
           disabled={disableEmail}
           onClick={handleSendEmail}

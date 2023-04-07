@@ -80,6 +80,7 @@ const OrderLangs = {
       orderProcessing: "Cập nhật đơn hàng thất bại",
       paymentType: "Vui lòng chọn phương thức thu tiền",
       dateCollectMoney: "Vui lòng chọn ngày thu tiền",
+      companyDebit: "Vui lòng nhập số tiền công ty bù",
     },
     success: {
       orderProcessing: "Cập nhật đơn hàng thành công",
@@ -94,6 +95,7 @@ const OrderLangs = {
       dayCollectMoney: "Ngày thu",
       moneySource: "Nguồn thu",
       whoCollectionMoney: "Người thu tiền",
+      companyDebit: "Công ty bù số tiền thiếu",
     },
     save: "Cập nhật",
   },
@@ -111,6 +113,9 @@ const OrderLangs = {
     success: {
       sendEmail: "Gửi email thành công",
     },
+  },
+  orderNeedCheck: {
+    title: "Đơn hàng cần kiểm tra",
   },
 };
 export default OrderLangs;

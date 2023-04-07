@@ -23,7 +23,7 @@ import { LoadingButton } from "@mui/lab";
 import {
   listPayment,
   LIST_MONEY_SOURCE,
-  listPaymentTypeViaNeedCollect,
+  listPaymentTypeViaNeedCheck,
 } from "scenes/orders/helper/OrderConstant";
 import { getTotalAmount, getTotalFee } from "utils/utility";
 import { useUpdateOrder } from "scenes/orders/hooks/useOrderProcessing";
@@ -47,8 +47,9 @@ type FormValuesProps = {
   done: boolean;
   debt: boolean;
   need_check: boolean;
+  company_debit: string;
 };
-const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
+const BlockFormOrderNeedCheck: FC<IPropsForm> = ({
   handleClose,
   orderDetail,
 }) => {
@@ -71,6 +72,9 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
       .required()
       .typeError(translate("orders.orderUpdate.error.dateCollectMoney")),
     who_collect_money: Yup.string(),
+    company_debit: Yup.string().required(
+      translate("orders.orderUpdate.error.companyDebit")
+    ),
   });
 
   const defaultValues = {
@@ -93,6 +97,7 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
     done: orderDetail?.done,
     debt: orderDetail?.debt,
     need_check: orderDetail?.need_check,
+    company_debit: orderDetail?.company_debit,
   };
 
   const methods = useForm<FormValuesProps>({
@@ -119,11 +124,6 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
         setValue("debt", false);
         setValue("need_check", false);
         // Đơn thu chưa đủ nhưng đã kiểm tra rồi
-      } else if (paymentType === "debt") {
-        setValue("done", false);
-        setValue("debt", true);
-        setValue("need_check", false);
-        // Đơn thu khách thực tế đã đủ nhưng nhỏ hơn số tiền phải thu cần kiểm tra lại
       } else if (paymentType === "need_check") {
         setValue("done", false);
         setValue("debt", false);
@@ -163,6 +163,7 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
         LIST_MONEY_SOURCE.CASH
           ? data.who_collect_money
           : "",
+      company_debit: parseToNumber(data.company_debit),
     };
     console.log(payload);
     alert("xu ly sau");
@@ -198,16 +199,22 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
             />
             <RHFNumberFormat
               name="cod"
+              disabled
               label={translate("orders.orderUpdate.form.cod")}
             />
             <RHFNumberFormat
               name="cash"
+              disabled
               label={translate("orders.orderUpdate.form.cash")}
+            />
+            <RHFNumberFormat
+              name="company_debit"
+              label={translate("orders.orderUpdate.form.companyDebit")}
             />
             <RHFRadioGroup
               row
               name="paymentType"
-              options={listPaymentTypeViaNeedCollect}
+              options={listPaymentTypeViaNeedCheck}
             />
             <Stack flexDirection="row" justifyContent="space-between">
               <RHFDatePicker
@@ -268,4 +275,4 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
   );
 };
 
-export default BlockFormOrderNeedCollect;
+export default BlockFormOrderNeedCheck;
