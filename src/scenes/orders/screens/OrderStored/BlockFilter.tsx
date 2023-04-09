@@ -1,65 +1,59 @@
 import React, { ChangeEvent, SyntheticEvent } from "react";
-import { Stack, TextField, Button, Autocomplete } from "@mui/material";
+import {
+  Stack,
+  InputAdornment,
+  TextField,
+  MenuItem,
+  Button,
+  Autocomplete,
+} from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import Iconify from "components/iconify";
+import { ORDER_STATUS_NAME } from "scenes/orders/helper/OrderConstant";
 import { useLocales } from "locales";
-import { useAppSelector } from "store";
+import { useAppDispatch, useAppSelector } from "store";
+import { ordersAction, OrdersSelector } from "scenes/orders/redux/slice";
 import { customerSelector } from "scenes/customer/redux/slice";
+import { ISelectCustomer } from "../OrderNeedCheck/BlockFilter";
+
 const DATE_PICKER_WIDTH = 200;
 
-type IProps = {
-  createdDate: Date | null;
-  updatedDate: Date | null;
-  setDateUpdated: (val: Date | null) => void;
-  setDateCreated: (val: Date | null) => void;
-  setCustomer: (val: ISelectCustomer | null) => void;
-  customer: ISelectCustomer | null;
-};
-export type ISelectCustomer = {
-  id: number;
-  label: string;
-};
-export default function BlockFilter({
-  createdDate,
-  updatedDate,
-  customer,
-  setDateUpdated,
-  setDateCreated,
-  setCustomer,
-}: IProps) {
+const BlockFilter = () => {
   const { translate } = useLocales();
+  const dispatch = useAppDispatch();
+  const dataFilter = useAppSelector(OrdersSelector.getFilterOrder);
   const customerList = useAppSelector(customerSelector.getCustomerList);
   const onSetCreatedDate = (e: Date | null) => {
-    setDateCreated(e);
+    dispatch(ordersAction.setDataFilter({ createDate: e }));
   };
   const onSetUpdatedDate = (e: Date | null) => {
-    setDateUpdated(e);
+    dispatch(ordersAction.setDataFilter({ updateDate: e }));
   };
-
-  const onResetFilter = () => {
-    setDateCreated(null);
-    setDateUpdated(null);
-    setCustomer(null);
-  };
-
-  const onClearCreatedDate = () => {
-    setDateCreated(null);
-  };
-
-  const onClearUpdatedDate = () => {
-    setDateUpdated(null);
-  };
-
   const onCustomerChange = (
     _e: SyntheticEvent<any>,
     value: ISelectCustomer | null
   ) => {
-    setCustomer(value || null);
+    dispatch(ordersAction.setDataFilter({ customer_id: value?.id }));
   };
+
+  const onResetFilter = () => {
+    dispatch(ordersAction.resetFilter());
+  };
+
+  const onClearCreatedDate = () => {
+    dispatch(ordersAction.clearCreateDateFilter());
+  };
+
+  const onClearUpdatedDate = () => {
+    dispatch(ordersAction.clearUpdateDateFilter());
+  };
+
   const customerAutoComplete = customerList.map((e) => {
     return { id: e.id, label: `${e.name} (${e.company?.company_name})` };
   });
-  const isFiltered = createdDate || updatedDate || customer;
+  const { createDate, updateDate, customer_id } = dataFilter || {};
+  const customer = customerAutoComplete.find((e) => e.id === customer_id);
+  const isFiltered = createDate || updateDate;
   return (
     <Stack
       spacing={2}
@@ -68,15 +62,15 @@ export default function BlockFilter({
         xs: "column",
         md: "row",
       }}
-      sx={{ px: 2.5, py: 3 }}
     >
       <Autocomplete
         disablePortal
         autoHighlight
+        isOptionEqualToValue={(option, value) => option.id === value.id}
         onChange={onCustomerChange}
         value={customer}
         options={customerAutoComplete}
-        sx={{ width: "30%" }}
+        sx={{ width: 250 }}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -86,7 +80,7 @@ export default function BlockFilter({
       />
       <DatePicker
         label={translate("orders.createdDate")}
-        value={createdDate}
+        value={createDate}
         onChange={onSetCreatedDate}
         inputFormat="dd / MM / yyyy"
         renderInput={({ InputProps, ...rest }) => {
@@ -96,7 +90,7 @@ export default function BlockFilter({
               InputProps={{
                 endAdornment: (
                   <>
-                    {createdDate && (
+                    {createDate && (
                       <Iconify
                         sx={{ cursor: "pointer" }}
                         onClick={onClearCreatedDate}
@@ -108,7 +102,7 @@ export default function BlockFilter({
                 ),
               }}
               sx={{
-                maxWidth: DATE_PICKER_WIDTH,
+                minWidth: { md: DATE_PICKER_WIDTH },
               }}
             />
           );
@@ -116,7 +110,7 @@ export default function BlockFilter({
       />
       <DatePicker
         label={translate("orders.updatedDate")}
-        value={updatedDate}
+        value={updateDate}
         onChange={onSetUpdatedDate}
         inputFormat="dd / MM / yyyy"
         renderInput={({ InputProps, ...rest }) => {
@@ -126,7 +120,7 @@ export default function BlockFilter({
               InputProps={{
                 endAdornment: (
                   <>
-                    {updatedDate && (
+                    {updateDate && (
                       <Iconify
                         sx={{ cursor: "pointer" }}
                         onClick={onClearUpdatedDate}
@@ -138,7 +132,7 @@ export default function BlockFilter({
                 ),
               }}
               sx={{
-                maxWidth: DATE_PICKER_WIDTH,
+                minWidth: { md: DATE_PICKER_WIDTH },
               }}
             />
           );
@@ -157,4 +151,5 @@ export default function BlockFilter({
       )}
     </Stack>
   );
-}
+};
+export default React.memo(BlockFilter);

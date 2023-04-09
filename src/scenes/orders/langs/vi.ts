@@ -120,5 +120,12 @@ const OrderLangs = {
   orderNeedConfirm: {
     title: "Đơn hàng cần xác nhận",
   },
+  orderStore: {
+    title: "Đơn hàng lưu kho",
+    tabStored: "Lưu kho",
+    tabDelivery: "Đang giao hàng",
+    btnBillDelivery: "Biên bản GH",
+    btnBillDelivery2: "Biên bản GH V2",
+  },
 };
 export default OrderLangs;

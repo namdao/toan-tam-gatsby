@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
-  useRef,
 } from "react";
 import Box from "@mui/material/Box";
 import {
@@ -17,7 +16,6 @@ import { useListOrderConfirm } from "scenes/orders/hooks/useOrderNeedConfirm";
 import BlockFilter from "./BlockFilter";
 import { Card } from "@mui/material";
 import { useCustomer } from "scenes/customer/hooks/useCustomer";
-import { Stack } from "@mui/system";
 import { OrderNeedConfirmTableColumns } from "scenes/orders/helper/OrderNeedConfirmTableColumns";
 import { IOrder } from "scenes/orders/redux/types";
 
@@ -71,9 +69,7 @@ const OrderTable: React.FC = () => {
 
   return (
     <Card>
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <BlockFilter setCustomer={setCustomer} customer={customer} />
-      </Stack>
+      <BlockFilter setCustomer={setCustomer} customer={customer} />
       <Box sx={{ height: 600, width: "100%" }}>
         <DataGridPro
           apiRef={apiRef}

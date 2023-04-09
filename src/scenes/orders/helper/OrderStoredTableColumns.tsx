@@ -13,44 +13,12 @@ import { fCurrency, fNumber } from "utils/formatNumber";
 import { getTotalAmount } from "utils/utility";
 import { useTheme } from "@mui/material/styles";
 import { format } from "date-fns";
+import { ORDER_STATUS_VALUE } from "./OrderConstant";
 import FullScreenDialogs from "../screens/OrderProcessing/DialogOrderSelected";
 import DialogOrderUpdate from "../screens/OrderUpdate";
-import { magicTableRef } from "../screens/OrderNeedConfirm/OrderList";
-import { useOrderUpdate } from "../hooks/useOrderUpdate";
+import ButonRetailBill from "../screens/OrderStored/ButtonRetailBill";
 
-const QuickUpdateConfirm = ({ row }: { row: IOrder }) => {
-  const { onUpdateOrder, loading } = useOrderUpdate(row.id);
-  const callbackSuccess = () => {
-    magicTableRef?.current?.updateRowSuccess(row);
-  };
-  const handlerQuickConfirm = () => {
-    onUpdateOrder(
-      {
-        confirmed_money: !row.confirmed_money,
-        note: "Admin đã xác nhận",
-      },
-      callbackSuccess
-    );
-  };
-  const theme = useTheme();
-  const { confirmed_money = false } = row;
-  let iconName = confirmed_money
-    ? "line-md:confirm-circle"
-    : "material-symbols:error-circle-rounded-outline";
-  iconName = loading ? "eos-icons:loading" : iconName;
-  const color = confirmed_money
-    ? theme.palette.primary.main
-    : theme.palette.warning.main;
-  return (
-    <Iconify
-      width={ICON.NAV_ITEM}
-      icon={iconName}
-      color={color}
-      onClick={handlerQuickConfirm}
-    />
-  );
-};
-export const OrderNeedConfirmTableColumns: GridColDef[] = [
+export const OrderStoredTableColumns: GridColDef[] = [
   {
     field: "order_no",
     headerName: "Mã đơn hàng",
@@ -74,14 +42,14 @@ export const OrderNeedConfirmTableColumns: GridColDef[] = [
           <DialogOrderUpdate
             orderId={row.id}
             orderName={row.order_no}
-            fromPage="ORDER_NEED_CONFIRM"
+            fromPage="ORDER_PROCESSING"
           />
         }
         label="Cập nhật"
       />,
       <GridActionsCellItem
-        icon={<QuickUpdateConfirm row={row} />}
-        label="Cập nhật nhanh"
+        icon={<ButonRetailBill data={row} />}
+        label="In hóa đơn bán lẻ"
       />,
     ],
   },
@@ -177,6 +145,18 @@ export const OrderNeedConfirmTableColumns: GridColDef[] = [
     },
   },
   {
+    field: "status",
+    headerName: "Trạng thái",
+    minWidth: 150,
+    valueGetter: ({ value }: { value: keyof typeof ORDER_STATUS_VALUE }) =>
+      value ? ORDER_STATUS_VALUE[value] : "-",
+  },
+  {
+    field: "deliver",
+    headerName: "Giao hàng",
+    minWidth: 150,
+  },
+  {
     field: "cod",
     headerName: "Còn lại",
     minWidth: 100,
@@ -185,14 +165,6 @@ export const OrderNeedConfirmTableColumns: GridColDef[] = [
   {
     field: "cash",
     headerName: "Đã thu",
-    minWidth: 100,
-    headerAlign: "center",
-    align: "center",
-    valueGetter: ({ value }) => value || "-",
-  },
-  {
-    field: "company_debit",
-    headerName: "Công ty bù",
     minWidth: 100,
     headerAlign: "center",
     align: "center",

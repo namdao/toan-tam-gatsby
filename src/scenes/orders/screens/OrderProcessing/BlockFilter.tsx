@@ -8,11 +8,7 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import Iconify from "components/iconify";
-import {
-  ORDER_FILTER,
-  ORDER_STATUS_NAME,
-  SEARCH_BY,
-} from "scenes/orders/helper/OrderConstant";
+import { ORDER_FILTER, SEARCH_BY } from "scenes/orders/helper/OrderConstant";
 import { useLocales } from "locales";
 import { useAppDispatch, useAppSelector } from "store";
 import { ordersAction, OrdersSelector } from "scenes/orders/redux/slice";
@@ -20,10 +16,7 @@ import { ordersAction, OrdersSelector } from "scenes/orders/redux/slice";
 const INPUT_WIDTH = 160;
 const DATE_PICKER_WIDTH = 200;
 
-type Props = {
-  status: ORDER_STATUS_NAME;
-};
-export default function BlockFilter({ status }: Props) {
+const BlockFilter = () => {
   const { translate } = useLocales();
   const dispatch = useAppDispatch();
   const dataFilter = useAppSelector(OrdersSelector.getFilterOrder);
@@ -128,7 +121,7 @@ export default function BlockFilter({ status }: Props) {
                 ),
               }}
               sx={{
-                minWidth: { md: DATE_PICKER_WIDTH },
+                minWidth: DATE_PICKER_WIDTH,
               }}
             />
           );
@@ -158,7 +151,7 @@ export default function BlockFilter({ status }: Props) {
                 ),
               }}
               sx={{
-                minWidth: { md: DATE_PICKER_WIDTH },
+                minWidth: DATE_PICKER_WIDTH,
               }}
             />
           );
@@ -191,4 +184,6 @@ export default function BlockFilter({ status }: Props) {
       )}
     </Stack>
   );
-}
+};
+
+export default React.memo(BlockFilter);

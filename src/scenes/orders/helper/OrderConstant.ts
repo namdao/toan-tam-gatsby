@@ -69,6 +69,18 @@ export const ORDER_TAB_PROCESSING: IOrderTabProcessing[] = [
     color: "default",
   },
 ];
+export const ORDER_TAB_STORED: IOrderTabProcessing[] = [
+  {
+    name: "orders.orderStore.tabStored",
+    value: ORDER_STATUS_NAME.STORED,
+    color: "primary",
+  },
+  {
+    name: "orders.orderStore.tabDelivery",
+    value: ORDER_STATUS_NAME.DELIVER,
+    color: "info",
+  },
+];
 export const ORDER_FILTER = [
   {
     name: "orders.filterGroup.all",

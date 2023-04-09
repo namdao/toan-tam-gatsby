@@ -1,11 +1,9 @@
-import React, { ChangeEvent, SyntheticEvent } from "react";
+import React, { SyntheticEvent } from "react";
 import { Stack, TextField, Button, Autocomplete } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
 import Iconify from "components/iconify";
 import { useLocales } from "locales";
 import { useAppSelector } from "store";
 import { customerSelector } from "scenes/customer/redux/slice";
-const DATE_PICKER_WIDTH = 200;
 
 type IProps = {
   setCustomer: (val: ISelectCustomer | null) => void;
@@ -30,11 +28,12 @@ export default function BlockFilter({ customer, setCustomer }: IProps) {
     setCustomer(value || null);
   };
   const customerAutoComplate = customerList.map((e) => {
-    return { id: e.id, label: e.name };
+    return { id: e.id, label: `${e.name} (${e.company?.company_name})` };
   });
   const isFiltered = customer;
   return (
     <Stack
+      display="block"
       spacing={2}
       alignItems="center"
       direction={{
@@ -49,7 +48,7 @@ export default function BlockFilter({ customer, setCustomer }: IProps) {
         onChange={onCustomerChange}
         value={customer}
         options={customerAutoComplate}
-        sx={{ width: 200 }}
+        sx={{ width: "30%" }}
         renderInput={(params) => (
           <TextField
             {...params}

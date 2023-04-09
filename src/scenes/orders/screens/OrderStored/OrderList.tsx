@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Tab, Tabs, Card } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import { Tab, Tabs, Card, Stack } from "@mui/material";
 import {
   ORDER_STATUS_NAME,
-  ORDER_TAB_PROCESSING,
+  ORDER_TAB_STORED,
 } from "scenes/orders/helper/OrderConstant";
 import { useLocales } from "locales";
 import Label from "components/label";
@@ -12,8 +12,10 @@ import { useAppDispatch, useAppSelector } from "store";
 import { ordersAction, OrdersSelector } from "scenes/orders/redux/slice";
 import OrderTable from "./OrderTable";
 import BlockFilter from "./BlockFilter";
-import BlockDescription from "./BlockDescription";
 import { shallowEqual } from "react-redux";
+import { useCustomer } from "scenes/customer/hooks/useCustomer";
+import BlockDeliveryPrint, { IPropsDeliveryPrint } from "./BlockDeliveryPrint";
+import { GridRowSelectionModel } from "@mui/x-data-grid";
 
 const tabChild = (
   tab: IOrderTabProcessing,
@@ -29,16 +31,13 @@ const tabChild = (
   const total = useAppSelector((state) =>
     OrdersSelector.getTotalByStatus(state, tab.value)
   );
+
   useEffect(() => {
-    setTimeout(() => {
-      onOrderWithStatus();
-    }, 100);
+    onOrderWithStatus();
     dispatch(ordersAction.resetPagination());
   }, [
     filterStatus,
     dataFilter.createDate,
-    dataFilter.search,
-    dataFilter.type,
     dataFilter.updateDate,
     dataFilter.customer_id,
   ]);
@@ -56,12 +55,16 @@ const tabChild = (
   );
 };
 const OrderList = () => {
-  const [filterStatus, handleFilterStatus] = useState<ORDER_STATUS_NAME>(
-    ORDER_STATUS_NAME.DESIGNED
-  );
   const dispatch = useAppDispatch();
+  const buttonRef = useRef<IPropsDeliveryPrint>(null);
+  const { translate } = useLocales();
+  const { getCustomerList } = useCustomer();
+  const [filterStatus, handleFilterStatus] = useState<ORDER_STATUS_NAME>(
+    ORDER_STATUS_NAME.STORED
+  );
 
   useEffect(() => {
+    getCustomerList();
     return () => {
       dispatch(ordersAction.resetFilter());
     };
@@ -74,9 +77,25 @@ const OrderList = () => {
     handleFilterStatus(newValue);
   };
 
+  const onHandleBtnDelivery = ({
+    isValid,
+    listIds,
+  }: {
+    isValid: boolean;
+    listIds?: GridRowSelectionModel;
+  }) => {
+    if (!isValid) {
+      buttonRef?.current?.disablePrintDelivery();
+      buttonRef?.current?.disablePrintDeliveryV2();
+    } else {
+      buttonRef?.current?.enablePrintDelivery();
+      buttonRef?.current?.enablePrintDeliveryV2();
+      buttonRef?.current?.setListIds(listIds as number[]);
+    }
+  };
+
   return (
     <Card>
-      <BlockDescription />
       <Tabs
         value={filterStatus}
         onChange={onChangeStatus}
@@ -85,10 +104,21 @@ const OrderList = () => {
           bgcolor: "background.neutral",
         }}
       >
-        {ORDER_TAB_PROCESSING.map((tab) => tabChild(tab, filterStatus))}
+        {ORDER_TAB_STORED.map((tab) => tabChild(tab, filterStatus))}
       </Tabs>
-      <BlockFilter />
-      <OrderTable status={filterStatus} />
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ px: 2.5, py: 3 }}
+      >
+        <BlockFilter />
+        <BlockDeliveryPrint ref={buttonRef} />
+      </Stack>
+      <OrderTable
+        status={filterStatus}
+        callbackBtnPrint={onHandleBtnDelivery}
+      />
     </Card>
   );
 };

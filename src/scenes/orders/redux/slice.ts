@@ -11,6 +11,7 @@ type IFilter = {
   type?: SEARCH_BY;
   page?: number;
   pageSize?: number;
+  customer_id?: number | null;
 };
 type IDataOrder = {
   list: IOrder[];
@@ -34,6 +35,7 @@ const initialState: IOrdersState = {
     search: "",
     createDate: null,
     updateDate: null,
+    customer_id: null,
   },
 } as IOrdersState;
 const ordersSlice = createSlice({

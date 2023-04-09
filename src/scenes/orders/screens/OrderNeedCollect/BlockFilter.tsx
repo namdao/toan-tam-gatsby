@@ -57,7 +57,7 @@ export default function BlockFilter({
     setCustomer(value || null);
   };
   const customerAutoComplate = customerList.map((e) => {
-    return { id: e.id, label: e.name };
+    return { id: e.id, label: `${e.name} (${e.company?.company_name})` };
   });
   const isFiltered = createdDate || updatedDate || customer;
   return (
@@ -76,7 +76,7 @@ export default function BlockFilter({
         onChange={onCustomerChange}
         value={customer}
         options={customerAutoComplate}
-        sx={{ width: 200 }}
+        sx={{ width: 250 }}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -108,7 +108,7 @@ export default function BlockFilter({
                 ),
               }}
               sx={{
-                minWidth: { md: DATE_PICKER_WIDTH },
+                maxWidth: DATE_PICKER_WIDTH,
               }}
             />
           );
@@ -138,7 +138,7 @@ export default function BlockFilter({
                 ),
               }}
               sx={{
-                minWidth: { md: DATE_PICKER_WIDTH },
+                maxWidth: DATE_PICKER_WIDTH,
               }}
             />
           );

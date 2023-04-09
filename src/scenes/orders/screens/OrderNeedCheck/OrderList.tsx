@@ -54,7 +54,12 @@ const OrderTable: React.FC = () => {
 
   return (
     <Card>
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
+      <Stack
+        display="block"
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+      >
         <BlockFilter
           setDateCreated={setDateCreated}
           setDateUpdated={setDateUpdated}

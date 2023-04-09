@@ -20,7 +20,7 @@ export const OrderNeedCheckTableColumns: GridColDef[] = [
   {
     field: "order_no",
     headerName: "Mã đơn hàng",
-    minWidth: 150,
+    minWidth: 120,
     renderCell: ({ value }: GridRenderCellParams<IOrder>) => {
       return <Label color="primary">{value}</Label>;
     },

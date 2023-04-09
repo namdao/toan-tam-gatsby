@@ -22,6 +22,7 @@ export type IReqOrderStatus = IPage & {
   created_date?: string;
   updated_date?: string;
   search?: string;
+  customer_id?: number;
 };
 export type IReqParams = Omit<IReqOrderStatus, "status">;
 

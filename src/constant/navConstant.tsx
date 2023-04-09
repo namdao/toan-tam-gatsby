@@ -27,7 +27,7 @@ import OrderProcessing from "scenes/orders/screens/OrderProcessing";
 import OrderNeedCollect from "scenes/orders/screens/OrderNeedCollect";
 import OrderNeedCheck from "scenes/orders/screens/OrderNeedCheck";
 import OrderNeedConfirm from "scenes/orders/screens/OrderNeedConfirm";
-import OrderListStored from "scenes/orders/screens/OrderListStored";
+import OrderListStored from "scenes/orders/screens/OrderStored";
 import OrderDetail from "scenes/orders/screens/OrderDetail";
 import OrderUpdate from "scenes/orders/screens/OrderUpdate";
 
