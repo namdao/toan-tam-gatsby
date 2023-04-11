@@ -10,7 +10,6 @@ import { OrderNeedCheckTableColumns } from "scenes/orders/helper/OrderNeedCheckT
 import { useListOrderColect } from "scenes/orders/hooks/useOrderNeedCollect";
 import BlockFilter from "./BlockFilter";
 import { Card } from "@mui/material";
-import { useCustomer } from "scenes/customer/hooks/useCustomer";
 import { Stack } from "@mui/system";
 
 const MemoizedRow = React.memo(GridRow);
@@ -32,11 +31,7 @@ const OrderTable: React.FC = () => {
     setCustomer,
     onOrderListCollect,
   } = useListOrderColect();
-  const { getCustomerList } = useCustomer();
 
-  useEffect(() => {
-    getCustomerList();
-  }, []);
   useEffect(() => {
     onOrderListCollect();
   }, [createdDate, updatedDate, customer]);

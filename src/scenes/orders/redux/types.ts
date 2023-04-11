@@ -197,3 +197,10 @@ export type IReqOrderListConfirm = IPage & {
   start_date: string;
   end_date: string;
 };
+
+export type IReqOrderSearch = IPage & {
+  method?: string;
+  customer_id?: number;
+  paper?: string;
+  order_name?: string;
+};

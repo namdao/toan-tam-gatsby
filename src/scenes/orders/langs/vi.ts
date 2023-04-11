@@ -127,5 +127,11 @@ const OrderLangs = {
     btnBillDelivery: "Biên bản GH",
     btnBillDelivery2: "Biên bản GH V2",
   },
+  orderSearch: {
+    title: "Tìm kiếm đơn hàng",
+    method: "Kích thước",
+    file: "Tên file",
+    paper: "Loại giấy",
+  },
 };
 export default OrderLangs;

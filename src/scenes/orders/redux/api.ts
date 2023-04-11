@@ -4,6 +4,7 @@ import { ORDER_STATUS_NAME } from "../helper/OrderConstant";
 import {
   IReqOrderListCollect,
   IReqOrderListConfirm,
+  IReqOrderSearch,
   IReqOrderStatus,
   IRequestUpdateOrder,
 } from "./types";
@@ -48,3 +49,5 @@ export const apiOrderConfirmList = (params: IReqOrderListConfirm) =>
       status: ORDER_STATUS_NAME.DONE,
     },
   });
+export const apiOrderSearch = (params: IReqOrderSearch) =>
+  axios.get(API_URL.SEARCH, { params });

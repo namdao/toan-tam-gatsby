@@ -36,12 +36,9 @@ const OrderTable: React.FC = () => {
     setCustomer,
     onOrderListCollect,
   } = useListOrderColect();
-  const { getCustomerList } = useCustomer();
   const buttonRef = useRef<IPropsPrint>(null);
   const { translate } = useLocales();
-  useEffect(() => {
-    getCustomerList();
-  }, []);
+
   const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     onOrderListCollect();

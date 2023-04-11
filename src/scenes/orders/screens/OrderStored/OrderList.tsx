@@ -57,14 +57,11 @@ const tabChild = (
 const OrderList = () => {
   const dispatch = useAppDispatch();
   const buttonRef = useRef<IPropsDeliveryPrint>(null);
-  const { translate } = useLocales();
-  const { getCustomerList } = useCustomer();
   const [filterStatus, handleFilterStatus] = useState<ORDER_STATUS_NAME>(
     ORDER_STATUS_NAME.STORED
   );
 
   useEffect(() => {
-    getCustomerList();
     return () => {
       dispatch(ordersAction.resetFilter());
     };

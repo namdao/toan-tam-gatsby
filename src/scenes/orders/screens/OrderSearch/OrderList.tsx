@@ -1,63 +1,65 @@
-import React, {
-  createRef,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-} from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
 import {
   DataGridPro,
   GridRow,
   GridColumnHeaders,
   GridPaginationModel,
-  useGridApiRef,
+  DataGridProProps,
 } from "@mui/x-data-grid-pro";
-import { useListOrderConfirm } from "scenes/orders/hooks/useOrderNeedConfirm";
 import BlockFilter from "./BlockFilter";
 import { Card } from "@mui/material";
-import { useCustomer } from "scenes/customer/hooks/useCustomer";
-import { OrderNeedConfirmTableColumns } from "scenes/orders/helper/OrderNeedConfirmTableColumns";
+import { useOrderSearch } from "scenes/orders/hooks/useOrderSearch";
+import { OrderSearchColumnTable } from "scenes/orders/helper/OrderSearchTableColumns";
 import { IOrder } from "scenes/orders/redux/types";
 
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
-export type IMagicTableRef = {
-  updateRowSuccess: (row: IOrder) => void;
-};
-export const magicTableRef = createRef<IMagicTableRef>();
+
 const OrderTable: React.FC = () => {
   const {
     onNextPage,
     loading,
     orderList,
     total,
+    setMethod,
+    setOrderName,
+    setPaperName,
+    setOrderList,
     customer,
+    method,
+    paperName,
+    orderName,
     pageModel,
     setCustomer,
-    onOrderListConfirm,
-  } = useListOrderConfirm();
-  const apiRef = useGridApiRef();
-
-  useImperativeHandle(magicTableRef, () => ({
-    updateRowSuccess: rowUpdate,
-  }));
-
+    onSearchOrder,
+  } = useOrderSearch();
   useEffect(() => {
-    onOrderListConfirm();
-  }, [customer]);
-
-  const rowUpdate = (row: IOrder) => {
-    apiRef.current.updateRows([
-      { id: row.id, confirmed_money: !row.confirmed_money },
-    ]);
-  };
+    if (method || paperName?.id || orderName || customer?.id) {
+      onSearchOrder();
+    } else if (orderList.length > 0) {
+      setOrderList([]);
+    }
+  }, [method, paperName, orderName, customer]);
   const paginationModel = pageModel;
+  const getTreeDataPath: DataGridProProps["getTreeDataPath"] = useCallback(
+    (row: IOrder & { group: string[] }) => row.group,
+    []
+  );
+
+  const groupingColDef: DataGridProProps["groupingColDef"] = useMemo(() => {
+    return {
+      headerName: "Ngày tạo đơn",
+      headerAlign: "center",
+    };
+  }, []);
+
   const pinOrderLeft = useMemo(
     () =>
-      OrderNeedConfirmTableColumns.filter(
-        (e) => e.field === "order_no" || e.field === "actions"
-      ).map((e) => e.field),
+      OrderSearchColumnTable.filter((e) => e.field === "order_no").map(
+        (e) => e.field
+      ),
     []
   );
   const setPagination = (model: GridPaginationModel) => {
@@ -66,14 +68,23 @@ const OrderTable: React.FC = () => {
 
   return (
     <Card>
-      <BlockFilter setCustomer={setCustomer} customer={customer} />
+      <BlockFilter
+        setMethod={setMethod}
+        setOrderName={setOrderName}
+        setPaperName={setPaperName}
+        setCustomer={setCustomer}
+        method={method}
+        paperName={paperName}
+        orderName={orderName}
+        customer={customer}
+      />
       <Box sx={{ height: 600, width: "100%" }}>
         <DataGridPro
-          apiRef={apiRef}
+          treeData
           loading={loading}
           rows={orderList}
           rowCount={total}
-          columns={OrderNeedConfirmTableColumns}
+          columns={OrderSearchColumnTable}
           disableRowSelectionOnClick
           initialState={{
             pinnedColumns: {
@@ -81,6 +92,8 @@ const OrderTable: React.FC = () => {
             },
             pagination: { paginationModel },
           }}
+          getTreeDataPath={getTreeDataPath}
+          groupingColDef={groupingColDef}
           pageSizeOptions={[20, 50, 100]}
           components={{
             Row: MemoizedRow,
