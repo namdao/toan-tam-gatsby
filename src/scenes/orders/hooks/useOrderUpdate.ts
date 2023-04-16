@@ -24,7 +24,9 @@ export const useOrderUpdate = (orderId: number) => {
           translate("orders.orderUpdate.success.orderProcessing")
         );
       } else {
-        enqueueSnackbar(translate("orders.orderUpdate.error.orderProcessing"));
+        enqueueSnackbar(translate("orders.orderUpdate.error.orderProcessing"), {
+          variant: "error",
+        });
       }
     } catch (error) {
       enqueueSnackbar((error as Error)?.message || "onOrderWithStatus error", {

@@ -1,4 +1,6 @@
 import { LoadingButton } from "@mui/lab";
+import { Box } from "@mui/material";
+import Counter from "components/animate/counter";
 import CustomBreadcrumbs from "components/breadCumbs";
 import Iconify from "components/iconify";
 import { PATH_APP } from "constant/routeConstant";
@@ -34,9 +36,10 @@ const Header = () => {
           size="large"
           startIcon={<Iconify icon="material-symbols:attach-money" />}
         >
-          {translate("orders.orderProcessing.totalDebit", {
-            money: fCurrency(moneyDebitProgress),
-          })}
+          <Box component="span">
+            <Counter from={0} to={moneyDebitProgress} />
+            {` VNĐ`}
+          </Box>
         </LoadingButton>
       }
     />

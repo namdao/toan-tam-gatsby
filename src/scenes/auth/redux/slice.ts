@@ -3,7 +3,6 @@ import { PersistConfig } from "redux-persist/lib/types";
 import { persistReducer } from "redux-persist";
 import { RootState } from "store";
 import storage from "redux-persist/lib/storage";
-import { IRequestLogin } from "./types";
 
 export type IRoles = {
   id: null | number;

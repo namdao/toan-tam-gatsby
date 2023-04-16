@@ -101,7 +101,7 @@ const OrderLangs = {
   },
   orderNeedCollect: {
     title: "Đơn hàng cần thanh toán",
-    totalMoneyReceive: "Tổng tiền phải thu: {{money}}",
+    totalMoneyReceive: "Tổng tiền phải thu: ",
     filterCustomer: "Lọc khách hàng",
     debit: "Công nợ",
     emailDebit: "Gửi email công nợ",

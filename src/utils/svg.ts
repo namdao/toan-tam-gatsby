@@ -38,6 +38,8 @@ import icDashboard from "assets/icons/navbar/ic_dashboard.svg";
 //flag
 import icFlagVn from "assets/icons/flags/ic_flag_vn.svg";
 import icFlagEn from "assets/icons/flags/ic_flag_en.svg";
+// shape
+import shapeAvt from "assets/svg/shape_avatar.svg";
 const Svg = {
   Setting: {
     icAlignLeft,
@@ -86,6 +88,9 @@ const Svg = {
   flag: {
     icFlagVn,
     icFlagEn,
+  },
+  shape: {
+    avatar: shapeAvt,
   },
 };
 export default Svg;
