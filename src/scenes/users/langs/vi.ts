@@ -4,7 +4,10 @@ const UserLangs = {
   },
   error: {
     userList: {
-      message: "Lấy danh sách nhân viên lỗi",
+      message: "Lỗi danh sách nhân viên",
+    },
+    reportSummary: {
+      message: "Lỗi thống kê doanh thu nhân viên",
     },
   },
 };

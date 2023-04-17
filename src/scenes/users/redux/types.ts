@@ -19,3 +19,11 @@ export type IReqEmployeeReport = {
   isCurrent?: boolean;
   isLastMonth?: boolean;
 };
+
+export type IResEmployeeReport = {
+  company_debit: number;
+  total_income: number;
+  total_order: number;
+  total_paid: number;
+  total_quantity: number;
+};

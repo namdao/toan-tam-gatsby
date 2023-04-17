@@ -87,7 +87,7 @@ export default function UserCard({ user }: Props) {
       </Typography>
 
       <Divider sx={{ borderStyle: "dashed" }} />
-      <UserReport />
+      <UserReport userId={user.id} />
     </Card>
   );
 }
