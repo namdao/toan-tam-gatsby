@@ -1,6 +1,6 @@
 const appConstant = {
   ENV: {
-    DEV: "http://localhost:5000",
+    DEV: "http://localhost:5001",
     PROD: "https://api.inantoantam.com/",
   },
   API_URL: {

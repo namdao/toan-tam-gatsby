@@ -30,6 +30,7 @@ import OrderNeedConfirm from "scenes/orders/screens/OrderNeedConfirm";
 import OrderListStored from "scenes/orders/screens/OrderStored";
 import OrderDetail from "scenes/orders/screens/OrderDetail";
 import OrderUpdate from "scenes/orders/screens/OrderUpdate";
+import UserUpdate from "scenes/users/screens/UserUpdate";
 
 const { ROLES } = appConstant;
 const iconify = (name: string) => <Iconify width={ICON.NAV_ITEM} icon={name} />;
@@ -191,13 +192,6 @@ const navConfig = [
             title: "basicInfo.user.add",
             path: PATH_APP.user.add,
             component: UserAdd,
-            roles: [ROLES.ADMIN],
-          },
-          {
-            title: "basicInfo.user.update",
-            path: PATH_APP.user.update,
-            hideMenu: true,
-            component: () => <></>,
             roles: [ROLES.ADMIN],
           },
           {

@@ -27,3 +27,12 @@ export type IResEmployeeReport = {
   total_paid: number;
   total_quantity: number;
 };
+export type IReqUpdateUser = {
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  role_name?: string;
+  email: string;
+};
+
+export type IReqAddUser = IReqUpdateUser;

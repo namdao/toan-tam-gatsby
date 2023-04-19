@@ -1,7 +1,14 @@
 import React from "react";
 // @mui
 import { alpha, styled } from "@mui/material/styles";
-import { Box, Card, Avatar, Divider, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  Avatar,
+  Divider,
+  Typography,
+  useTheme,
+} from "@mui/material";
 // utils
 // components
 import Image from "components/image";
@@ -10,6 +17,11 @@ import dataMockConstant from "constant/dataMockConstant";
 import Svg from "utils/svg";
 import { IResUser } from "scenes/users/redux/types";
 import UserReport from "./UserReport";
+import { PATH_APP } from "constant/routeConstant";
+import { navigate } from "gatsby";
+import DialogUserUpdateSelect from "./DialogUserUpdateSelect";
+import { ICON } from "constant/layoutConstant";
+import Iconify from "components/iconify";
 
 const StyledOverlay = styled("div")(({ theme }) => ({
   top: 0,
@@ -23,13 +35,37 @@ const StyledOverlay = styled("div")(({ theme }) => ({
 
 type Props = {
   user: IResUser;
+  openUser: (user: IResUser) => void;
 };
 
-export default function UserCard({ user }: Props) {
-  const { first_name, last_name, username, roles, email } = user;
+export default function UserCard({ user, openUser }: Props) {
+  const theme = useTheme();
+  const { first_name, last_name, username, roles, email, id } = user;
+  const fullName = `${first_name} ${last_name}`;
 
+  const onSetUser = () => {
+    openUser(user);
+  };
   return (
     <Card sx={{ textAlign: "center" }}>
+      <Box
+        sx={{
+          position: "absolute",
+          right: 10,
+          top: 10,
+          width: 30,
+          height: 40,
+          zIndex: 99,
+          cursor: "pointer",
+        }}
+      >
+        <Iconify
+          width={ICON.NAV_ITEM}
+          icon="material-symbols:edit-document-outline"
+          color={theme.palette.background.default}
+          onClick={onSetUser}
+        />
+      </Box>
       <Box sx={{ position: "relative" }}>
         <SvgColor
           src={Svg.shape.avatar}
@@ -71,7 +107,7 @@ export default function UserCard({ user }: Props) {
       </Box>
 
       <Typography variant="subtitle1" sx={{ mt: 6, mb: 0.5 }}>
-        {first_name} {last_name}
+        {fullName}
       </Typography>
 
       <Typography variant="body2" sx={{ color: "text.secondary" }}>

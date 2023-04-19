@@ -17,6 +17,7 @@ const UserReport: FC<IPropsUser> = ({ userId }) => {
     dataReportOfMonth,
     dataReportOfYear,
   } = useReportUser();
+  const abort = new AbortController();
   useEffect(() => {
     const currDate = new Date();
     const last_date_in_last_month = format(currDate, "yyyy-MM-dd");
@@ -30,14 +31,17 @@ const UserReport: FC<IPropsUser> = ({ userId }) => {
       date_to,
       isLastMonth: true,
     };
-    onGetReportSummaryByUser(paramsMonth, "month");
+    onGetReportSummaryByUser(paramsMonth, "month", abort.signal);
     const paramsYear: IReqEmployeeReport = {
       employee_id: userId,
       date_from: first_day_in_year,
       date_to: last_date_in_last_month,
       isInYear: true,
     };
-    onGetReportSummaryByUser(paramsYear, "year");
+    onGetReportSummaryByUser(paramsYear, "year", abort.signal);
+    return () => {
+      abort.abort();
+    };
   }, [userId]);
   return (
     <Box>

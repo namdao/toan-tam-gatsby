@@ -15,13 +15,14 @@ export const useReportUser = () => {
     useState<IResEmployeeReport | null>(null);
   const onGetReportSummaryByUser = async (
     params: IReqEmployeeReport,
-    type: "month" | "year"
+    type: "month" | "year",
+    signal: AbortSignal
   ) => {
     try {
       if (type === "month") setLoadingMonth(true);
       if (type === "year") setLoadingYear(true);
       const result: IResponseType<IResEmployeeReport[]> =
-        await apiGetReportEmployee(params);
+        await apiGetReportEmployee(params, signal);
       if (result?.data && result?.data.length > 0) {
         if (type === "month") setDataReportOfMonth(result.data[0]);
         if (type === "year") setDataReportOfYear(result.data[0]);
@@ -31,6 +32,9 @@ export const useReportUser = () => {
         });
       }
     } catch (error) {
+      if ((error as Error)?.message === "canceled") {
+        return;
+      }
       enqueueSnackbar(
         (error as Error)?.message || "onGetReportSummaryByUser error",
         {

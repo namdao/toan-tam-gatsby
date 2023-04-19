@@ -29,8 +29,7 @@ const init = (): void => {
 
 const setBaseUrl = (newUrl: string): string => {
   let newBaseUrl = "";
-  const { IS_TEST_MODE } = process.env;
-  if (!IS_TEST_MODE) {
+  if (!process.env.IS_TEST_MODE) {
     newBaseUrl = appConstant.ENV.PROD;
   } else if (newUrl) {
     newBaseUrl = newUrl;

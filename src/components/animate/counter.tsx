@@ -11,7 +11,7 @@ const Counter = ({
 }: {
   from: number;
   to: number;
-  format: (val: number | string | null) => string;
+  format?: (val: number | string | null) => string;
 } & TypographyProps) => {
   const nodeRef = useRef<{ textContent: number | string }>(null);
 
