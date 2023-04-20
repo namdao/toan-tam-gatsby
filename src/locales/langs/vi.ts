@@ -3,6 +3,8 @@ import orderLangs from "scenes/orders/langs/vi";
 import userLangs from "scenes/users/langs/vi";
 import customerLangs from "scenes/customer/langs/vi";
 import companyLangs from "scenes/company/langs/vi";
+import printTypeLangs from "scenes/printtype/langs/vi";
+import categoryLangs from "scenes/categories/langs/vi";
 
 const vi = {
   hi: "Xin chào",
@@ -93,4 +95,6 @@ export default {
   users: userLangs,
   customer: customerLangs,
   company: companyLangs,
+  printtype: printTypeLangs,
+  category: categoryLangs,
 };

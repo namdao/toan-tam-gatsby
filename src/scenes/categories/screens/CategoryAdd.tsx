@@ -1,6 +1,6 @@
 import React from "react";
 
-const CategoryAdd = () => {
-  return <h1>Category Add</h1>;
+const PrintTypeAdd = () => {
+  return <h1>PrintType add</h1>;
 };
-export default CategoryAdd;
+export default PrintTypeAdd;

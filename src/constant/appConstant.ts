@@ -19,6 +19,9 @@ const appConstant = {
     USERS: "/users",
     REPORTS_EMPLOYEE: "/reports/employee",
     COMPANIES: "/companies",
+    PRINT_TYPE: "/print-type",
+    ALL_CATEGORY: "/all-category",
+    OUTSOURCE: "/outsources",
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

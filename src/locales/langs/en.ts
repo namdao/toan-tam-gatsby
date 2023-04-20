@@ -1,8 +1,10 @@
 import authLangs from "scenes/auth/langs/en";
 import orderLangs from "scenes/orders/langs/en";
 import userLangs from "scenes/users/langs/en";
-import customerLangs from "scenes/customer/langs/vi";
-import companyLangs from "scenes/company/langs/vi";
+import customerLangs from "scenes/customer/langs/en";
+import companyLangs from "scenes/company/langs/en";
+import printTypeLangs from "scenes/printtype/langs/en";
+import categoryLangs from "scenes/categories/langs/en";
 
 const en = {
   hi: "Hi",
@@ -48,4 +50,6 @@ export default {
   users: userLangs,
   customer: customerLangs,
   company: companyLangs,
+  printtype: printTypeLangs,
+  category: categoryLangs,
 };
