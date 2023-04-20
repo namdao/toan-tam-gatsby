@@ -11,6 +11,7 @@ export const useCustomer = () => {
   const { enqueueSnackbar } = useSnackbar();
   const getCustomerList = async () => {
     try {
+      dispatch(customerActions.requestCustomer());
       const result: IResponseType<IResCustomerList> =
         await apiGetListCustomer();
       if (result.data && isArray(result.data.items)) {

@@ -1,23 +1,23 @@
 import React from "react";
-import { Container, Divider } from "@mui/material";
+import { Container } from "@mui/material";
 import { useLocales } from "locales";
 import { SettingsSelector } from "services/settings/redux/slice";
 import { useAppSelector } from "store";
 import Header from "./BlockHeader";
-import ListUsers from "./ListUsers";
 import Helmet from "react-helmet";
+import CustomerTable from "./CustomerTable";
 
-const UserList = () => {
+const CustomerList = () => {
   const themeStretch = useAppSelector(SettingsSelector.getThemeStretch);
   const { translate } = useLocales();
   return (
     <>
-      <Helmet title={translate("users.userList.title")} />
+      <Helmet title={translate("customer.customerList.title")} />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <Header />
-        <ListUsers />
+        <CustomerTable />
       </Container>
     </>
   );
 };
-export default UserList;
+export default CustomerList;

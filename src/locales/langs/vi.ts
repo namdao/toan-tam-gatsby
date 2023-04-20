@@ -1,6 +1,9 @@
 import authLangs from "scenes/auth/langs/vi";
 import orderLangs from "scenes/orders/langs/vi";
 import userLangs from "scenes/users/langs/vi";
+import customerLangs from "scenes/customer/langs/vi";
+import companyLangs from "scenes/company/langs/vi";
+
 const vi = {
   hi: "Xin chào",
   logout: "Đăng xuất",
@@ -88,4 +91,6 @@ export default {
   auth: authLangs,
   orders: orderLangs,
   users: userLangs,
+  customer: customerLangs,
+  company: companyLangs,
 };

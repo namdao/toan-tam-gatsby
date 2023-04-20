@@ -18,6 +18,7 @@ const appConstant = {
     SEARCH: "/search",
     USERS: "/users",
     REPORTS_EMPLOYEE: "/reports/employee",
+    COMPANIES: "/companies",
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

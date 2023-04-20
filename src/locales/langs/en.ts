@@ -1,6 +1,8 @@
 import authLangs from "scenes/auth/langs/en";
 import orderLangs from "scenes/orders/langs/en";
 import userLangs from "scenes/users/langs/en";
+import customerLangs from "scenes/customer/langs/vi";
+import companyLangs from "scenes/company/langs/vi";
 
 const en = {
   hi: "Hi",
@@ -44,4 +46,6 @@ export default {
   auth: authLangs,
   order: orderLangs,
   users: userLangs,
+  customer: customerLangs,
+  company: companyLangs,
 };
