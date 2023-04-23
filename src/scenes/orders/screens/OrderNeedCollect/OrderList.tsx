@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, {
+  createRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from "react";
 import Box from "@mui/material/Box";
 import {
   DataGridPro,
@@ -20,7 +26,10 @@ import { useLocales } from "locales";
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
-
+export type IMagicTableNeedCollectRef = {
+  onRefreshOrderList: () => void;
+};
+export const magicTableNeedCollectRef = createRef<IMagicTableNeedCollectRef>();
 const OrderTable: React.FC = () => {
   const {
     onNextPage,
@@ -43,6 +52,10 @@ const OrderTable: React.FC = () => {
   useEffect(() => {
     onOrderListCollect();
   }, [createdDate, updatedDate, customer]);
+
+  useImperativeHandle(magicTableNeedCollectRef, () => ({
+    onRefreshOrderList: onOrderListCollect,
+  }));
   const paginationModel = pageModel;
   const pinOrderLeft = useMemo(
     () =>

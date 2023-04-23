@@ -81,6 +81,7 @@ const OrderLangs = {
       paymentType: "Vui lòng chọn phương thức thu tiền",
       dateCollectMoney: "Vui lòng chọn ngày thu tiền",
       companyDebit: "Vui lòng nhập số tiền công ty bù",
+      moneySource: "Vui lòng chọn nguồn thu",
     },
     success: {
       orderProcessing: "Cập nhật đơn hàng thành công",

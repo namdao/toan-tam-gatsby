@@ -29,6 +29,7 @@ import { getTotalAmount, getTotalFee } from "utils/utility";
 import { useOrderUpdate } from "scenes/orders/hooks/useOrderUpdate";
 import RHFDatePicker from "components/hook-form/RHFDatePicker";
 import { format, parseISO } from "date-fns";
+import { magicTableNeedCheckRef } from "../OrderNeedCheck/OrderList";
 
 type IPropsForm = {
   handleClose: (open: boolean) => void;
@@ -144,6 +145,7 @@ const BlockFormOrderNeedCheck: FC<IPropsForm> = ({
   const onCallbackSuccess = () => {
     reset();
     handleClose(false);
+    magicTableNeedCheckRef.current?.onRefreshOrderList();
   };
 
   const onSubmit = async (data: FormValuesProps) => {
@@ -157,7 +159,7 @@ const BlockFormOrderNeedCheck: FC<IPropsForm> = ({
       debt: data.debt,
       need_check: data.need_check,
       date_collect_money: data.date_collect_money,
-      money_source: parseToNumber(data.money_source),
+      money_source: data.money_source,
       who_collect_money:
         LIST_MONEY_SOURCE[money_source as keyof typeof LIST_MONEY_SOURCE] ===
         LIST_MONEY_SOURCE.CASH

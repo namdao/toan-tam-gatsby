@@ -16,7 +16,7 @@ const OrderProcessing = () => {
       <Helmet title={translate("orders.orderProcessing.title")} />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <Header />
-        <BlockSummary />
+        {/* <BlockSummary /> */}
         <OrderList />
         <Divider />
       </Container>

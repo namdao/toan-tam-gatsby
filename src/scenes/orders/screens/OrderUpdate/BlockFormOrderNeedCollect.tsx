@@ -29,6 +29,9 @@ import { getTotalAmount, getTotalFee } from "utils/utility";
 import { useOrderUpdate } from "scenes/orders/hooks/useOrderUpdate";
 import RHFDatePicker from "components/hook-form/RHFDatePicker";
 import { format, parseISO } from "date-fns";
+import { useAppSelector } from "store";
+import { AuthSelector } from "scenes/auth/redux/slice";
+import { magicTableNeedCollectRef } from "../OrderNeedCollect/OrderList";
 
 type IPropsForm = {
   handleClose: (open: boolean) => void;
@@ -48,12 +51,14 @@ type FormValuesProps = {
   debt: boolean;
   need_check: boolean;
 };
+// PO12220352;/
 const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
   handleClose,
   orderDetail,
 }) => {
   const { translate } = useLocales();
   const { onUpdateOrder } = useOrderUpdate(orderDetail?.id || -1);
+  const user = useAppSelector(AuthSelector.getProfile);
   const OrderUpdateSchema = Yup.object().shape({
     deposite: Yup.string().typeError(
       translate("orders.orderUpdate.error.number")
@@ -63,7 +68,6 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
     ),
     cod: Yup.string(),
     cash: Yup.string(),
-    note: Yup.string().required(translate("orders.orderUpdate.error.notes")),
     paymentType: Yup.string().required(
       translate("orders.orderUpdate.error.paymentType")
     ),
@@ -71,6 +75,9 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
       .required()
       .typeError(translate("orders.orderUpdate.error.dateCollectMoney")),
     who_collect_money: Yup.string(),
+    money_source: Yup.string().required(
+      translate("orders.orderUpdate.error.moneySource")
+    ),
   });
 
   const defaultValues = {
@@ -89,7 +96,7 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
       ? parseISO(format(orderDetail.date_collect_money * 1000, "yyyy-MM-dd"))
       : new Date(),
     who_collect_money: orderDetail?.who_collect_money,
-    money_source: orderDetail?.money_source,
+    money_source: orderDetail?.money_source || "VIB_PERSON",
     done: orderDetail?.done,
     debt: orderDetail?.debt,
     need_check: orderDetail?.need_check,
@@ -109,7 +116,6 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
   } = methods;
 
   const [paymentType, money_source] = watch(["paymentType", "money_source"]);
-
   useEffect(() => {
     if (orderDetail && paymentType) {
       // Đơn đã thu đủ
@@ -144,12 +150,22 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
   const onCallbackSuccess = () => {
     reset();
     handleClose(false);
+    console.log("fdsfs");
+    magicTableNeedCollectRef.current?.onRefreshOrderList();
   };
 
   const onSubmit = async (data: FormValuesProps) => {
+    let note = "";
+    if (data.done) {
+      note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[0].label}`;
+    } else if (data.debt) {
+      note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[1].label}`;
+    } else if (data.need_check) {
+      note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[2].label}`;
+    }
     const payload = {
       cod: parseToNumber(data.cod),
-      note: data.note,
+      note,
       deposite: parseToNumber(data.deposite),
       payment_method: data.payment_method,
       cash: parseToNumber(data.cash),
@@ -157,7 +173,7 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
       debt: data.debt,
       need_check: data.need_check,
       date_collect_money: data.date_collect_money,
-      money_source: parseToNumber(data.money_source),
+      money_source: data.money_source,
       who_collect_money:
         LIST_MONEY_SOURCE[money_source as keyof typeof LIST_MONEY_SOURCE] ===
         LIST_MONEY_SOURCE.CASH
@@ -232,12 +248,6 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
                 label={translate("orders.orderUpdate.form.whoCollectionMoney")}
               />
             )}
-            <RHFTextField
-              name="note"
-              label={translate("orders.orderUpdate.form.note")}
-              multiline
-              rows={3}
-            />
           </Stack>
         </DialogContentText>
       </DialogContent>

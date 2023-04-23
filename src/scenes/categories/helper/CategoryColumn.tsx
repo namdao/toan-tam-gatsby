@@ -35,7 +35,7 @@ export const CategoryColumn: GridColDef[] = [
   },
   {
     field: "category_name",
-    headerName: "Danh mục cha",
+    headerName: "Danh mục",
     minWidth: 300,
     renderCell: ({ value }: GridRenderCellParams<IDataTableCategory>) => {
       return <Label color="primary">{value}</Label>;

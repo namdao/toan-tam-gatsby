@@ -15,15 +15,14 @@ import {
 import { useListOrderConfirm } from "scenes/orders/hooks/useOrderNeedConfirm";
 import BlockFilter from "./BlockFilter";
 import { Card } from "@mui/material";
-import { useCustomer } from "scenes/customer/hooks/useCustomer";
 import { OrderNeedConfirmTableColumns } from "scenes/orders/helper/OrderNeedConfirmTableColumns";
-import { IOrder } from "scenes/orders/redux/types";
+import { IOrder, IOrderDetail } from "scenes/orders/redux/types";
 
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
 export type IMagicTableRef = {
-  updateRowSuccess: (row: IOrder) => void;
+  updateRowSuccess: (row: IOrder | IOrderDetail) => void;
 };
 export const magicTableRef = createRef<IMagicTableRef>();
 const OrderTable: React.FC = () => {
@@ -47,7 +46,7 @@ const OrderTable: React.FC = () => {
     onOrderListConfirm();
   }, [customer]);
 
-  const rowUpdate = (row: IOrder) => {
+  const rowUpdate = (row: IOrder | IOrderDetail) => {
     apiRef.current.updateRows([
       { id: row.id, confirmed_money: !row.confirmed_money },
     ]);

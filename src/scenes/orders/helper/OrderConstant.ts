@@ -59,11 +59,6 @@ export const ORDER_TAB_PROCESSING: IOrderTabProcessing[] = [
     color: "success",
   },
   {
-    name: "orders.orderProcessing.cancel",
-    value: ORDER_STATUS_NAME.CANCEL,
-    color: "error",
-  },
-  {
     name: "orders.orderProcessing.draft",
     value: ORDER_STATUS_NAME.DRAFT,
     color: "default",

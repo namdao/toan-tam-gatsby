@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, {
+  createRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from "react";
 import Box from "@mui/material/Box";
 import {
   DataGridPro,
@@ -7,7 +13,7 @@ import {
   GridPaginationModel,
 } from "@mui/x-data-grid-pro";
 import { OrderNeedCheckTableColumns } from "scenes/orders/helper/OrderNeedCheckTableColumns";
-import { useListOrderColect } from "scenes/orders/hooks/useOrderNeedCollect";
+import { useListOrderNeedCheck } from "scenes/orders/hooks/useOrderNeedCheck";
 import BlockFilter from "./BlockFilter";
 import { Card } from "@mui/material";
 import { Stack } from "@mui/system";
@@ -15,6 +21,10 @@ import { Stack } from "@mui/system";
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
+export type IMagicTableNeedChecktRef = {
+  onRefreshOrderList: () => void;
+};
+export const magicTableNeedCheckRef = createRef<IMagicTableNeedChecktRef>();
 
 const OrderTable: React.FC = () => {
   const {
@@ -29,12 +39,16 @@ const OrderTable: React.FC = () => {
     customer,
     pageModel,
     setCustomer,
-    onOrderListCollect,
-  } = useListOrderColect();
+    onOrderListNeedCheck,
+  } = useListOrderNeedCheck();
 
   useEffect(() => {
-    onOrderListCollect();
+    onOrderListNeedCheck();
   }, [createdDate, updatedDate, customer]);
+
+  useImperativeHandle(magicTableNeedCheckRef, () => ({
+    onRefreshOrderList: onOrderListNeedCheck,
+  }));
   const paginationModel = pageModel;
   const pinOrderLeft = useMemo(
     () =>

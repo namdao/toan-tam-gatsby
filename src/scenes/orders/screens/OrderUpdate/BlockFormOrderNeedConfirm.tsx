@@ -12,12 +12,10 @@ import { useForm } from "react-hook-form";
 import { IOrderDetail } from "scenes/orders/redux/types";
 import * as Yup from "yup";
 import FormProvider, {
-  RHFSelect,
   RHFTextField,
   RHFNumberFormat,
   RHFRadioGroup,
 } from "components/hook-form";
-import { parseToNumber } from "utils/formatNumber";
 import {
   listConfirmMoney,
   listPayment,
@@ -28,6 +26,7 @@ import { useOrderUpdate } from "scenes/orders/hooks/useOrderUpdate";
 import RHFDatePicker from "components/hook-form/RHFDatePicker";
 import { format, parseISO } from "date-fns";
 import { LoadingButton } from "@mui/lab";
+import { magicTableRef } from "../OrderNeedConfirm/OrderList";
 
 type IPropsForm = {
   handleClose: (open: boolean) => void;
@@ -57,7 +56,6 @@ const BlockFormOrderNeedConfirm: FC<IPropsForm> = ({
   const { onUpdateOrder } = useOrderUpdate(orderDetail?.id || -1);
   const OrderUpdateSchema = Yup.object().shape({
     confirmed_money: Yup.boolean().required(),
-    note: Yup.string().required(translate("orders.orderUpdate.error.notes")),
   });
 
   const defaultValues = {
@@ -97,13 +95,16 @@ const BlockFormOrderNeedConfirm: FC<IPropsForm> = ({
 
   const onCallbackSuccess = () => {
     reset();
+    orderDetail && magicTableRef?.current?.updateRowSuccess(orderDetail);
     handleClose(false);
   };
 
   const onSubmit = async (data: FormValuesProps) => {
     const payload = {
       confirmed_money: data.confirmed_money,
-      note: "Admin đã xác nhận",
+      note: data.confirmed_money
+        ? "Admin xác nhận đủ"
+        : "Admin xác nhận lại với kế toán",
     };
     onUpdateOrder(payload, onCallbackSuccess);
   };
@@ -167,12 +168,6 @@ const BlockFormOrderNeedConfirm: FC<IPropsForm> = ({
               row
               name="confirmed_money"
               options={listConfirmMoney}
-            />
-            <RHFTextField
-              name="note"
-              label={translate("orders.orderUpdate.form.note")}
-              multiline
-              rows={3}
             />
           </Stack>
         </DialogContentText>

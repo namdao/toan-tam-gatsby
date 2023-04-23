@@ -26,7 +26,7 @@ export const apiOrderListReceivable = (payload: IReqOrderListCollect) =>
   axios.get(API_URL.ORDERS3, {
     params: {
       status: ORDER_STATUS_NAME.DONE,
-      seearch_by: "all",
+      search_by: "all",
       done: false,
       need_check: false,
       debt: false,
@@ -34,6 +34,17 @@ export const apiOrderListReceivable = (payload: IReqOrderListCollect) =>
     },
   });
 
+export const apiOrderListNeedCheck = (payload: IReqOrderListCollect) =>
+  axios.get(API_URL.ORDERS3, {
+    params: {
+      status: ORDER_STATUS_NAME.DONE,
+      search_by: "all",
+      done: false,
+      need_check: true,
+      debt: false,
+      ...payload,
+    },
+  });
 export const apiOrderDetailList = (payload: { order_ids: number[] }) =>
   axios.post(API_URL.ORDER_DETAILS_LIST, payload);
 

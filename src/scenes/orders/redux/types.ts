@@ -165,7 +165,7 @@ export type IRequestUpdateOrder = {
   debt?: boolean;
   need_check?: boolean;
   date_collect_money?: Date;
-  money_source?: number;
+  money_source?: string;
   who_collect_money?: string;
   company_debit?: number;
   confirmed_money?: boolean;

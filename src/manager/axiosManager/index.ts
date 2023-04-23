@@ -59,6 +59,7 @@ const setHeaderToken = (newToken: string): void => {
 const clearHeaderToken = (): void => {
   axios.defaults.headers.common = initHeader;
 };
+let interceptorInit = false;
 const setupOnResponseInterceptors = () => {
   const onResponseSuccess = (
     response: AxiosResponse<IResponseType<any>>
@@ -88,7 +89,10 @@ const setupOnResponseInterceptors = () => {
   const onResponseError = (errors: AxiosError): Promise<AxiosResponse<any>> => {
     throw errors;
   };
-  axios.interceptors.response.use(onResponseSuccess, onResponseError);
+  if (!interceptorInit) {
+    axios.interceptors.response.use(onResponseSuccess, onResponseError);
+    interceptorInit = true;
+  }
 };
 
 const SetupAxios = {

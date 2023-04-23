@@ -27,7 +27,6 @@ const CategoryTable = () => {
     <Box sx={{ height: 600, width: "100%" }}>
       <DataGridPro
         treeData
-        isGroupExpandedByDefault={() => true}
         getTreeDataPath={(row) => row.group}
         rows={listCategory}
         rowCount={totalRow}
@@ -36,6 +35,9 @@ const CategoryTable = () => {
         components={{
           Row: MemoizedRow,
           ColumnHeaders: MemoizedColumnHeaders,
+        }}
+        groupingColDef={{
+          headerName: "Danh mục cha",
         }}
         pagination
       />
