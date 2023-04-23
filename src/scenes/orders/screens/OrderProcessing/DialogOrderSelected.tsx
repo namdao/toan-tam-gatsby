@@ -15,6 +15,7 @@ import { TransitionProps } from "@mui/material/transitions";
 import OrderDetail from "../OrderDetail";
 import { ICON } from "constant/layoutConstant";
 import { useLocales } from "locales";
+import { GridActionsCellItem } from "@mui/x-data-grid";
 const Transition = forwardRef(
   (
     props: TransitionProps & {
@@ -44,10 +45,10 @@ function DialogOrderSelected({
 
   return (
     <>
-      <Iconify
-        width={ICON.NAV_ITEM}
-        icon="mdi:show"
+      <GridActionsCellItem
+        label="Chi tiết"
         onClick={handleClickOpen}
+        icon={<Iconify width={ICON.NAV_ITEM} icon="mdi:show" />}
       />
 
       <Dialog

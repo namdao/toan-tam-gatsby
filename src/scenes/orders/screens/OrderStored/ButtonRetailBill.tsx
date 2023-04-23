@@ -1,4 +1,5 @@
 import { Box, Stack } from "@mui/material";
+import { GridActionsCellItem } from "@mui/x-data-grid";
 import Iconify from "components/iconify";
 import React, { useEffect, useRef, FC } from "react";
 import { useReactToPrint } from "react-to-print";
@@ -22,6 +23,7 @@ const ButonRetailBill: FC<IPropsRetailBill> = ({ data }) => {
 
   const handlePrint = useReactToPrint({
     content: () => retailBillRef.current,
+    documentTitle: "",
     onBeforeGetContent: () => {
       return new Promise((resolve) => {
         if (promiseResolveRef) {
@@ -32,9 +34,15 @@ const ButonRetailBill: FC<IPropsRetailBill> = ({ data }) => {
     },
   });
 
+  const typeIcon = loading ? "eos-icons:loading" : "material-symbols:print";
+
   return (
     <Stack direction="row" spacing={3}>
-      <Iconify icon="material-symbols:print" onClick={handlePrint} />
+      <GridActionsCellItem
+        onClick={handlePrint}
+        label="Chi tiết"
+        icon={<Iconify icon={typeIcon} />}
+      />
       <Box
         sx={{
           display: "none",

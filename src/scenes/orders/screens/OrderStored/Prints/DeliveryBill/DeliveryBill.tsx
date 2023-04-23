@@ -16,7 +16,6 @@ import { IResOrderListDetail } from "scenes/orders/redux/types";
 import { compareAsc, parseISO } from "date-fns";
 import { cloneDeep } from "lodash";
 import { fNumber } from "utils/formatNumber";
-import "./DeliveryBill.css";
 
 type IProps = {
   data: IResOrderListDetail[];
@@ -174,6 +173,7 @@ const DeliveryBill = forwardRef(({ data }: IProps, ref) => {
               })}
           </TableBody>
         </Table>
+        {sectionFooter()}
       </Stack>
     );
   };
@@ -197,7 +197,7 @@ const DeliveryBill = forwardRef(({ data }: IProps, ref) => {
     <Stack ref={ref}>
       {sectionHeader()}
       {sectionBody()}
-      {sectionFooter()}
+      {/* {sectionFooter()} */}
     </Stack>
   );
 });

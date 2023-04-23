@@ -32,19 +32,11 @@ export const OrderCollectTableColumns: GridColDef[] = [
     headerName: "Hành động",
     minWidth: 100,
     getActions: ({ row }: GridRowParams<IOrder>) => [
-      <GridActionsCellItem
-        icon={<FullScreenDialogs orderId={row.id} orderName={row.order_no} />}
-        label="Chi tiết"
-      />,
-      <GridActionsCellItem
-        icon={
-          <DialogOrderUpdate
-            orderId={row.id}
-            orderName={row.order_no}
-            fromPage="ORDER_NEED_COLLECT"
-          />
-        }
-        label="Cập nhật"
+      <FullScreenDialogs orderId={row.id} orderName={row.order_no} />,
+      <DialogOrderUpdate
+        orderId={row.id}
+        orderName={row.order_no}
+        fromPage="ORDER_NEED_COLLECT"
       />,
     ],
   },

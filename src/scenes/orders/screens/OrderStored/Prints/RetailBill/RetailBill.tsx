@@ -1,5 +1,4 @@
 import {
-  Grid,
   Stack,
   Box,
   Typography,
@@ -17,7 +16,6 @@ import { IResOrderListDetail } from "scenes/orders/redux/types";
 import { format } from "date-fns";
 import { cloneDeep } from "lodash";
 import { fNumber } from "utils/formatNumber";
-import "./RetailBill.css";
 import { getTotalAmount, getTotalFee } from "utils/utility";
 
 type IProps = {
@@ -25,10 +23,9 @@ type IProps = {
 };
 const StyledCell = styled(TableCell)(() => ({
   border: "1px solid rgba(224, 224, 224, 1)",
-  // padding: "8px 6px",
-  // fontSize: "0.78rem",
 }));
-const PrintOrders = forwardRef(({ data }: IProps, ref) => {
+
+const RetailBill = forwardRef(({ data }: IProps, ref) => {
   if (data.length < 1) return <></>;
   const { customer } = data[0];
   const newOrder = cloneDeep(data[0]);
@@ -222,4 +219,4 @@ const PrintOrders = forwardRef(({ data }: IProps, ref) => {
     </Stack>
   );
 });
-export default PrintOrders;
+export default RetailBill;

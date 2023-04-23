@@ -12,6 +12,7 @@ import BlockFormOrderProcessing from "./BlockFormOrderProcessing";
 import BlockFormOrderNeedCollect from "./BlockFormOrderNeedCollect";
 import BlockFormOrderNeedCheck from "./BlockFormOrderNeedCheck";
 import BlockFormOrderNeedConfirm from "./BlockFormOrderNeedConfirm";
+import { GridActionsCellItem } from "@mui/x-data-grid";
 const Transition = forwardRef(
   (
     props: TransitionProps & {
@@ -88,10 +89,15 @@ const DialogOrderUpdate = ({
 
   return (
     <>
-      <Iconify
-        width={ICON.NAV_ITEM}
-        icon="material-symbols:edit-document-outline"
+      <GridActionsCellItem
+        label="Chi tiết"
         onClick={handleClickOpen}
+        icon={
+          <Iconify
+            width={ICON.NAV_ITEM}
+            icon="material-symbols:edit-document-outline"
+          />
+        }
       />
       <Dialog
         open={open}

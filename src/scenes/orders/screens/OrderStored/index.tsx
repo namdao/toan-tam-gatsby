@@ -12,7 +12,7 @@ const OrderProcessing = () => {
   const { translate } = useLocales();
   return (
     <>
-      <Helmet title={translate("orders.orderProcessing.title")} />
+      <Helmet title={translate("orders.orderStore.title")} />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <Header />
         <OrderList />

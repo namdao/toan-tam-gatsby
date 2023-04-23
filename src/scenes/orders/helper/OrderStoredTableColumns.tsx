@@ -33,24 +33,13 @@ export const OrderStoredTableColumns: GridColDef[] = [
     headerName: "Hành động",
     minWidth: 150,
     getActions: ({ row }: GridRowParams<IOrder>) => [
-      <GridActionsCellItem
-        icon={<FullScreenDialogs orderId={row.id} orderName={row.order_no} />}
-        label="Chi tiết"
+      <FullScreenDialogs orderId={row.id} orderName={row.order_no} />,
+      <DialogOrderUpdate
+        orderId={row.id}
+        orderName={row.order_no}
+        fromPage="ORDER_PROCESSING"
       />,
-      <GridActionsCellItem
-        icon={
-          <DialogOrderUpdate
-            orderId={row.id}
-            orderName={row.order_no}
-            fromPage="ORDER_PROCESSING"
-          />
-        }
-        label="Cập nhật"
-      />,
-      <GridActionsCellItem
-        icon={<ButonRetailBill data={row} />}
-        label="In hóa đơn bán lẻ"
-      />,
+      <ButonRetailBill data={row} />,
     ],
   },
   {

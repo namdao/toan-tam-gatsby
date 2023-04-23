@@ -42,11 +42,10 @@ const QuickUpdateConfirm = ({ row }: { row: IOrder }) => {
     ? theme.palette.primary.main
     : theme.palette.warning.main;
   return (
-    <Iconify
-      width={ICON.NAV_ITEM}
-      icon={iconName}
-      color={color}
+    <GridActionsCellItem
+      label="Chi tiết"
       onClick={handlerQuickConfirm}
+      icon={<Iconify width={ICON.NAV_ITEM} icon={iconName} color={color} />}
     />
   );
 };
@@ -65,24 +64,13 @@ export const OrderNeedConfirmTableColumns: GridColDef[] = [
     headerName: "Hành động",
     minWidth: 150,
     getActions: ({ row }: GridRowParams<IOrder>) => [
-      <GridActionsCellItem
-        icon={<FullScreenDialogs orderId={row.id} orderName={row.order_no} />}
-        label="Chi tiết"
+      <FullScreenDialogs orderId={row.id} orderName={row.order_no} />,
+      <DialogOrderUpdate
+        orderId={row.id}
+        orderName={row.order_no}
+        fromPage="ORDER_NEED_CONFIRM"
       />,
-      <GridActionsCellItem
-        icon={
-          <DialogOrderUpdate
-            orderId={row.id}
-            orderName={row.order_no}
-            fromPage="ORDER_NEED_CONFIRM"
-          />
-        }
-        label="Cập nhật"
-      />,
-      <GridActionsCellItem
-        icon={<QuickUpdateConfirm row={row} />}
-        label="Cập nhật nhanh"
-      />,
+      <QuickUpdateConfirm row={row} />,
     ],
   },
   {
