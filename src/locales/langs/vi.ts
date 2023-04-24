@@ -5,6 +5,7 @@ import customerLangs from "scenes/customer/langs/vi";
 import companyLangs from "scenes/company/langs/vi";
 import printTypeLangs from "scenes/printtype/langs/vi";
 import categoryLangs from "scenes/categories/langs/vi";
+import paperLangs from "scenes/papers/langs/vi";
 
 const vi = {
   hi: "Xin chào",
@@ -97,4 +98,5 @@ export default {
   company: companyLangs,
   printtype: printTypeLangs,
   category: categoryLangs,
+  paper: paperLangs,
 };
