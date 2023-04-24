@@ -6,6 +6,7 @@ import companyLangs from "scenes/company/langs/en";
 import printTypeLangs from "scenes/printtype/langs/en";
 import categoryLangs from "scenes/categories/langs/en";
 import paperLangs from "scenes/papers/langs/vi";
+import outsourceLangs from "scenes/outsources/langs/vi";
 
 const en = {
   hi: "Hi",
@@ -54,4 +55,5 @@ export default {
   printtype: printTypeLangs,
   category: categoryLangs,
   paper: paperLangs,
+  outsource: outsourceLangs,
 };

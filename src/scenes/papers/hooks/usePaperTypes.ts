@@ -20,7 +20,9 @@ export const usePaperTypes = () => {
         dispatch(paperTypeActions.setPaperListSuccess(result.data));
       }
     } catch (error) {
-      enqueueSnackbar((error as Error)?.message || "onGetPaperList error");
+      enqueueSnackbar((error as Error)?.message || "onGetPaperList error", {
+        variant: "error",
+      });
     } finally {
       setLoading(false);
     }
