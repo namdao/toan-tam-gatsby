@@ -1,9 +1,18 @@
 import { useState } from "react";
 import { IResponseType } from "constant/commonType";
 import { useSnackbar } from "notistack";
-import { IOutSource, IResOutSourceType } from "../redux/types";
+import {
+  IOutSource,
+  IReqAddOutSource,
+  IResOutSourceType,
+} from "../redux/types";
 import { useLocales } from "locales";
-import { apiGetOutSourceList } from "../redux/api";
+import {
+  apiAddOutSource,
+  apiDeleteOutSource,
+  apiGetOutSourceList,
+  apiUpdateOutSource,
+} from "../redux/api";
 
 export const useOutSource = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -20,7 +29,12 @@ export const useOutSource = () => {
         const dataParse = Object.entries(result.data)
           .flat()
           .filter((e) => Array.isArray(e))
-          .flat();
+          .flat()
+          .map((f) => ({
+            // @ts-ignore
+            ...f,
+            isNew: false,
+          }));
         // @ts-ignore
         setOutSourceList(dataParse);
       } else {
@@ -37,9 +51,82 @@ export const useOutSource = () => {
     }
   };
 
+  const onAddNewOutSource = async (
+    payload: IReqAddOutSource
+  ): Promise<boolean> => {
+    let status = true;
+    try {
+      const result: IResponseType<IResOutSourceType> = await apiAddOutSource(
+        payload
+      );
+      if (result?.data) {
+        enqueueSnackbar(translate("outsource.success.outsourceAdd"));
+      } else {
+        status = false;
+        enqueueSnackbar(translate("outsource.error.outsourceAdd"), {
+          variant: "error",
+        });
+      }
+    } catch (error) {
+      status = false;
+      enqueueSnackbar((error as Error)?.message || "onAddNewOutSource error", {
+        variant: "error",
+      });
+    }
+    return status;
+  };
+  const onUpdateOutSource = async (id: number, payload: IReqAddOutSource) => {
+    let status = true;
+    try {
+      const result: IResponseType<IResOutSourceType> = await apiUpdateOutSource(
+        id,
+        payload
+      );
+      if (result?.data) {
+        enqueueSnackbar(translate("outsource.success.outsourceUpdate"));
+      } else {
+        status = false;
+        enqueueSnackbar(translate("outsource.error.outsourceUpdate"), {
+          variant: "error",
+        });
+      }
+    } catch (error) {
+      status = false;
+      enqueueSnackbar((error as Error)?.message || "onUpdateOutSource error", {
+        variant: "error",
+      });
+    }
+    return status;
+  };
+  const onDeleteOutSource = async (id: number) => {
+    let status = true;
+    try {
+      const result: IResponseType<IResOutSourceType> = await apiDeleteOutSource(
+        id
+      );
+      if (result?.data) {
+        enqueueSnackbar(translate("outsource.success.outsourceDelete"));
+      } else {
+        status = false;
+        enqueueSnackbar(translate("outsource.error.outsourceDelete"), {
+          variant: "error",
+        });
+      }
+    } catch (error) {
+      status = false;
+      enqueueSnackbar((error as Error)?.message || "onDeleteOutSource error", {
+        variant: "error",
+      });
+    }
+    return status;
+  };
   return {
     loading,
     outsourceList,
     onGetOutSourceList,
+    setOutSourceList,
+    onAddNewOutSource,
+    onUpdateOutSource,
+    onDeleteOutSource,
   };
 };

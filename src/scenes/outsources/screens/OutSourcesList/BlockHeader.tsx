@@ -18,16 +18,6 @@ const Header = () => {
           name: translate("outsource.outsourceList.title"),
         },
       ]}
-      action={
-        <Button
-          variant="outlined"
-          size="large"
-          startIcon={<Iconify icon="material-symbols:add" />}
-          onClick={onNavigatePrintypeAdd}
-        >
-          <Typography>{translate("outsource.outsourceAdd.title")}</Typography>
-        </Button>
-      }
     />
   );
 };

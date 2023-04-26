@@ -1,10 +1,14 @@
 import { IResponseType } from "constant/commonType";
 import { useLocales } from "locales";
-import { isArray } from "lodash";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
-import { apiGetPrintType } from "../redux/api";
-import { IColor, IResPrintType } from "../redux/types";
+import {
+  apiAddPrintType,
+  apiDeletePrintType,
+  apiGetPrintType,
+  apiUpdatePrintType,
+} from "../redux/api";
+import { IColor, IReqPrintType, IResPrintType } from "../redux/types";
 
 export const usePrintType = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -31,9 +35,79 @@ export const usePrintType = () => {
     }
   };
 
+  const onAddPrintType = async (payload: IReqPrintType): Promise<boolean> => {
+    let status = true;
+    try {
+      const result: IResponseType<IResPrintType> = await apiAddPrintType(
+        payload
+      );
+      if (result?.data) {
+        enqueueSnackbar(translate("printtype.success.printTypeAdd"));
+      } else {
+        status = false;
+        enqueueSnackbar(translate("printtype.error.printTypeAdd"), {
+          variant: "error",
+        });
+      }
+    } catch (error) {
+      status = false;
+      enqueueSnackbar((error as Error)?.message || "onAddPrintType error", {
+        variant: "error",
+      });
+    }
+    return status;
+  };
+  const onUpdatePrintType = async (id: number, payload: IReqPrintType) => {
+    let status = true;
+    try {
+      const result: IResponseType<IResPrintType> = await apiUpdatePrintType(
+        id,
+        payload
+      );
+      if (result?.data) {
+        enqueueSnackbar(translate("printtype.success.printTypeUpdate"));
+      } else {
+        status = false;
+        enqueueSnackbar(translate("printtype.error.printTypeUpdate"), {
+          variant: "error",
+        });
+      }
+    } catch (error) {
+      status = false;
+      enqueueSnackbar((error as Error)?.message || "onUpdatePrintType error", {
+        variant: "error",
+      });
+    }
+    return status;
+  };
+  const onDeletePrintType = async (id: number) => {
+    let status = true;
+    try {
+      const result: IResponseType<IReqPrintType> = await apiDeletePrintType(id);
+      if (result?.data) {
+        enqueueSnackbar(translate("printtype.success.printTypeDelete"));
+      } else {
+        status = false;
+        enqueueSnackbar(translate("printtype.error.printTypeDelete"), {
+          variant: "error",
+        });
+      }
+    } catch (error) {
+      status = false;
+      enqueueSnackbar((error as Error)?.message || "onDeletePrintType error", {
+        variant: "error",
+      });
+    }
+    return status;
+  };
+
   return {
     onGetPrintTypes,
+    onAddPrintType,
+    onDeletePrintType,
+    onUpdatePrintType,
     loading,
     listPrintType,
+    setListPrintType,
   };
 };

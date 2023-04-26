@@ -15,13 +15,11 @@ import CustomerAdd from "scenes/customer/screens/CustomerAdd";
 import CompanyList from "scenes/company/screens/CompanyList";
 import CompanyAdd from "scenes/company/screens/CompanyAdd";
 import PrintTypeList from "scenes/printtype/screens/PrintTypeList";
-import PrintTypeAdd from "scenes/printtype/screens/PrintTypeAdd";
 import CategoryList from "scenes/categories/screens/CategoryList";
 import CategoryAdd from "scenes/categories/screens/CategoryAdd";
 import PaperList from "scenes/papers/screens/PaperList";
 import PaperAdd from "scenes/papers/screens/PaperAdd";
 import OutsourceList from "scenes/outsources/screens/OutSourcesList";
-import OutsourceAdd from "scenes/outsources/screens/OutSourceAdd";
 import OrderSearch from "scenes/orders/screens/OrderSearch";
 import OrderProcessing from "scenes/orders/screens/OrderProcessing";
 import OrderNeedCollect from "scenes/orders/screens/OrderNeedCollect";
@@ -283,77 +281,23 @@ const navConfig = [
           },
         ],
       },
+      // outsource
+      {
+        title: "basicInfo.outsource.title",
+        path: PATH_APP.outsource.root,
+        icon: iconify("mdi:paper-text-outline"),
+        component: OutsourceList,
+        roles: [ROLES.ADMIN, ROLES.MANAGER],
+        children: [],
+      },
       // Print type
       {
         title: "basicInfo.printType.title",
         path: PATH_APP.printType.root,
         icon: iconify("material-symbols:print"),
-        component: () => <></>,
+        component: PrintTypeList,
         roles: [ROLES.ADMIN, ROLES.MANAGER],
-        children: [
-          {
-            title: "basicInfo.printType.list",
-            path: PATH_APP.printType.list,
-            component: PrintTypeList,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.printType.add",
-            path: PATH_APP.printType.add,
-            component: PrintTypeAdd,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.printType.update",
-            path: PATH_APP.printType.update,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.printType.view",
-            path: PATH_APP.printType.view,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-        ],
-      },
-      // Categories
-      {
-        title: "basicInfo.categories.title",
-        path: PATH_APP.categories.root,
-        icon: iconify("carbon:categories"),
-        component: () => <></>,
-        roles: [ROLES.ADMIN, ROLES.MANAGER],
-        children: [
-          {
-            title: "basicInfo.categories.list",
-            path: PATH_APP.categories.list,
-            component: CategoryList,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.categories.add",
-            path: PATH_APP.categories.add,
-            component: CategoryAdd,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.categories.update",
-            path: PATH_APP.categories.update,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.categories.view",
-            path: PATH_APP.categories.view,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-        ],
+        children: [],
       },
       // paperType
       {
@@ -391,36 +335,36 @@ const navConfig = [
           },
         ],
       },
-      // outsource
+      // Categories
       {
-        title: "basicInfo.outsource.title",
-        path: PATH_APP.outsource.root,
-        icon: iconify("mdi:paper-text-outline"),
+        title: "basicInfo.categories.title",
+        path: PATH_APP.categories.root,
+        icon: iconify("carbon:categories"),
         component: () => <></>,
         roles: [ROLES.ADMIN, ROLES.MANAGER],
         children: [
           {
-            title: "basicInfo.outsource.list",
-            path: PATH_APP.outsource.list,
-            component: OutsourceList,
+            title: "basicInfo.categories.list",
+            path: PATH_APP.categories.list,
+            component: CategoryList,
             roles: [ROLES.ADMIN, ROLES.MANAGER],
           },
           {
-            title: "basicInfo.outsource.add",
-            path: PATH_APP.outsource.add,
-            component: OutsourceAdd,
+            title: "basicInfo.categories.add",
+            path: PATH_APP.categories.add,
+            component: CategoryAdd,
             roles: [ROLES.ADMIN, ROLES.MANAGER],
           },
           {
-            title: "basicInfo.outsource.update",
-            path: PATH_APP.outsource.update,
+            title: "basicInfo.categories.update",
+            path: PATH_APP.categories.update,
             hideMenu: true,
             component: () => <></>,
             roles: [ROLES.ADMIN, ROLES.MANAGER],
           },
           {
-            title: "basicInfo.outsource.view",
-            path: PATH_APP.outsource.view,
+            title: "basicInfo.categories.view",
+            path: PATH_APP.categories.view,
             hideMenu: true,
             component: () => <></>,
             roles: [ROLES.ADMIN, ROLES.MANAGER],
