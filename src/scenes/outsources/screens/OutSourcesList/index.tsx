@@ -1,5 +1,5 @@
 import React from "react";
-import { Container } from "@mui/material";
+import { Card, Container } from "@mui/material";
 import { useLocales } from "locales";
 import { SettingsSelector } from "services/settings/redux/slice";
 import { useAppSelector } from "store";
@@ -15,7 +15,9 @@ const OutSourceList = () => {
       <Helmet title={translate("outsource.outsourceList.title")} />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <Header />
-        <OutSourceListTable />
+        <Card>
+          <OutSourceListTable />
+        </Card>
       </Container>
     </>
   );

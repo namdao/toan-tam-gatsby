@@ -1,5 +1,5 @@
 import React from "react";
-import { Container } from "@mui/material";
+import { Card, Container } from "@mui/material";
 import { useLocales } from "locales";
 import { SettingsSelector } from "services/settings/redux/slice";
 import { useAppSelector } from "store";
@@ -15,7 +15,9 @@ const PrintTypeList = () => {
       <Helmet title={translate("printtype.printTypeList.title")} />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <Header />
-        <PrintTypeTable />
+        <Card>
+          <PrintTypeTable />
+        </Card>
       </Container>
     </>
   );

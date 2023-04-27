@@ -13,6 +13,7 @@ import {
   apiGetOutSourceList,
   apiUpdateOutSource,
 } from "../redux/api";
+import { compareIdDesc } from "utils/utility";
 
 export const useOutSource = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -35,8 +36,9 @@ export const useOutSource = () => {
             ...f,
             isNew: false,
           }));
+        const dataSort = dataParse.sort(compareIdDesc);
         // @ts-ignore
-        setOutSourceList(dataParse);
+        setOutSourceList(dataSort);
       } else {
         enqueueSnackbar(translate("outsource.error.outsourceList"), {
           variant: "error",

@@ -33,6 +33,7 @@ function EditToolbar(props: EditToolbarProps) {
 
   return (
     <Button
+      sx={{ ml: 2, mt: 2 }}
       variant="outlined"
       size="large"
       startIcon={<Iconify icon="material-symbols:add" />}

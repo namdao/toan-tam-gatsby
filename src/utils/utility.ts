@@ -12,3 +12,18 @@ export const getTotalFee = (order: IOrder | IOrderDetail) => {
     order || {};
   return template_number * unit_price * quantity + shipping_fee + design_fee;
 };
+
+export const compareIdDesc = (
+  a: {
+    id: number;
+  },
+  b: { id: number }
+) => {
+  if (a.id < b.id) {
+    return 1;
+  }
+  if (a.id > b.id) {
+    return -1;
+  }
+  return 0;
+};

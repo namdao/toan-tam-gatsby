@@ -2,6 +2,7 @@ import { IResponseType } from "constant/commonType";
 import { useLocales } from "locales";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
+import { compareIdDesc } from "utils/utility";
 import {
   apiAddPrintType,
   apiDeletePrintType,
@@ -20,7 +21,8 @@ export const usePrintType = () => {
       setLoading(true);
       const result: IResponseType<IResPrintType> = await apiGetPrintType();
       if (result.data && result.data.color) {
-        setListPrintType(result.data.color);
+        const dataSort = result.data.color.sort(compareIdDesc);
+        setListPrintType(dataSort);
       } else {
         enqueueSnackbar(translate("printtype.error.printTypeList"), {
           variant: "error",

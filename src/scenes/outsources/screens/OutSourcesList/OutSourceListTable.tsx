@@ -116,7 +116,7 @@ export default function OutSourceListTable() {
       field: "id",
       headerName: "STT",
       renderCell: (index) =>
-        index.api.getRowIndexRelativeToVisibleRows(index.row.id),
+        index.api.getRowIndexRelativeToVisibleRows(index.row.id) + 1,
     },
     {
       field: "name",
