@@ -304,36 +304,9 @@ const navConfig = [
         title: "basicInfo.paperType.title",
         path: PATH_APP.paperType.root,
         icon: iconify("mdi:paper-check"),
-        component: () => <></>,
+        component: PaperList,
         roles: [ROLES.ADMIN, ROLES.MANAGER],
-        children: [
-          {
-            title: "basicInfo.paperType.list",
-            path: PATH_APP.paperType.list,
-            component: PaperList,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.paperType.add",
-            path: PATH_APP.paperType.add,
-            component: PaperAdd,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.paperType.update",
-            path: PATH_APP.paperType.update,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.paperType.view",
-            path: PATH_APP.paperType.view,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-        ],
+        children: [],
       },
       // Categories
       {

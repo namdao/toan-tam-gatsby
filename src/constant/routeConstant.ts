@@ -6,7 +6,7 @@ const ROOT_COMPANY = "/company";
 const ROOT_PRINTTYPE = "/print-type";
 const ROOT_CATEGORIES = "/categories";
 const ROOT_PAPERTYPE = "/paper-type";
-const ROOT_OUTSOURC = "/oursource";
+const ROOT_OUTSOURCE = "/oursource";
 const ROOT_ORDER = "/order";
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
@@ -45,11 +45,7 @@ export const PATH_APP = {
     update: `${ROOT_COMPANY}/edit/:companyId`,
   },
   printType: {
-    root: `${ROOT_PRINTTYPE}`,
-    list: `${ROOT_PRINTTYPE}/danh-sach-kieu-in`,
-    add: `${ROOT_PRINTTYPE}/them-kieu-in`,
-    view: `${ROOT_PRINTTYPE}/view/:printTypeId`,
-    update: `${ROOT_PRINTTYPE}/edit/:printTypeId`,
+    root: `${ROOT_PRINTTYPE}/quan-ly-kieu-in`,
   },
   categories: {
     root: `${ROOT_CATEGORIES}`,
@@ -59,18 +55,10 @@ export const PATH_APP = {
     update: `${ROOT_CATEGORIES}/edit/:categoryId`,
   },
   paperType: {
-    root: `${ROOT_PAPERTYPE}`,
-    list: `${ROOT_PAPERTYPE}/danh-sach-loai-giay`,
-    add: `${ROOT_PAPERTYPE}/them-loai-giay`,
-    view: `${ROOT_PAPERTYPE}/view/:paperTypeId`,
-    update: `${ROOT_PAPERTYPE}/edit/:paperTypeId`,
+    root: `${ROOT_PAPERTYPE}/quan-ly-loai-giay`,
   },
   outsource: {
-    root: `${ROOT_OUTSOURC}`,
-    list: `${ROOT_OUTSOURC}/danh-sach-gia-cong`,
-    add: `${ROOT_OUTSOURC}/them-gia-cong`,
-    view: `${ROOT_OUTSOURC}/view/:outsourceId`,
-    update: `${ROOT_OUTSOURC}/edit/:outsourceId`,
+    root: `${ROOT_OUTSOURCE}/quan-ly-gia-cong`,
   },
   order: {
     root: ROOT_ORDER,

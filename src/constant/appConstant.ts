@@ -8,6 +8,7 @@ const appConstant = {
     TOTAL_INPROGRESS: "/total-inprogress",
     ORDERS2: "/orders2",
     PAPER_TYPE: "/paper-type",
+    PAPER_TYPES: "/paper-types",
     ORDERS_ACTIONS: (id: number) => `/orders/${id}`,
     TOTAL_RECEIVABLES: "/total-receivables",
     ORDERS3: "/orders3",

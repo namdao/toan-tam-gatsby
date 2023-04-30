@@ -19,6 +19,12 @@ const paperSlice = createSlice({
     setPaperListSuccess: (state, action: PayloadAction<IPaperType[]>) => {
       state.list = action.payload;
     },
+    addNewRow: (state, action: PayloadAction<IPaperType>) => {
+      state.list = [action.payload, ...state.list];
+    },
+    deleteNewRow: (state, action: PayloadAction<number>) => {
+      state.list = state.list.filter((row) => row.id !== action.payload);
+    },
   },
 });
 
