@@ -23,6 +23,7 @@ const appConstant = {
     PRINT_TYPE: "/print-type",
     ALL_CATEGORY: "/all-category",
     OUTSOURCE: "/outsources",
+    CATEGORIES: "/categories",
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

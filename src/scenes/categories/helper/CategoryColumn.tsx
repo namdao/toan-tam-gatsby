@@ -6,7 +6,6 @@ import {
   GridRowParams,
 } from "@mui/x-data-grid";
 import Label from "components/label";
-import DialogCategoryDetail from "../screens/CategoryList/DialogCategoryDetail";
 import { IDataTableCategory } from "../redux/types";
 import Iconify from "components/iconify";
 import { ICON } from "constant/layoutConstant";
@@ -18,10 +17,6 @@ export const CategoryColumn: GridColDef[] = [
     headerName: "Hành động",
     minWidth: 100,
     getActions: ({ row }: GridRowParams<IDataTableCategory>) => [
-      <GridActionsCellItem
-        icon={<DialogCategoryDetail categoryDetail={row} />}
-        label="Chi tiết"
-      />,
       <GridActionsCellItem
         icon={
           <Iconify

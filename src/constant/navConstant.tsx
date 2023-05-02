@@ -16,9 +16,7 @@ import CompanyList from "scenes/company/screens/CompanyList";
 import CompanyAdd from "scenes/company/screens/CompanyAdd";
 import PrintTypeList from "scenes/printtype/screens/PrintTypeList";
 import CategoryList from "scenes/categories/screens/CategoryList";
-import CategoryAdd from "scenes/categories/screens/CategoryAdd";
 import PaperList from "scenes/papers/screens/PaperList";
-import PaperAdd from "scenes/papers/screens/PaperAdd";
 import OutsourceList from "scenes/outsources/screens/OutSourcesList";
 import OrderSearch from "scenes/orders/screens/OrderSearch";
 import OrderProcessing from "scenes/orders/screens/OrderProcessing";
@@ -313,36 +311,9 @@ const navConfig = [
         title: "basicInfo.categories.title",
         path: PATH_APP.categories.root,
         icon: iconify("carbon:categories"),
-        component: () => <></>,
+        component: CategoryList,
         roles: [ROLES.ADMIN, ROLES.MANAGER],
-        children: [
-          {
-            title: "basicInfo.categories.list",
-            path: PATH_APP.categories.list,
-            component: CategoryList,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.categories.add",
-            path: PATH_APP.categories.add,
-            component: CategoryAdd,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.categories.update",
-            path: PATH_APP.categories.update,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-          {
-            title: "basicInfo.categories.view",
-            path: PATH_APP.categories.view,
-            hideMenu: true,
-            component: () => <></>,
-            roles: [ROLES.ADMIN, ROLES.MANAGER],
-          },
-        ],
+        children: [],
       },
     ],
   },

@@ -10,5 +10,10 @@ export type IDataTableCategory = {
   category_parent: IResCategory | null;
   id: number;
   parent_id: number | null;
-  group: string[];
+  group?: string[];
+};
+
+export type IReqCategory = {
+  parent_id: number;
+  name: string;
 };
