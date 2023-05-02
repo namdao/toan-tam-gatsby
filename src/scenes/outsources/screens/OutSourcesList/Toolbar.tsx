@@ -10,26 +10,11 @@ import { TFunction } from "i18next";
 import React from "react";
 
 interface EditToolbarProps {
-  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
-  setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
-  ) => void;
   trans: TFunction<"trans", undefined, "trans">;
+  handleAddClick: () => void;
 }
 function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel, trans } = props;
-
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [
-      { id, name: "", group: "other", isNew: true },
-      ...oldRows,
-    ]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-    }));
-  };
+  const { trans, handleAddClick } = props;
 
   return (
     <Button
@@ -37,7 +22,7 @@ function EditToolbar(props: EditToolbarProps) {
       variant="outlined"
       size="large"
       startIcon={<Iconify icon="material-symbols:add" />}
-      onClick={handleClick}
+      onClick={handleAddClick}
     >
       <Typography>{trans("outsource.outsourceAdd.title")}</Typography>
     </Button>

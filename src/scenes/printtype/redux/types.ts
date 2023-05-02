@@ -1,7 +1,7 @@
 export type IColor = {
   group: string;
   id: number;
-  max_select: string;
+  max_select: number;
   print_type_name: string;
   isNew?: boolean;
 };

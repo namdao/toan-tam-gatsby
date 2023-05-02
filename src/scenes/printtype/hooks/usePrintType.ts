@@ -16,9 +16,9 @@ export const usePrintType = () => {
   const [listPrintType, setListPrintType] = useState<IColor[]>([]);
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
-  const onGetPrintTypes = async () => {
+  const onGetPrintTypes = async (action: "idle" | "refresh") => {
     try {
-      setLoading(true);
+      action === "idle" && setLoading(true);
       const result: IResponseType<IResPrintType> = await apiGetPrintType();
       if (result.data && result.data.color) {
         const dataSort = result.data.color.sort(compareIdDesc);
@@ -33,7 +33,7 @@ export const usePrintType = () => {
         variant: "error",
       });
     } finally {
-      setLoading(false);
+      action === "idle" && setLoading(false);
     }
   };
 

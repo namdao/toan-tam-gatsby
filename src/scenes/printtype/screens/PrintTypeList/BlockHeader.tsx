@@ -10,6 +10,9 @@ const Header = () => {
       heading={translate("printtype.printTypeList.title")}
       links={[
         {
+          name: translate("basicInfo.title"),
+        },
+        {
           name: translate("printtype.printTypeList.title"),
         },
       ]}

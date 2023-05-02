@@ -27,7 +27,7 @@ const CommonManager = () => {
   useLayoutEffect(() => {
     if (token !== "") {
       SetupAxios.setHeaderToken(token);
-      onGetPaperList();
+      onGetPaperList("idle");
       getCustomerList();
     } else {
       SetupAxios.clearHeaderToken();

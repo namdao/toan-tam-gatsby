@@ -21,9 +21,9 @@ export const useOutSource = () => {
   const [outsourceList, setOutSourceList] = useState<IOutSource[]>([]);
   const { enqueueSnackbar } = useSnackbar();
 
-  const onGetOutSourceList = async () => {
+  const onGetOutSourceList = async (action: "idle" | "refresh") => {
     try {
-      setLoading(true);
+      action === "idle" && setLoading(true);
       const result: IResponseType<IResOutSourceType> =
         await apiGetOutSourceList();
       if (result?.data) {
@@ -49,7 +49,7 @@ export const useOutSource = () => {
         variant: "error",
       });
     } finally {
-      setLoading(false);
+      action === "idle" && setLoading(false);
     }
   };
 

@@ -12,25 +12,27 @@ import { IPaperType, IReqPaper } from "../redux/types";
 import { useAppDispatch } from "store";
 import { paperTypeActions } from "../redux/slice";
 import { useLocales } from "locales";
+import { compareIdDesc } from "utils/utility";
 
 export const usePaperTypes = () => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
-  const onGetPaperList = async () => {
+  const onGetPaperList = async (action: "idle" | "refresh") => {
     try {
-      setLoading(true);
+      action === "idle" && setLoading(true);
       const result: IResponseType<IPaperType[]> = await apiGetPaperList();
       if (result?.data && isArray(result.data)) {
-        dispatch(paperTypeActions.setPaperListSuccess(result.data));
+        const dataSort = result.data.sort(compareIdDesc);
+        dispatch(paperTypeActions.setPaperListSuccess(dataSort));
       }
     } catch (error) {
       enqueueSnackbar((error as Error)?.message || "onGetPaperList error", {
         variant: "error",
       });
     } finally {
-      setLoading(false);
+      action === "idle" && setLoading(false);
     }
   };
   const onAddNewPaper = async (payload: IReqPaper): Promise<boolean> => {

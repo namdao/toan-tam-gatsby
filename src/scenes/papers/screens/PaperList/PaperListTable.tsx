@@ -14,7 +14,13 @@ import {
   GridRowId,
   useGridApiRef,
 } from "@mui/x-data-grid-pro";
-import { styled, Tooltip, TooltipProps, tooltipClasses } from "@mui/material";
+import {
+  styled,
+  Tooltip,
+  TooltipProps,
+  tooltipClasses,
+  LinearProgress,
+} from "@mui/material";
 import { IResPrintType } from "scenes/printtype/redux/types";
 import Label from "components/label";
 import EditIcon from "@mui/icons-material/Edit";
@@ -42,8 +48,13 @@ const PrintTypeTable = () => {
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
   );
-  const { onUpdatePaper, onAddNewPaper, onDeletePaper, onGetPaperList } =
-    usePaperTypes();
+  const {
+    onUpdatePaper,
+    onAddNewPaper,
+    onDeletePaper,
+    onGetPaperList,
+    loading,
+  } = usePaperTypes();
   const dispatch = useAppDispatch();
   const paperList = useAppSelector(PaperTypeSelector.getListPaper);
   const apiRef = useGridApiRef();
@@ -55,13 +66,13 @@ const PrintTypeTable = () => {
         prev.id > current.id ? prev : current
       ).id + 1;
   }
-  // if (loading) {
-  //   return (
-  //     <Box sx={{ margin: "10% auto", width: "50%" }}>
-  //       <LinearProgress color="primary" />
-  //     </Box>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <Box sx={{ margin: "10% auto", width: "50%" }}>
+        <LinearProgress color="primary" />
+      </Box>
+    );
+  }
 
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
@@ -86,7 +97,7 @@ const PrintTypeTable = () => {
     }
     if (!status) return;
     setTimeout(() => {
-      onGetPaperList();
+      onGetPaperList("refresh");
     }, 400);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };

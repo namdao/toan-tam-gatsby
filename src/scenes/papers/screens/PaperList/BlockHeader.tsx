@@ -10,6 +10,9 @@ const Header = () => {
       heading={translate("paper.paperList.title")}
       links={[
         {
+          name: translate("basicInfo.title"),
+        },
+        {
           name: translate("paper.paperList.title"),
         },
       ]}

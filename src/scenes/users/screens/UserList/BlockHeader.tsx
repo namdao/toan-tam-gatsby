@@ -14,6 +14,9 @@ const Header = () => {
       heading={translate("users.userList.title")}
       links={[
         {
+          name: translate("basicInfo.title"),
+        },
+        {
           name: translate("users.userList.title"),
           href: PATH_APP.user.list,
         },

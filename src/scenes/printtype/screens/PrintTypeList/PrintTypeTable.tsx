@@ -14,7 +14,13 @@ import {
   GridRowId,
   useGridApiRef,
 } from "@mui/x-data-grid-pro";
-import { styled, Tooltip, TooltipProps, tooltipClasses } from "@mui/material";
+import {
+  styled,
+  Tooltip,
+  TooltipProps,
+  tooltipClasses,
+  LinearProgress,
+} from "@mui/material";
 import { usePrintType } from "scenes/printtype/hooks/usePrintType";
 import { IResPrintType } from "scenes/printtype/redux/types";
 import Label from "components/label";
@@ -52,16 +58,34 @@ const PrintTypeTable = () => {
   const apiRef = useGridApiRef();
   const { translate } = useLocales();
   useEffect(() => {
-    onGetPrintTypes();
+    onGetPrintTypes("idle");
   }, []);
+  let lastIdRow = -1;
+  if (listPrintType.length > 0) {
+    lastIdRow =
+      listPrintType.reduce((prev, current) =>
+        prev.id > current.id ? prev : current
+      ).id + 1;
+  }
+  if (loading) {
+    return (
+      <Box sx={{ margin: "10% auto", width: "50%" }}>
+        <LinearProgress color="primary" />
+      </Box>
+    );
+  }
 
-  // if (loading) {
-  //   return (
-  //     <Box sx={{ margin: "10% auto", width: "50%" }}>
-  //       <LinearProgress color="primary" />
-  //     </Box>
-  //   );
-  // }
+  const handleAddClick = () => {
+    const id = lastIdRow + 1;
+    setListPrintType((oldRows) => [
+      { id, print_type_name: "", group: "color", isNew: true, max_select: 1 },
+      ...oldRows,
+    ]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+    }));
+  };
 
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
@@ -87,7 +111,7 @@ const PrintTypeTable = () => {
     }
     if (!status) return;
     setTimeout(() => {
-      onGetPrintTypes();
+      onGetPrintTypes("refresh");
     }, 400);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
@@ -205,9 +229,8 @@ const PrintTypeTable = () => {
         }}
         slotProps={{
           toolbar: {
-            setRows: setListPrintType,
+            handleAddClick: handleAddClick,
             trans: translate,
-            setRowModesModel,
           },
         }}
       />

@@ -24,6 +24,7 @@ import { useLocales } from "locales";
 import { styled } from "@mui/system";
 import AutoSelectGroup from "./AutoSelectGroup";
 import EditToolbar from "./Toolbar";
+import { LinearProgress } from "@mui/material";
 
 const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -40,6 +41,7 @@ export default function OutSourceListTable() {
   );
   const { translate } = useLocales();
   const {
+    loading,
     outsourceList,
     setOutSourceList,
     onGetOutSourceList,
@@ -48,7 +50,7 @@ export default function OutSourceListTable() {
     onDeleteOutSource,
   } = useOutSource();
   useEffect(() => {
-    onGetOutSourceList();
+    onGetOutSourceList("idle");
   }, []);
   const apiRef = useGridApiRef();
 
@@ -61,6 +63,34 @@ export default function OutSourceListTable() {
     });
     return listGroup;
   }, [outsourceList]);
+
+  let lastIdRow = -1;
+  if (outsourceList.length > 0) {
+    lastIdRow =
+      outsourceList.reduce((prev, current) =>
+        prev.id > current.id ? prev : current
+      ).id + 1;
+  }
+
+  if (loading) {
+    return (
+      <Box sx={{ margin: "10% auto", width: "50%" }}>
+        <LinearProgress color="primary" />
+      </Box>
+    );
+  }
+
+  const handleAddClick = () => {
+    const id = lastIdRow + 1;
+    setOutSourceList((oldRows) => [
+      { id, name: "", group: "other", isNew: true, max_select: 1 },
+      ...oldRows,
+    ]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+    }));
+  };
 
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
@@ -85,7 +115,7 @@ export default function OutSourceListTable() {
     }
     if (!status) return;
     setTimeout(() => {
-      onGetOutSourceList();
+      onGetOutSourceList("refresh");
     }, 400);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
@@ -115,6 +145,8 @@ export default function OutSourceListTable() {
     {
       field: "id",
       headerName: "STT",
+      align: "center",
+      headerAlign: "center",
       renderCell: (index) =>
         index.api.getRowIndexRelativeToVisibleRows(index.row.id) + 1,
     },
@@ -203,9 +235,8 @@ export default function OutSourceListTable() {
         getRowId={(row) => row.id}
         slotProps={{
           toolbar: {
-            setRows: setOutSourceList,
             trans: translate,
-            setRowModesModel,
+            handleAddClick,
           },
         }}
       />
