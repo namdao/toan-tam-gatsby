@@ -13,8 +13,10 @@ import navConfig from "constant/navConstant";
 import NavToggleButton from "./NavToggleButton";
 
 // ----------------------------------------------------------------------
-
-export default function NavMini() {
+type Props = {
+  menuList: typeof navConfig;
+};
+export default function NavMini({ menuList }: Props) {
   return (
     <Box
       component="nav"
@@ -42,7 +44,7 @@ export default function NavMini() {
       >
         <Logo sx={{ mx: "auto", my: 2 }} sizeLogo={60} />
 
-        <NavSectionMini data={navConfig} />
+        <NavSectionMini data={menuList} />
       </Stack>
     </Box>
   );

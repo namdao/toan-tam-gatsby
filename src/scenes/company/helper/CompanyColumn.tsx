@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  GridActionsCellItem,
   GridColDef,
   GridRenderCellParams,
   GridRowParams,
@@ -18,10 +17,7 @@ export const CompanyColumn: GridColDef[] = [
     headerName: "Hành động",
     minWidth: 100,
     getActions: ({ row }: GridRowParams<IResCompanies>) => [
-      <GridActionsCellItem
-        icon={<DialogCustomerDetail company={row} />}
-        label="Chi tiết"
-      />,
+      <DialogCustomerDetail company={row} />,
     ],
   },
   {

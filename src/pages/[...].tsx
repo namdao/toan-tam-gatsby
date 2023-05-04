@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Router, useLocation, Location } from "@reach/router";
 import AuthGuard from "manager/guardManager/AuthGuard";
 import DashboardLayout from "layouts/dashboardLayout";
-import { PATH_APP } from "constant/routeConstant";
+import { PATH_APP, PATH_AUTH } from "constant/routeConstant";
 import { navigate } from "gatsby";
 import { useAppSelector } from "store";
 import { AuthSelector } from "scenes/auth/redux/slice";
@@ -11,13 +11,16 @@ import { listPermissionRoutingByRole } from "utils/utility";
 const NotFoundTemp = () => {
   const location = useLocation();
   const { pathname } = location;
-
+  const token = useAppSelector(AuthSelector.getToken);
   useEffect(() => {
-    if (pathname === "/") {
+    if (pathname === "/" && token) {
       navigate(PATH_APP.order.processing);
       return;
+    } else if (!token) {
+      navigate(PATH_AUTH.login);
+    } else {
+      navigate("/404");
     }
-    navigate("/404");
   }, []);
   return <></>;
 };

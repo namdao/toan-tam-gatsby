@@ -10,18 +10,19 @@ import Logo from "components/logo";
 import Scrollbar from "components/scrollbar";
 import { NavSectionVertical } from "components/navSection";
 //
-import navConfig from "constant/navConstant";
 import NavDocs from "./NavDocs";
 import NavAccount from "./NavAccount";
 import NavToggleButton from "./NavToggleButton";
 import { useLocation } from "@reach/router";
+import navConfig from "constant/navConstant";
 
 type Props = {
   openNav: boolean;
   onCloseNav: VoidFunction;
+  menuList: typeof navConfig;
 };
 
-export default function NavVertical({ openNav, onCloseNav }: Props) {
+export default function NavVertical({ openNav, onCloseNav, menuList }: Props) {
   const location = useLocation();
   const { pathname } = location;
 
@@ -58,7 +59,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
         <NavAccount />
       </Stack>
 
-      <NavSectionVertical data={navConfig} />
+      <NavSectionVertical data={menuList} />
 
       <Box sx={{ flexGrow: 1 }} />
 

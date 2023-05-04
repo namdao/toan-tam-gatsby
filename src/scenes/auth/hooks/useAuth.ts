@@ -50,9 +50,9 @@ const useAuth = () => {
 
   const onSignOut = async () => {
     try {
+      dispatch(authActions.resetData());
       const result = await apiLogout();
       if (result.data) {
-        dispatch(authActions.resetData());
         enqueueSnackbar(translate("logoutSuccess"), { variant: "success" });
       }
     } catch (error) {

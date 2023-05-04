@@ -66,16 +66,16 @@ export const useCategory = () => {
     try {
       const result: IResponseType<any> = await apiAddCategory(payload);
       if (result?.data) {
-        enqueueSnackbar(translate("outsource.success.outsourceAdd"));
+        enqueueSnackbar(translate("category.success.categoryAdd"));
       } else {
         status = false;
-        enqueueSnackbar(translate("outsource.error.outsourceAdd"), {
+        enqueueSnackbar(translate("category.error.categoryAdd"), {
           variant: "error",
         });
       }
     } catch (error) {
       status = false;
-      enqueueSnackbar((error as Error)?.message || "onAddNewOutSource error", {
+      enqueueSnackbar((error as Error)?.message || "onAddCategory error", {
         variant: "error",
       });
     }
@@ -86,16 +86,16 @@ export const useCategory = () => {
     try {
       const result: IResponseType<any> = await apiUpdateCategory(id, payload);
       if (result?.data) {
-        enqueueSnackbar(translate("outsource.success.outsourceUpdate"));
+        enqueueSnackbar(translate("category.success.categoryEdit"));
       } else {
         status = false;
-        enqueueSnackbar(translate("outsource.error.outsourceUpdate"), {
+        enqueueSnackbar(translate("category.error.categoryEdit"), {
           variant: "error",
         });
       }
     } catch (error) {
       status = false;
-      enqueueSnackbar((error as Error)?.message || "onUpdateOutSource error", {
+      enqueueSnackbar((error as Error)?.message || "onUpdateCategory error", {
         variant: "error",
       });
     }
@@ -106,16 +106,16 @@ export const useCategory = () => {
     try {
       const result: IResponseType<any> = await apiDeleteCategory(id);
       if (result?.data) {
-        enqueueSnackbar(translate("outsource.success.outsourceDelete"));
+        enqueueSnackbar(translate("category.success.categoryDelete"));
       } else {
         status = false;
-        enqueueSnackbar(translate("outsource.error.outsourceDelete"), {
+        enqueueSnackbar(translate("category.error.categoryDelete"), {
           variant: "error",
         });
       }
     } catch (error) {
       status = false;
-      enqueueSnackbar((error as Error)?.message || "onDeleteOutSource error", {
+      enqueueSnackbar((error as Error)?.message || "onDeleteCategory error", {
         variant: "error",
       });
     }

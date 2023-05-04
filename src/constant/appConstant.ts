@@ -24,6 +24,8 @@ const appConstant = {
     ALL_CATEGORY: "/all-category",
     OUTSOURCE: "/outsources",
     CATEGORIES: "/categories",
+    HCM_CITY: "/city?city_id=10958",
+    ALL_CITY: "/address",
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

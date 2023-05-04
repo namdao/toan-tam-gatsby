@@ -3,8 +3,12 @@ import { useLocales } from "locales";
 import { isArray } from "lodash";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
-import { apiGetListCompanies } from "../redux/api";
-import { IResCompanies } from "../redux/types";
+import {
+  apiAddCompanies,
+  apiGetListCompanies,
+  apiUpdateCompanies,
+} from "../redux/api";
+import { IReqAddCompany, IResCompanies } from "../redux/types";
 
 export const useCompany = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -20,7 +24,7 @@ export const useCompany = () => {
       if (result.data && isArray(result.data)) {
         setListCompany(result.data);
       } else {
-        enqueueSnackbar(translate("company.error.companyFail"), {
+        enqueueSnackbar(translate("company.error.companyList"), {
           variant: "error",
         });
       }
@@ -36,8 +40,68 @@ export const useCompany = () => {
     }
   };
 
+  const onAddCompany = async (data: IReqAddCompany): Promise<boolean> => {
+    let status = true;
+    try {
+      setLoading(true);
+      const result: IResponseType<IResCompanies[]> = await apiAddCompanies(
+        data
+      );
+      if (result.data) {
+        enqueueSnackbar(translate("company.success.companyAdd"), {
+          variant: "success",
+        });
+      } else {
+        enqueueSnackbar(translate("company.error.companyAdd"), {
+          variant: "error",
+        });
+        status = false;
+      }
+    } catch (error) {
+      status = false;
+      enqueueSnackbar((error as Error)?.message || "onAddCompany error", {
+        variant: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+    return status;
+  };
+  const onUpdateCompany = async (
+    id: number,
+    data: IReqAddCompany
+  ): Promise<boolean> => {
+    let status = true;
+    try {
+      setLoading(true);
+      const result: IResponseType<IResCompanies[]> = await apiUpdateCompanies(
+        id,
+        data
+      );
+      if (result.data) {
+        enqueueSnackbar(translate("company.success.companyUpdate"), {
+          variant: "success",
+        });
+      } else {
+        enqueueSnackbar(translate("company.error.companyUpdate"), {
+          variant: "error",
+        });
+        status = false;
+      }
+    } catch (error) {
+      status = false;
+      enqueueSnackbar((error as Error)?.message || "onUpdateCompany error", {
+        variant: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+    return status;
+  };
   return {
     onGetCompanies,
+    onAddCompany,
+    onUpdateCompany,
     loading,
     listCompany,
   };

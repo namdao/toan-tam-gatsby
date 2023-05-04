@@ -12,6 +12,8 @@ import NavHorizontal from "./nav/NavHorizontal";
 import AuthGuard from "manager/guardManager/AuthGuard";
 import { useAppSelector } from "store";
 import { SettingsSelector } from "services/settings/redux/slice";
+import { listMenuByRole } from "utils/utility";
+import { AuthSelector } from "scenes/auth/redux/slice";
 
 type Props = {
   children?: React.ReactNode;
@@ -20,7 +22,8 @@ type Props = {
 export default function DashboardLayout({ children }: Props) {
   const themeLayout = useAppSelector(SettingsSelector.getThemeLayout);
   const isDesktop = useResponsive("up", "lg");
-
+  const roles = useAppSelector(AuthSelector.getRolesUser)[0]?.name;
+  const menuList = listMenuByRole(roles);
   const [open, setOpen] = useState(false);
 
   const isNavHorizontal = themeLayout === "horizontal";
@@ -36,7 +39,7 @@ export default function DashboardLayout({ children }: Props) {
   };
 
   const renderNavVertical = (
-    <NavVertical openNav={open} onCloseNav={handleClose} />
+    <NavVertical openNav={open} menuList={menuList} onCloseNav={handleClose} />
   );
 
   const renderContent = () => {
@@ -63,7 +66,7 @@ export default function DashboardLayout({ children }: Props) {
               minHeight: { lg: 1 },
             }}
           >
-            {isDesktop ? <NavMini /> : renderNavVertical}
+            {isDesktop ? <NavMini menuList={menuList} /> : renderNavVertical}
 
             <Main>{children}</Main>
           </Box>

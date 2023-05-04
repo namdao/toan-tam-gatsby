@@ -38,3 +38,21 @@ export const listPermissionRoutingByRole = (role: string) => {
   });
   return listByRole;
 };
+
+export const listMenuByRole = (role: string): typeof navConfig => {
+  const listMenu: typeof navConfig = [];
+  navConfig.forEach((e) => {
+    const subheader = e.subheader;
+    const listItem: any = [];
+    e.items.forEach((i) => {
+      if (i.roles.includes(role)) {
+        listItem.push(i);
+      }
+    });
+    listMenu.push({
+      subheader,
+      items: listItem,
+    });
+  });
+  return listMenu;
+};

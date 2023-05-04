@@ -9,12 +9,14 @@ import {
   Box,
 } from "@mui/material";
 import Iconify from "components/iconify";
-
+import { GridActionsCellItem } from "@mui/x-data-grid-pro";
 import { forwardRef, useState } from "react";
 import { TransitionProps } from "@mui/material/transitions";
 import { ICON } from "constant/layoutConstant";
 import { useLocales } from "locales";
 import { IResCompanies } from "scenes/company/redux/types";
+import CompanyNewEditForm from "../../components/CompanyNewEditForm";
+
 const Transition = forwardRef(
   (
     props: TransitionProps & {
@@ -41,12 +43,11 @@ function DialogCompanyDetail({ company }: IPropsCompany) {
 
   return (
     <>
-      <Iconify
-        width={ICON.NAV_ITEM}
-        icon="mdi:show"
+      <GridActionsCellItem
         onClick={handleClickOpen}
+        icon={<Iconify width={ICON.NAV_ITEM} icon="mdi:edit" />}
+        label="Chi tiết"
       />
-
       <Dialog
         fullScreen
         open={open}
@@ -67,7 +68,11 @@ function DialogCompanyDetail({ company }: IPropsCompany) {
           </Toolbar>
         </AppBar>
         <Box sx={{ mt: 12 }} />
-        {/* <OrderDetail orderId={orderId} /> */}
+        <CompanyNewEditForm
+          isEdit={true}
+          company={company}
+          closeModal={handleClose}
+        />
       </Dialog>
     </>
   );

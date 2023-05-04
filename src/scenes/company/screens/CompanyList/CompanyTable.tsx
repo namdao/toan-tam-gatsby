@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { createRef, useEffect, useImperativeHandle } from "react";
 import Box from "@mui/material/Box";
 import { DataGridPro, GridRow, GridColumnHeaders } from "@mui/x-data-grid-pro";
 import { CompanyColumn } from "scenes/company/helper/CompanyColumn";
@@ -7,6 +7,10 @@ import { useCompany } from "scenes/company/hooks/useCompany";
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
+export type IMagicTableRef = {
+  onRefresh: () => Promise<void>;
+};
+export const magicTableRef = createRef<IMagicTableRef>();
 
 const CompanyTable = () => {
   const { loading, listCompany, onGetCompanies } = useCompany();
@@ -15,6 +19,10 @@ const CompanyTable = () => {
     onGetCompanies(controller.signal);
     return () => controller.abort();
   }, []);
+
+  useImperativeHandle(magicTableRef, () => ({
+    onRefresh: () => onGetCompanies(controller.signal),
+  }));
 
   if (loading) {
     return (
@@ -33,7 +41,7 @@ const CompanyTable = () => {
         rowCount={totalRow}
         columns={CompanyColumn}
         disableRowSelectionOnClick
-        pageSizeOptions={[50, 100, 150]}
+        pageSizeOptions={[100, 150, 250]}
         components={{
           Row: MemoizedRow,
           ColumnHeaders: MemoizedColumnHeaders,
@@ -41,7 +49,7 @@ const CompanyTable = () => {
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: 50,
+              pageSize: 100,
             },
           },
         }}
