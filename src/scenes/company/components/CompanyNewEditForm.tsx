@@ -85,17 +85,6 @@ export default function CompanyNewEditForm({
     citySelect: Yup.object().required("Chọn thành phố"),
   });
 
-  const districtByCompany =
-    listDistrict.find((e) => e.label === company?.district) || defaultDistrict;
-  let wardByCompany = defaultWard;
-  const wardCompanyInfo = listWard
-    .find((e) => e.id === districtByCompany?.id)
-    ?.wards.find((w) => w.name === company?.ward);
-  if (wardCompanyInfo) {
-    wardByCompany.label = wardCompanyInfo?.name;
-    wardByCompany.id = wardCompanyInfo?.id;
-  }
-
   const defaultValues = useMemo(
     () => ({
       id: company?.id,
@@ -103,13 +92,22 @@ export default function CompanyNewEditForm({
       tax_code: company?.tax_code,
       email: company?.email,
       accountant_email: company?.accountant_email,
-      districtSelect: districtByCompany,
-
-      citySelect:
-        company?.city === defaultCity.name
-          ? defaultCity
-          : { name: company?.city },
-      wardSelect: wardByCompany,
+      districtSelect: company?.district
+        ? {
+            label: company?.district,
+          }
+        : defaultDistrict,
+      citySelect: company?.city
+        ? {
+            name: company?.city,
+            id: company?.city === defaultCity.name ? defaultCity.id : -100,
+          }
+        : defaultCity,
+      wardSelect: company?.ward
+        ? {
+            label: company?.ward,
+          }
+        : defaultWard,
       phone: company?.phone,
       address: company?.address,
     }),
