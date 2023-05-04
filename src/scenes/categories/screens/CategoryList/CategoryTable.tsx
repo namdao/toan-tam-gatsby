@@ -198,7 +198,7 @@ export default function CategoryTable() {
       renderEditCell: renderSelectEditInputCell,
       renderCell: ({ row }: GridRenderCellParams<IResCategory>) => {
         if (row?.category_parent?.category_name) return "";
-        return <Label color="primary">{row.category_name}</Label>;
+        return <Label color="primary">{row?.category_name_with_count}</Label>;
       },
     },
     {
@@ -209,6 +209,10 @@ export default function CategoryTable() {
       preProcessEditCellProps: ({ props }: GridPreProcessEditCellProps) => {
         const hasError = props.value.length < 1;
         return { ...props, error: hasError ? "Không để trống" : "" };
+      },
+      renderCell: ({ row, value }: GridRenderCellParams<IResCategory>) => {
+        if (!row.category_parent) return "";
+        return value;
       },
       renderEditCell: (props) => {
         return (

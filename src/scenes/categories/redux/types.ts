@@ -3,6 +3,7 @@ export type IResCategory = {
   category_parent: IResCategory | null;
   id: number;
   parent_id: number | null;
+  category_name_with_count?: string;
 };
 
 export type IDataTableCategory = {

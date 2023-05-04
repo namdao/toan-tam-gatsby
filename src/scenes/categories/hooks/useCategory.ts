@@ -42,7 +42,7 @@ export const useCategory = () => {
           }
           listTree.push({
             ...parent,
-            category_name: `${parent.category_name} (${count})`,
+            category_name_with_count: `${parent.category_name} (${count})`,
             group,
           });
         }
