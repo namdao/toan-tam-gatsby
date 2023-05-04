@@ -9,6 +9,7 @@ import Label from "components/label";
 import DialogCustomerDetail from "../screens/CompanyList/DialogCompanyDetail";
 import { IResCompanies } from "../redux/types";
 import { Typography } from "@mui/material";
+import TextMaxLine from "components/TextMaxLine";
 
 export const CompanyColumn: GridColDef[] = [
   {
@@ -28,7 +29,11 @@ export const CompanyColumn: GridColDef[] = [
     headerName: "Công ty",
     minWidth: 500,
     renderCell: ({ value }: GridRenderCellParams<IResCompanies>) => {
-      return <Label color="primary">{value}</Label>;
+      return (
+        <Label color="primary">
+          <TextMaxLine line={1}>{value}</TextMaxLine>
+        </Label>
+      );
     },
   },
   {

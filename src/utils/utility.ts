@@ -1,4 +1,5 @@
 import { IOrder, IOrderDetail } from "scenes/orders/redux/types";
+import navConfig from "constant/navConstant";
 
 export const isBrowser = typeof window !== `undefined`;
 
@@ -26,4 +27,14 @@ export const compareIdDesc = (
     return -1;
   }
   return 0;
+};
+
+export const listPermissionRoutingByRole = (role: string) => {
+  const listNav = navConfig.map((e) => e.items).flat(1);
+  const listByRole = listNav.filter((e) => {
+    if (e.roles.includes(role)) {
+      return e;
+    }
+  });
+  return listByRole;
 };

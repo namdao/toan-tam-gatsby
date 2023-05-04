@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { Router, useLocation, Location } from "@reach/router";
 import AuthGuard from "manager/guardManager/AuthGuard";
-import navConfig from "constant/navConstant";
 import DashboardLayout from "layouts/dashboardLayout";
 import { PATH_APP } from "constant/routeConstant";
 import { navigate } from "gatsby";
+import { useAppSelector } from "store";
+import { AuthSelector } from "scenes/auth/redux/slice";
+import { listPermissionRoutingByRole } from "utils/utility";
 
 const NotFoundTemp = () => {
   const location = useLocation();
@@ -21,8 +23,9 @@ const NotFoundTemp = () => {
 };
 
 const AppPages = () => {
+  const roles = useAppSelector(AuthSelector.getRolesUser)[0]?.name;
   const listRoutingApp = () => {
-    const listRoute = navConfig.map((e) => e.items).flat(1);
+    const listRoute = listPermissionRoutingByRole(roles);
     return listRoute.map((e) => {
       const pathNav = e.path;
       if (e.children.length >= 1) {

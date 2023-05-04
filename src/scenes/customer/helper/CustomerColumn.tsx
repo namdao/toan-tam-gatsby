@@ -8,6 +8,7 @@ import {
 import { ICustomer } from "constant/commonType";
 import Label from "components/label";
 import DialogCustomerDetail from "../screens/CustomerList/DialogCustomerDetail";
+import TextMaxLine from "components/TextMaxLine";
 
 export const CustomerColumn: GridColDef[] = [
   {
@@ -15,7 +16,13 @@ export const CustomerColumn: GridColDef[] = [
     headerName: "Khách hàng",
     minWidth: 120,
     renderCell: ({ value }: GridRenderCellParams<ICustomer>) => {
-      return <Label color="primary">{value}</Label>;
+      return (
+        <Label color="primary">
+          <TextMaxLine line={1} style={{ whiteSpace: "normal" }}>
+            {value}
+          </TextMaxLine>
+        </Label>
+      );
     },
   },
   {

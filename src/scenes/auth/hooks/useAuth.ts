@@ -36,6 +36,11 @@ const useAuth = () => {
           };
           dispatch(authActions.setProfileSuccess(profile));
         }
+      } else {
+        payload.callbackError &&
+          payload.callbackError(
+            (result.errors?.messages as string) || "onSignIn error"
+          );
       }
     } catch (error) {
       payload.callbackError &&

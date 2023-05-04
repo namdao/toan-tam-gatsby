@@ -80,9 +80,10 @@ const setupOnResponseInterceptors = () => {
           }
         });
         const messageFinal = firstMessage?.[0] || firstMessage;
-        return enqueueSnackbar(messageFinal, { variant: "error" });
+        enqueueSnackbar(messageFinal, { variant: "error" });
+      } else {
+        enqueueSnackbar(messages || message, { variant: "error" });
       }
-      return enqueueSnackbar(messages || message, { variant: "error" });
     }
     return response?.data;
   };
