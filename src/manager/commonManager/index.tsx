@@ -10,12 +10,14 @@ import { usePaperTypes } from "scenes/papers/hooks/usePaperTypes";
 import { useCustomer } from "scenes/customer/hooks/useCustomer";
 import { CitySelector } from "services/settings/redux/city.slice";
 import { useCity } from "services/settings/hooks/useCity";
+import { useCompany } from "scenes/company/hooks/useCompany";
 
 const CommonManager = () => {
   const dispatch = useAppDispatch();
   const { onGetPaperList } = usePaperTypes();
   const { getCustomerList } = useCustomer();
   const { getDataCity, getAllCity } = useCity();
+  const { onGetCompanies } = useCompany();
   const token = useAppSelector(AuthSelector.getToken);
   const url = useAppSelector(SettingsSelector.getUrl);
   const listDistrict = useAppSelector(CitySelector.getListDistrict);
@@ -47,6 +49,7 @@ const CommonManager = () => {
       SetupAxios.setHeaderToken(token);
       onGetPaperList("idle");
       getCustomerList();
+      onGetCompanies();
     } else {
       SetupAxios.clearHeaderToken();
     }

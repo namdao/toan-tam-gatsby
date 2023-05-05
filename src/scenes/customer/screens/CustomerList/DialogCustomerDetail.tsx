@@ -16,6 +16,7 @@ import { TransitionProps } from "@mui/material/transitions";
 import { ICON } from "constant/layoutConstant";
 import { useLocales } from "locales";
 import { ICustomer } from "constant/commonType";
+import CustomerNewEditForm from "scenes/customer/components/CustomerNewEditForm";
 const Transition = forwardRef(
   (
     props: TransitionProps & {
@@ -44,7 +45,7 @@ function DialogCustomerDetail({ customer }: IPropsCustomer) {
     <>
       <Iconify
         width={ICON.NAV_ITEM}
-        icon="mdi:show"
+        icon="mdi:edit"
         onClick={handleClickOpen}
       />
 
@@ -68,7 +69,11 @@ function DialogCustomerDetail({ customer }: IPropsCustomer) {
           </Toolbar>
         </AppBar>
         <Box sx={{ mt: 12 }} />
-        {/* <OrderDetail orderId={orderId} /> */}
+        <CustomerNewEditForm
+          isEdit={true}
+          customer={customer}
+          closeModal={handleClose}
+        />
       </Dialog>
     </>
   );

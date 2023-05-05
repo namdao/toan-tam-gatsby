@@ -13,20 +13,15 @@ export default function AutoSelectGroup(
   const { id, value, field, groupSelect } = props;
   const apiRef = useGridApiContext();
 
-  const [valueAutoComplete, setValue] = React.useState<string | null>(
-    value.category_name
-  );
-  console.log(props);
   const onSelectValue = (
     _event: React.SyntheticEvent<Element, Event>,
     newValue: string
   ) => {
-    console.log(newValue);
     apiRef.current.setEditCellValue({ id, field, value: newValue });
   };
   return (
     <Autocomplete
-      value={valueAutoComplete}
+      value={value.category_name}
       // @ts-ignore
       onChange={onSelectValue}
       selectOnFocus

@@ -1,3 +1,4 @@
+import { CUSTOMER_TYPE } from "scenes/customer/redux/types";
 import { ORDER_STATUS_NAME } from "scenes/orders/helper/OrderConstant";
 
 export interface IResErrors {
@@ -54,7 +55,7 @@ export type ICustomer = {
   city: string;
   company: ICompany;
   company_id: number;
-  customer_type: 0 | 1;
+  customer_type: CUSTOMER_TYPE;
   district: string;
   email: string;
   id: number;
@@ -62,4 +63,5 @@ export type ICustomer = {
   phone: string;
   status: number;
   ward: string;
+  personal: boolean;
 };

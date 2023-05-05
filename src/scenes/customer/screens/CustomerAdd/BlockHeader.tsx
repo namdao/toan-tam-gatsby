@@ -7,17 +7,17 @@ const Header = () => {
   const { translate } = useLocales();
   return (
     <CustomBreadcrumbs
-      heading={translate("company.companyAdd.title")}
+      heading={translate("customer.customerList.title")}
       links={[
         {
           name: translate("basicInfo.title"),
         },
         {
-          name: translate("company.companyList.title"),
-          href: PATH_APP.user.list,
+          name: translate("customer.customerList.title"),
+          href: PATH_APP.customer.list,
         },
         {
-          name: translate("company.companyAdd.title"),
+          name: translate("customer.customerAdd.title"),
         },
       ]}
     />

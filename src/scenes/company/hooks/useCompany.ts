@@ -3,26 +3,28 @@ import { useLocales } from "locales";
 import { isArray } from "lodash";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
+import { useAppDispatch } from "store";
 import {
   apiAddCompanies,
   apiGetListCompanies,
   apiUpdateCompanies,
 } from "../redux/api";
+import { companyActions } from "../redux/slice";
 import { IReqAddCompany, IResCompanies } from "../redux/types";
 
 export const useCompany = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [listCompany, setListCompany] = useState<IResCompanies[]>([]);
+  const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
-  const onGetCompanies = async (signal: AbortSignal) => {
+  const onGetCompanies = async (signal?: AbortSignal) => {
     try {
       setLoading(true);
       const result: IResponseType<IResCompanies[]> = await apiGetListCompanies(
         signal
       );
       if (result.data && isArray(result.data)) {
-        setListCompany(result.data);
+        dispatch(companyActions.requestCompanySuccess(result.data));
       } else {
         enqueueSnackbar(translate("company.error.companyList"), {
           variant: "error",
@@ -103,6 +105,5 @@ export const useCompany = () => {
     onAddCompany,
     onUpdateCompany,
     loading,
-    listCompany,
   };
 };

@@ -5,19 +5,18 @@ import { SettingsSelector } from "services/settings/redux/slice";
 import { useAppSelector } from "store";
 import Header from "./BlockHeader";
 import Helmet from "react-helmet";
-import CompanyNewEditForm from "../../components/CompanyNewEditForm";
-const CustomerAdd = () => {
+import CustomerNewEditForm from "../../components/CustomerNewEditForm";
+const CompanyAdd = () => {
   const themeStretch = useAppSelector(SettingsSelector.getThemeStretch);
   const { translate } = useLocales();
   return (
     <>
-      <Helmet title={translate("company.companyAdd.title")} />
+      <Helmet title={translate("users.userAdd.title")} />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <Header />
-        <CompanyNewEditForm />
-        <Divider />
+        <CustomerNewEditForm />
       </Container>
     </>
   );
 };
-export default CustomerAdd;
+export default CompanyAdd;

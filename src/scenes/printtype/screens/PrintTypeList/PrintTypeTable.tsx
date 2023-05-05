@@ -93,7 +93,6 @@ const PrintTypeTable = () => {
 
   const handleSaveClick = (id: GridRowId) => async () => {
     const data = apiRef.current.getRowWithUpdatedValues(id, "id");
-    console.log("data", data);
     if (!data.print_type_name) {
       return;
     }

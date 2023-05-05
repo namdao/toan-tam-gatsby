@@ -1,6 +1,5 @@
 import type { GatsbyConfig } from "gatsby";
 
-console.log("####", process.env);
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 });

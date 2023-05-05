@@ -1,10 +1,11 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
 import { DataGridPro, GridRow, GridColumnHeaders } from "@mui/x-data-grid-pro";
 import { CustomerColumn } from "scenes/customer/helper/CustomerColumn";
 import { useAppSelector } from "store";
 import { customerSelector } from "scenes/customer/redux/slice";
 import { LinearProgress } from "@mui/material";
+import { useCustomer } from "scenes/customer/hooks/useCustomer";
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
@@ -13,7 +14,10 @@ const CustomerTable = () => {
   const customerList = useAppSelector(customerSelector.getCustomerList);
   const loading = useAppSelector(customerSelector.getLoading);
   const totalRow = useAppSelector(customerSelector.getTotal);
-
+  const { getCustomerList } = useCustomer();
+  useEffect(() => {
+    getCustomerList(customerList.length > 0);
+  }, []);
   const pinOrderLeft = useMemo(
     () =>
       CustomerColumn.filter(

@@ -4,6 +4,8 @@ import { DataGridPro, GridRow, GridColumnHeaders } from "@mui/x-data-grid-pro";
 import { CompanyColumn } from "scenes/company/helper/CompanyColumn";
 import { LinearProgress } from "@mui/material";
 import { useCompany } from "scenes/company/hooks/useCompany";
+import { useAppSelector } from "store";
+import { companySelector } from "scenes/company/redux/slice";
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
@@ -13,7 +15,8 @@ export type IMagicTableRef = {
 export const magicTableRef = createRef<IMagicTableRef>();
 
 const CompanyTable = () => {
-  const { loading, listCompany, onGetCompanies } = useCompany();
+  const { loading, onGetCompanies } = useCompany();
+  const listCompany = useAppSelector(companySelector.getCompanyList);
   const controller = new AbortController();
   useEffect(() => {
     onGetCompanies(controller.signal);

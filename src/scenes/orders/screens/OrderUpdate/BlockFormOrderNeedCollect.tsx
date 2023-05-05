@@ -150,7 +150,6 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
   const onCallbackSuccess = () => {
     reset();
     handleClose(false);
-    console.log("fdsfs");
     magicTableNeedCollectRef.current?.onRefreshOrderList();
   };
 

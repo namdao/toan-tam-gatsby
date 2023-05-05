@@ -35,7 +35,7 @@ interface FormValuesProps {
   district?: string;
   districtSelect: IDistrict;
   wards?: string;
-  wardSelect: IWard;
+  wardSelect: IWard & { label?: string };
   citySelect: IResCityDistrictWard;
   city?: string;
   tax_code?: string;
@@ -97,23 +97,23 @@ export default function CompanyNewEditForm({
             label: company?.district,
           }
         : defaultDistrict,
-      citySelect: company?.city
-        ? {
-            name: company?.city,
-            id: company?.city === defaultCity.name ? defaultCity.id : -100,
-          }
-        : defaultCity,
       wardSelect: company?.ward
         ? {
             label: company?.ward,
           }
         : defaultWard,
+      citySelect: company?.city
+        ? {
+            name: company?.city,
+            // gan id de tim quan theo id hcm, kg co thi tra ve -100 de quan la empty
+            id: company?.city === defaultCity.name ? defaultCity.id : -100,
+          }
+        : defaultCity,
       phone: company?.phone,
       address: company?.address,
     }),
     [company]
   );
-  console.log(company?.city === defaultCity.name, defaultValues);
   const methods = useForm<FormValuesProps>({
     resolver: yupResolver(CompanySchema),
     // @ts-ignore
@@ -152,7 +152,7 @@ export default function CompanyNewEditForm({
   }, [watchCity]);
 
   const onSubmit = async (data: FormValuesProps) => {
-    if (isEdit) {
+    if (isEdit && data?.id) {
       const payload = {
         company_name: data.company_name,
         tax_code: data.tax_code,
@@ -164,7 +164,7 @@ export default function CompanyNewEditForm({
         address: data.address,
         ward: data.wardSelect.label,
       };
-      const result = await onUpdateCompany(data.id || 0, payload);
+      const result = await onUpdateCompany(data.id, payload);
       if (result) {
         reset();
         magicTableRef.current?.onRefresh();

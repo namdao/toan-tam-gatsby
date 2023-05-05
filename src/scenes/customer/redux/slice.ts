@@ -13,7 +13,7 @@ const initialState: IState = {
   total: 0,
 };
 const customersSlice = createSlice({
-  name: "orders",
+  name: "customer",
   initialState,
   reducers: {
     requestCustomer: (state) => {

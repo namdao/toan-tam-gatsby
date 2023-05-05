@@ -68,7 +68,6 @@ export default function CategoryTable() {
       .map((f) => {
         return { label: f.category_name, id: f.id };
       });
-    console.log(listGroup);
     return listGroup;
   }, [listCategory]);
 
