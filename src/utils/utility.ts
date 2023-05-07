@@ -1,6 +1,10 @@
 import { IOrder, IOrderDetail } from "scenes/orders/redux/types";
 import navConfig from "constant/navConstant";
+import appConstant from "constant/appConstant";
+import { navigate } from "gatsby";
+import { PATH_APP } from "constant/routeConstant";
 
+const { ROLES } = appConstant;
 export const isBrowser = typeof window !== `undefined`;
 
 export const getTotalAmount = (order: IOrder | IOrderDetail) => {
@@ -55,4 +59,27 @@ export const listMenuByRole = (role: string): typeof navConfig => {
     });
   });
   return listMenu;
+};
+
+export const navigateByRole = (role: string) => {
+  switch (role) {
+    case ROLES.ADMIN:
+    case ROLES.ACCOUNTANT:
+    case ROLES.MANAGER:
+    case ROLES.SALER: {
+      navigate(PATH_APP.order.processing);
+      break;
+    }
+    case ROLES.PRINTER: {
+      navigate(PATH_APP.order.waitingPrint);
+      break;
+    }
+    case ROLES.STORE: {
+      navigate(PATH_APP.order.stored);
+      break;
+    }
+    default: {
+      navigate(PATH_APP.order.root);
+    }
+  }
 };

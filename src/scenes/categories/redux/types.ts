@@ -18,3 +18,26 @@ export type IReqCategory = {
   parent_id: number;
   name: string;
 };
+
+export type ICategoryDefault =
+  | "Carbonless"
+  | "Card"
+  | "Catalogue"
+  | "Folder"
+  | "Hộp giấy"
+  | "Lịch"
+  | "Ngoài Trời"
+  | "Office"
+  | "Sticker"
+  | "Túi giấy"
+  | "Tờ rơi"
+  | "other";
+export type IResCategories = Record<
+  ICategoryDefault,
+  {
+    category_name: string;
+    category_parent: IResCategory | null;
+    id: number;
+    parent_id: number | null;
+  }[]
+>;

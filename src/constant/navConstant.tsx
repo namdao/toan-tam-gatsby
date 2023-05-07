@@ -26,6 +26,8 @@ import OrderNeedConfirm from "scenes/orders/screens/OrderNeedConfirm";
 import OrderListStored from "scenes/orders/screens/OrderStored";
 import OrderDetail from "scenes/orders/screens/OrderDetail";
 import OrderUpdate from "scenes/orders/screens/OrderUpdate";
+import OrderPrinting from "scenes/orders/screens/OrderPrinting";
+import OrderWaitingPrint from "scenes/orders/screens/OrderWaitingPrint";
 
 const { ROLES } = appConstant;
 const iconify = (name: string) => <Iconify width={ICON.NAV_ITEM} icon={name} />;
@@ -151,7 +153,7 @@ const navConfig = [
       {
         title: "order.stored",
         path: PATH_APP.order.stored,
-        icon: iconify("mdi:account-payment-outline"),
+        icon: iconify("material-symbols:warehouse-outline"),
         component: OrderListStored,
         children: [],
         roles: [
@@ -161,6 +163,22 @@ const navConfig = [
           ROLES.SALER,
           ROLES.STORE,
         ],
+      },
+      {
+        title: "order.waitingPrint",
+        path: PATH_APP.order.waitingPrint,
+        icon: iconify("mdi:archive-clock-outline"),
+        component: OrderWaitingPrint,
+        children: [],
+        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.PRINTER],
+      },
+      {
+        title: "order.printing",
+        path: PATH_APP.order.printing,
+        icon: iconify("mi:print"),
+        component: OrderPrinting,
+        children: [],
+        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.PRINTER],
       },
     ],
   },

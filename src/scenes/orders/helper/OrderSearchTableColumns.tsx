@@ -1,11 +1,16 @@
 import React from "react";
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid-pro";
+import {
+  GridColDef,
+  GridRenderCellParams,
+  GridRowParams,
+} from "@mui/x-data-grid-pro";
 import { IOrder } from "../redux/types";
 import { useAppSelector } from "store";
 import { PaperTypeSelector } from "scenes/papers/redux/slice";
 import Label from "components/label";
 import { fCurrency, fNumber } from "utils/formatNumber";
 import { LabelColor } from "components/label/types";
+import FullScreenDialogs from "../screens/OrderProcessing/DialogOrderSelected";
 
 const PaperType = ({ paperId }: { paperId: number }) => {
   const listPaper = useAppSelector(PaperTypeSelector.getListPaper);
@@ -26,6 +31,15 @@ export const OrderSearchColumnTable: GridColDef[] = [
         </Label>
       );
     },
+  },
+  {
+    field: "actions",
+    type: "actions",
+    headerName: "Hành động",
+    minWidth: 100,
+    getActions: ({ row }: GridRowParams<IOrder>) => [
+      <FullScreenDialogs orderId={row.id} orderName={row.order_no} />,
+    ],
   },
   {
     field: "customer_name",

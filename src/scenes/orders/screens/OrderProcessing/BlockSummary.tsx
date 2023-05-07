@@ -1,4 +1,4 @@
-import { Card, Divider, Skeleton, Stack, useTheme } from "@mui/material";
+import { Card, Divider, Stack, useTheme } from "@mui/material";
 import Scrollbar from "components/scrollbar";
 import { useLocales } from "locales";
 import React from "react";
@@ -72,7 +72,7 @@ const BlockSummary = () => {
             subTitle={translate("orders.name")}
             icon="eva:clock-fill"
             color={theme.palette.warning.main}
-            status={ORDER_STATUS_NAME.WAITING_PRINT}
+            status={ORDER_STATUS_NAME.PRINTING}
           />
 
           <BlockItem

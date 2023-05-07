@@ -76,5 +76,7 @@ export const PATH_APP = {
     needCheck: `${ROOT_ORDER}/don-hang-can-kiem-tra`,
     needConfirm: `${ROOT_ORDER}/don-hang-can-xac-nhan`,
     stored: `${ROOT_ORDER}/don-hang-luu-kho`,
+    waitingPrint: `${ROOT_ORDER}/don-hang-cho-in`,
+    printing: `${ROOT_ORDER}/don-hang-dang-in`,
   },
 };

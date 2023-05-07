@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Divider } from "@mui/material";
+import { Container } from "@mui/material";
 import { useLocales } from "locales";
 import { SettingsSelector } from "services/settings/redux/slice";
 import { useAppSelector } from "store";
@@ -16,7 +16,6 @@ const OrderNeedCheck = () => {
       <Container maxWidth={themeStretch ? false : "lg"}>
         <Header />
         <OrderList />
-        <Divider />
       </Container>
     </>
   );

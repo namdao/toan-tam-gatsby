@@ -5,6 +5,7 @@ import { IReqCategory } from "./types";
 const { API_URL } = appConstant;
 export const apiGetAllCategory = () => axios.get(API_URL.ALL_CATEGORY);
 
+export const apiGetCategoriesLikeMobiles = () => axios.get(API_URL.CATEGORIES);
 export const apiAddCategory = (body: IReqCategory) =>
   axios.post(API_URL.CATEGORIES, body);
 export const apiUpdateCategory = (id: number, body: IReqCategory) =>

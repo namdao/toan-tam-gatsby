@@ -5,10 +5,10 @@ import { RootState } from "store";
 import storage from "redux-persist/lib/storage";
 import { IPaperType } from "./types";
 
-export type AuthState = {
+export type PaperState = {
   list: IPaperType[];
 };
-const initialState: AuthState = {
+const initialState: PaperState = {
   list: [],
 };
 // Slice

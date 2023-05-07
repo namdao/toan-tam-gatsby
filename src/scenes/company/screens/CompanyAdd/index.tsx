@@ -15,7 +15,6 @@ const CustomerAdd = () => {
       <Container maxWidth={themeStretch ? false : "lg"}>
         <Header />
         <CompanyNewEditForm />
-        <Divider />
       </Container>
     </>
   );

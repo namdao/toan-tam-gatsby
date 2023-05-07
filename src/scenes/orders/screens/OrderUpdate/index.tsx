@@ -13,6 +13,9 @@ import BlockFormOrderNeedCollect from "./BlockFormOrderNeedCollect";
 import BlockFormOrderNeedCheck from "./BlockFormOrderNeedCheck";
 import BlockFormOrderNeedConfirm from "./BlockFormOrderNeedConfirm";
 import { GridActionsCellItem } from "@mui/x-data-grid";
+import { useAppSelector } from "store";
+import { AuthSelector } from "scenes/auth/redux/slice";
+import { ROLES } from "scenes/users/helper/RoleConstants";
 const Transition = forwardRef(
   (
     props: TransitionProps & {
@@ -39,7 +42,13 @@ const DialogOrderUpdate = ({
   const [open, setOpen] = useState(false);
   const { translate } = useLocales();
   const { loading, orderDetail, onOrderDetail } = useOrderDetail(orderId);
-
+  const roleUser = useAppSelector(AuthSelector.getRolesUser);
+  if (
+    roleUser[0].name !== ROLES.Admin &&
+    roleUser[0].name !== ROLES.Accountant
+  ) {
+    return <></>;
+  }
   useEffect(() => {
     if (open) onOrderDetail();
   }, [open]);

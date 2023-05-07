@@ -1,4 +1,5 @@
 import { LabelColor } from "components/label/types";
+import { ICategoryDefault } from "scenes/categories/redux/types";
 import { IReqParams } from "../redux/types";
 
 export const ORDER_STATUS_VALUE = {
@@ -24,7 +25,7 @@ export enum ORDER_STATUS_NAME {
   WAITING_FEEDBACK = 3,
   DESIGNING_AFTER_FEEDBACK = 4,
   DESIGNED = 5,
-  WAITING_PRINT = 6,
+  PRINTING = 6,
   PRINTED = 7,
   STORED = 8,
   DELIVER = 9,
@@ -42,6 +43,11 @@ export type IOrderTabProcessing = {
   value: ORDER_STATUS_NAME;
   color: LabelColor;
 };
+export type IOrderTabWaitingPrint = {
+  name: string;
+  value: ICategoryDefault;
+  color: string;
+};
 export const ORDER_TAB_PROCESSING: IOrderTabProcessing[] = [
   {
     name: "orders.orderProcessing.designed",
@@ -50,7 +56,7 @@ export const ORDER_TAB_PROCESSING: IOrderTabProcessing[] = [
   },
   {
     name: "orders.orderProcessing.waitingPrint",
-    value: ORDER_STATUS_NAME.WAITING_PRINT,
+    value: ORDER_STATUS_NAME.PRINTING,
     color: "warning",
   },
   {
@@ -149,3 +155,26 @@ export const LIST_MONEY_SOURCE = {
   MOMO: "Momo",
   CASH: "Tiền mặt",
 };
+
+export const ORDER_TAB_WAITING_PRINT: IOrderTabWaitingPrint[] = [
+  {
+    name: "orders.orderWaitingPrintList.card",
+    value: "Card",
+    color: "info",
+  },
+  {
+    name: "orders.orderWaitingPrintList.toroi",
+    value: "Tờ rơi",
+    color: "warning",
+  },
+  {
+    name: "orders.orderWaitingPrintList.sticker",
+    value: "Sticker",
+    color: "success",
+  },
+  {
+    name: "orders.orderWaitingPrintList.other",
+    value: "other",
+    color: "default",
+  },
+];

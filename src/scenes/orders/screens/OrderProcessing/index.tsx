@@ -1,10 +1,9 @@
 import React from "react";
-import { Container, Divider } from "@mui/material";
+import { Container } from "@mui/material";
 import { useLocales } from "locales";
 import { SettingsSelector } from "services/settings/redux/slice";
 import { useAppSelector } from "store";
 import Header from "./BlockHeader";
-import BlockSummary from "./BlockSummary";
 import OrderList from "./OrderList";
 import Helmet from "react-helmet";
 
@@ -18,7 +17,6 @@ const OrderProcessing = () => {
         <Header />
         {/* <BlockSummary /> */}
         <OrderList />
-        <Divider />
       </Container>
     </>
   );

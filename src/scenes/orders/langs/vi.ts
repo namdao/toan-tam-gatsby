@@ -134,5 +134,32 @@ const OrderLangs = {
     file: "Tên file",
     paper: "Loại giấy",
   },
+  orderWaitingPrintList: {
+    title: "Danh sách chờ in",
+    card: "Card",
+    toroi: "Tờ rơi",
+    sticker: "Sticker",
+    other: "Khác",
+    success: {
+      assign: "Nhận đơn thành công",
+    },
+    error: {
+      assign: "Nhận đơn thất bại",
+    },
+  },
+  orderPrintingList: {
+    title: "Danh sách đang in",
+    outsourceDate: "Ngày gửi qua gia công",
+    done: "Hoàn thành",
+    noteReject: "Lí do từ chối",
+    success: {
+      reject: "Từ chối thành công",
+      done: "Xác nhận hoàn thành",
+    },
+    error: {
+      reject: "Từ chối thất bại",
+      done: "Hoàn thành thất bại",
+    },
+  },
 };
 export default OrderLangs;

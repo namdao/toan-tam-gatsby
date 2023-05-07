@@ -4,6 +4,7 @@ import { ORDER_STATUS_NAME } from "scenes/orders/helper/OrderConstant";
 export interface IResErrors {
   messages: string | Array<string> | Record<string, string>;
   message?: string;
+  messasge?: string;
   code: number;
 }
 export interface IResponseType<T> {

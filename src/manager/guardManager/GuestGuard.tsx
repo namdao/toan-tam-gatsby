@@ -1,9 +1,10 @@
-import { PATH_APP } from "constant/routeConstant";
-import { navigate } from "gatsby";
 import React, { FC } from "react";
 import { AuthSelector } from "scenes/auth/redux/slice";
 import { useAppSelector } from "store";
-import { isBrowser } from "utils/utility";
+import { isBrowser, navigateByRole } from "utils/utility";
+import appConstant from "constant/appConstant";
+
+const { ROLES } = appConstant;
 
 type GuestGuardProps = {
   component: React.ElementType;
@@ -12,8 +13,9 @@ type GuestGuardProps = {
 
 const GuestGuard: FC<GuestGuardProps> = ({ component: Component, ...rest }) => {
   const token = useAppSelector(AuthSelector.getToken);
+  const roles = useAppSelector(AuthSelector.getRolesUser);
   if (token !== "" && isBrowser) {
-    navigate(PATH_APP.order.processing);
+    navigateByRole(roles[0].name);
     return null;
   }
 

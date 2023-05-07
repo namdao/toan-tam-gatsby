@@ -57,9 +57,9 @@ const OrderTable: React.FC = () => {
 
   const pinOrderLeft = useMemo(
     () =>
-      OrderSearchColumnTable.filter((e) => e.field === "order_no").map(
-        (e) => e.field
-      ),
+      OrderSearchColumnTable.filter(
+        (e) => e.field === "order_no" || e.field === "actions"
+      ).map((e) => e.field),
     []
   );
   const setPagination = (model: GridPaginationModel) => {

@@ -79,7 +79,7 @@ function SnackbarIcon({ icon, color }: SnackbarIconProps) {
         alignItems: "center",
         justifyContent: "center",
         color: `${color}.main`,
-        bgcolor: (theme) => alpha(theme.palette[color].main, 0.16),
+        bgcolor: (theme) => alpha(theme.palette[color].lighter, 0.5),
       }}
     >
       <Iconify icon={icon} width={24} />

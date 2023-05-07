@@ -18,7 +18,6 @@ export const useCustomer = () => {
   const { enqueueSnackbar } = useSnackbar();
   const getCustomerList = async (isData = false) => {
     try {
-      console.log(isData);
       if (!isData) {
         dispatch(customerActions.requestCustomer());
       }

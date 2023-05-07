@@ -65,7 +65,7 @@ const setupOnResponseInterceptors = () => {
     response: AxiosResponse<IResponseType<any>>
   ): any => {
     if (response.data?.errors) {
-      let { messages, message } = response.data.errors;
+      let { messages = "", message = "", messasge = "" } = response.data.errors;
       if (typeof messages === "object") {
         messages = Object.values(messages);
       }
@@ -82,7 +82,7 @@ const setupOnResponseInterceptors = () => {
         const messageFinal = firstMessage?.[0] || firstMessage;
         enqueueSnackbar(messageFinal, { variant: "error" });
       } else {
-        enqueueSnackbar(messages || message, { variant: "error" });
+        enqueueSnackbar(messages || message || messasge, { variant: "error" });
       }
     }
     return response?.data;

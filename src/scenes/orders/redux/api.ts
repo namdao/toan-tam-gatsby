@@ -2,10 +2,13 @@ import axios from "axios";
 import appConstant from "constant/appConstant";
 import { ORDER_STATUS_NAME } from "../helper/OrderConstant";
 import {
+  IReqOrderCategoryStatus,
   IReqOrderListCollect,
   IReqOrderListConfirm,
   IReqOrderSearch,
   IReqOrderStatus,
+  IReqPrintDoneOrder,
+  IReqRejectOrder,
   IRequestUpdateOrder,
 } from "./types";
 
@@ -62,3 +65,14 @@ export const apiOrderConfirmList = (params: IReqOrderListConfirm) =>
   });
 export const apiOrderSearch = (params: IReqOrderSearch) =>
   axios.get(API_URL.SEARCH, { params });
+
+export const apiOrderCategory = (params: IReqOrderCategoryStatus) =>
+  axios.get(API_URL.ORDERS, { params });
+
+export const apiAssignOrder = (id: number, status: ORDER_STATUS_NAME) =>
+  axios.put(API_URL.ASSIGN_ORDER(id), { status });
+export const apiRejectOrder = (id: number, data: IReqRejectOrder) =>
+  axios.put(API_URL.REJECT_ORDER(id), data);
+
+export const apiDonePrintOrder = (id: number, data: IReqPrintDoneOrder) =>
+  axios.put(API_URL.ORDERS_ACTIONS(id), data);

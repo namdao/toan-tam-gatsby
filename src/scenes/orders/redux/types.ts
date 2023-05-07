@@ -6,6 +6,7 @@ import {
   IPrintTypes,
 } from "constant/commonType";
 import { IResUser } from "scenes/auth/redux/types";
+import { IColor } from "scenes/printtype/redux/types";
 import { ORDER_STATUS_NAME, SEARCH_BY } from "../helper/OrderConstant";
 
 export type IResTotalDebigProgress = {
@@ -23,6 +24,15 @@ export type IReqOrderStatus = IPage & {
   updated_date?: string;
   search?: string;
   customer_id?: number;
+  order_by?: string;
+  category?: string;
+  sort_direction?: "asc" | "desc";
+};
+export type IReqOrderCategoryStatus = IPage & {
+  status: ORDER_STATUS_NAME;
+  order_by?: string;
+  category?: string;
+  sort_direction?: "asc" | "desc";
 };
 export type IReqParams = Omit<IReqOrderStatus, "status">;
 
@@ -73,6 +83,7 @@ export type IOrder = {
   print_type: string | null;
   print_type_id: number | null;
   print_type_ids: number[];
+  print_types?: IColor[];
   quantity: number;
   receiver_info: string;
   receiver_phone: null | string;
@@ -91,6 +102,10 @@ export type IOrder = {
 };
 export type IResOrder2Status = {
   items: IOrder[];
+  total: number;
+};
+export type IResOrderByCategory = {
+  items: IOrderDetail[];
   total: number;
 };
 export type IOrderDetail = {
@@ -203,4 +218,14 @@ export type IReqOrderSearch = IPage & {
   customer_id?: number;
   paper?: string;
   order_name?: string;
+};
+
+export type IReqRejectOrder = {
+  reason: string;
+};
+
+export type IReqPrintDoneOrder = {
+  note: string;
+  status: ORDER_STATUS_NAME;
+  outsource_date: string;
 };

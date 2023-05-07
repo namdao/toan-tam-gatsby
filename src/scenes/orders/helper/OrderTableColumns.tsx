@@ -2,7 +2,6 @@ import React from "react";
 import {
   GridColDef,
   GridRowParams,
-  GridActionsCellItem,
   GridRenderCellParams,
 } from "@mui/x-data-grid-pro";
 import Iconify from "components/iconify";
@@ -17,12 +16,10 @@ import { useTheme } from "@mui/material/styles";
 import { formatISO, parseISO } from "date-fns";
 import { LabelColor } from "components/label/types";
 import { ORDER_STATUS_NAME } from "./OrderConstant";
-import { Link } from "gatsby-theme-material-ui";
-import { PATH_APP } from "constant/routeConstant";
 import FullScreenDialogs from "../screens/OrderProcessing/DialogOrderSelected";
 import DialogOrderUpdate from "../screens/OrderUpdate";
 
-const PaperType = ({ paperId }: { paperId: number }) => {
+export const PaperType = ({ paperId }: { paperId: number }) => {
   const listPaper = useAppSelector(PaperTypeSelector.getListPaper);
   const paperItem = listPaper.find((e) => e.id === paperId);
   return <span>{paperItem?.paper_name}</span>;
@@ -77,14 +74,16 @@ export const OrderColumnTable: GridColDef[] = [
     type: "actions",
     headerName: "Hành động",
     minWidth: 100,
-    getActions: ({ row }: GridRowParams<IOrder>) => [
-      <FullScreenDialogs orderId={row.id} orderName={row.order_no} />,
-      <DialogOrderUpdate
-        orderId={row.id}
-        orderName={row.order_no}
-        fromPage="ORDER_PROCESSING"
-      />,
-    ],
+    getActions: ({ row }: GridRowParams<IOrder>) => {
+      return [
+        <FullScreenDialogs orderId={row.id} orderName={row.order_no} />,
+        <DialogOrderUpdate
+          orderId={row.id}
+          orderName={row.order_no}
+          fromPage="ORDER_PROCESSING"
+        />,
+      ];
+    },
   },
   {
     field: "customer_name",

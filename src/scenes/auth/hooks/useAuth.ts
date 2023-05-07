@@ -2,7 +2,7 @@ import { IResponseType } from "constant/commonType";
 import { useLocales } from "locales";
 import { isEmpty } from "lodash";
 import { useSnackbar } from "notistack";
-import { useAppDispatch } from "store";
+import { persistor, useAppDispatch } from "store";
 import { apiLogin, apiLogout } from "../redux/api";
 import { authActions, IProfile } from "../redux/slice";
 import { IRequestLogin, IResLogin } from "../redux/types";
@@ -51,12 +51,12 @@ const useAuth = () => {
   const onSignOut = async () => {
     try {
       dispatch(authActions.resetData());
+      persistor.purge();
       const result = await apiLogout();
       if (result.data) {
         enqueueSnackbar(translate("logoutSuccess"), { variant: "success" });
       }
     } catch (error) {
-      console.error(error);
       enqueueSnackbar(translate("logoutFail"), { variant: "error" });
     }
   };

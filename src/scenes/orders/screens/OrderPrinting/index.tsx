@@ -7,12 +7,12 @@ import Header from "./BlockHeader";
 import OrderList from "./OrderList";
 import Helmet from "react-helmet";
 
-const OrderNeedCheck = () => {
+const OrderPrinting = () => {
   const themeStretch = useAppSelector(SettingsSelector.getThemeStretch);
   const { translate } = useLocales();
   return (
     <>
-      <Helmet title={translate("orders.orderNeedCheck.title")} />
+      <Helmet title={translate("orders.orderPrintingList.title")} />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <Header />
         <OrderList />
@@ -20,4 +20,4 @@ const OrderNeedCheck = () => {
     </>
   );
 };
-export default OrderNeedCheck;
+export default OrderPrinting;

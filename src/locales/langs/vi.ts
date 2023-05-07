@@ -87,6 +87,8 @@ const vi = {
     needCheck: "Đơn hàng cần kiểm tra",
     needConfirm: "Đơn hàng cần xác nhận",
     stored: "Đơn hàng lưu kho",
+    waitingPrint: "Đơn hàng chờ in",
+    printing: "Đơn hàng đang in",
   },
 };
 

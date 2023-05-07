@@ -11,6 +11,7 @@ import { useCustomer } from "scenes/customer/hooks/useCustomer";
 import { CitySelector } from "services/settings/redux/city.slice";
 import { useCity } from "services/settings/hooks/useCity";
 import { useCompany } from "scenes/company/hooks/useCompany";
+import { useCategory } from "scenes/categories/hooks/useCategory";
 
 const CommonManager = () => {
   const dispatch = useAppDispatch();
@@ -18,6 +19,7 @@ const CommonManager = () => {
   const { getCustomerList } = useCustomer();
   const { getDataCity, getAllCity } = useCity();
   const { onGetCompanies } = useCompany();
+  const { onGetCategoriesLikeMobile } = useCategory();
   const token = useAppSelector(AuthSelector.getToken);
   const url = useAppSelector(SettingsSelector.getUrl);
   const listDistrict = useAppSelector(CitySelector.getListDistrict);
@@ -50,6 +52,7 @@ const CommonManager = () => {
       onGetPaperList("idle");
       getCustomerList();
       onGetCompanies();
+      onGetCategoriesLikeMobile();
     } else {
       SetupAxios.clearHeaderToken();
     }

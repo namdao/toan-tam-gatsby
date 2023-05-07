@@ -6,6 +6,7 @@ const appConstant = {
   API_URL: {
     SESSION: "/users/session",
     TOTAL_INPROGRESS: "/total-inprogress",
+    ORDERS: "/orders/",
     ORDERS2: "/orders2",
     PAPER_TYPE: "/paper-type",
     PAPER_TYPES: "/paper-types",
@@ -26,6 +27,8 @@ const appConstant = {
     CATEGORIES: "/categories",
     HCM_CITY: "/city?city_id=10958",
     ALL_CITY: "/address",
+    ASSIGN_ORDER: (id: number) => `orders/${id}/assign`,
+    REJECT_ORDER: (id: number) => `orders/${id}/reject`,
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

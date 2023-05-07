@@ -3,17 +3,26 @@ import { IResponseType } from "constant/commonType";
 import { useLocales } from "locales";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
+import { useAppDispatch } from "store";
 import {
   apiAddCategory,
   apiDeleteCategory,
   apiGetAllCategory,
+  apiGetCategoriesLikeMobiles,
   apiUpdateCategory,
 } from "../redux/api";
-import { IResCategory, IDataTableCategory, IReqCategory } from "../redux/types";
+import { categoriesActions } from "../redux/slice";
+import {
+  IResCategory,
+  IDataTableCategory,
+  IReqCategory,
+  IResCategories,
+} from "../redux/types";
 
 export const useCategory = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [listCategory, setListCategory] = useState<IDataTableCategory[]>([]);
+  const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
   const onGetCategory = async (action: "idle" | "refresh") => {
@@ -122,12 +131,30 @@ export const useCategory = () => {
     return status;
   };
 
+  const onGetCategoriesLikeMobile = async () => {
+    try {
+      const result: IResponseType<IResCategories> =
+        await apiGetCategoriesLikeMobiles();
+      if (result.data) {
+        dispatch(categoriesActions.seCategoriesSuccess(result.data));
+      }
+    } catch (error) {
+      enqueueSnackbar(
+        (error as Error)?.message || "onGetCategoriesLikeMobile error",
+        {
+          variant: "error",
+        }
+      );
+    }
+  };
+
   return {
     setListCategory,
     onAddCategory,
     onDeleteCategory,
     onUpdateCategory,
     onGetCategory,
+    onGetCategoriesLikeMobile,
     loading,
     listCategory,
   };
