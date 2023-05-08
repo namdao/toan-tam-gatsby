@@ -30,15 +30,16 @@ export default function AuthLoginForm() {
     password: Yup.string().required("Password is required"),
   });
 
-  const defaultValues = process.env.IS_TEST_MODE
-    ? {
-        email: "namdao@gmail.com",
-        password: "123456",
-      }
-    : {
-        email: "",
-        password: "",
-      };
+  const defaultValues =
+    process.env.IS_TEST_MODE === "true"
+      ? {
+          email: "namdao@gmail.com",
+          password: "123456",
+        }
+      : {
+          email: "",
+          password: "",
+        };
 
   const methods = useForm<FormValuesProps>({
     resolver: yupResolver(LoginSchema),
