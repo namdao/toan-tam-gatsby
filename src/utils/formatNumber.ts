@@ -1,5 +1,27 @@
 import numeral from "numeral";
 
+const isRegisterNumeral = numeral.locales["vi"];
+if (isRegisterNumeral === undefined) {
+  numeral.register("locale", "vi", {
+    delimiters: {
+      thousands: ".",
+      decimal: ",",
+    },
+    abbreviations: {
+      thousand: " k",
+      million: " triệu",
+      billion: " tỷ",
+      trillion: " ktỷ",
+    },
+    ordinal: function (number: number) {
+      return number ? "1" : number.toString();
+    },
+    currency: {
+      symbol: "VNĐ",
+    },
+  });
+  numeral.locale("vi");
+}
 type InputValue = string | number | null;
 
 export function fNumber(number: InputValue) {

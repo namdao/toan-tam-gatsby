@@ -7,10 +7,12 @@ const Counter = ({
   from,
   to,
   format,
+  currency = "",
   ...rest
 }: {
   from: number;
   to: number;
+  currency?: string;
   format?: (val: number | string | null) => string;
 } & TypographyProps) => {
   const nodeRef = useRef<{ textContent: number | string }>(null);
@@ -23,9 +25,13 @@ const Counter = ({
       onUpdate(value) {
         if (node) {
           if (format) {
-            node.textContent = value ? format(value.toFixed(2)) : 0;
+            node.textContent = value
+              ? `${format(value.toFixed(2))} ${currency}`
+              : 0;
           } else {
-            node.textContent = value ? fCurrency(value.toFixed(2)) : 0;
+            node.textContent = value
+              ? `${fCurrency(value.toFixed(2))} ${currency}`
+              : 0;
           }
         }
       },

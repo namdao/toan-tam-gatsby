@@ -1,6 +1,6 @@
 import illustrationDashboard from "assets/illustrations/illustration_dashboard.png";
-import bgLogin from "assets/illustrations/bgLogin.png";
-import bgLoginDark from "assets/illustrations/bgLoginDark.png";
+import bgLogin from "assets/background/banner_app_light.png";
+import bgLoginDark from "assets/background/banner_app_dark.png";
 // background Overlay
 import overlay2 from "assets/background/overlay_2.jpg";
 import bgTransparent from "assets/background/transparent.png";

@@ -29,6 +29,8 @@ const appConstant = {
     ALL_CITY: "/address",
     ASSIGN_ORDER: (id: number) => `orders/${id}/assign`,
     REJECT_ORDER: (id: number) => `orders/${id}/reject`,
+    TOTAL_DEBIT: "/total-debit",
+    CUSTOMER_DEBIT: "/customer-debit",
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

@@ -28,6 +28,7 @@ import OrderDetail from "scenes/orders/screens/OrderDetail";
 import OrderUpdate from "scenes/orders/screens/OrderUpdate";
 import OrderPrinting from "scenes/orders/screens/OrderPrinting";
 import OrderWaitingPrint from "scenes/orders/screens/OrderWaitingPrint";
+import DebitCompany from "scenes/statistic/screens/DebitCompany";
 
 const { ROLES } = appConstant;
 const iconify = (name: string) => <Iconify width={ICON.NAV_ITEM} icon={name} />;
@@ -64,7 +65,7 @@ const navConfig = [
         title: "statistic.debit",
         path: PATH_APP.statistic.debit,
         icon: iconify("tabler:pig-money"),
-        component: StatisticsDebit,
+        component: DebitCompany,
         children: [],
         roles: [ROLES.ACCOUNTANT, ROLES.ADMIN],
       },
