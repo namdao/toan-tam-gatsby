@@ -12,7 +12,6 @@ import {
 import Images from "utils/images";
 import { useAppSelector } from "store";
 import { SettingsSelector } from "services/settings/redux/slice";
-import { useLocales } from "locales";
 
 type Props = {
   title?: string;
@@ -20,28 +19,11 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function LoginLayout({ children, title }: Props) {
+export default function LoginLayout({ children }: Props) {
   const themeMode = useAppSelector(SettingsSelector.getThemeMode);
-  const { translate } = useLocales();
   return (
     <StyledRoot>
-      {/* <Logo
-        sx={{
-          zIndex: 9,
-          position: "absolute",
-          mt: { xs: 1.5, md: 5 },
-          ml: { xs: 2, md: 5 },
-        }}
-      /> */}
-
       <StyledSection>
-        {/* <Typography
-          variant="h3"
-          sx={{ mb: 10, maxWidth: 480, textAlign: "center" }}
-        >
-          {translate("wellcomeCompany")}
-        </Typography> */}
-
         <Image
           disabledEffect
           visibleByDefault

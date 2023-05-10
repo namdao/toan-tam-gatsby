@@ -7,7 +7,6 @@ import { PATH_APP } from "constant/routeConstant";
 import { useLocales } from "locales";
 import React, { useEffect } from "react";
 import { useTotalMoneyReceive } from "scenes/orders/hooks/useOrderNeedCollect";
-import { fCurrency } from "utils/formatNumber";
 
 const Header = () => {
   const { translate } = useLocales();

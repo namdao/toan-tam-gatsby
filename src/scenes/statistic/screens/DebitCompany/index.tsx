@@ -6,6 +6,7 @@ import { useAppSelector } from "store";
 import BlockSumaryDebit from "./BlockDebitSummary";
 import BlockPercentDebit from "./BlockPercentDebit";
 import BlockTopCompanyDebit from "./BlockTopCompanyDebit";
+import TableListDebit from "./TableListDebit";
 
 const DebitCompany = () => {
   const themeStretch = useAppSelector(SettingsSelector.getThemeStretch);
@@ -23,6 +24,7 @@ const DebitCompany = () => {
         <BlockSumaryDebit />
         <BlockPercentDebit listCustomerDebit={listCustomerDebit} />
         <BlockTopCompanyDebit listCustomerDebit={listCustomerDebit} />
+        <TableListDebit listCustomerDebit={listCustomerDebit} />
       </Grid>
     </Container>
   );

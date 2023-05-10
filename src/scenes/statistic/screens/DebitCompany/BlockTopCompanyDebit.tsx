@@ -6,7 +6,6 @@ import { useChart } from "components/chart";
 import { ICustomerDebit } from "scenes/statistic/redux/type";
 
 const ChartLazy = lazy(() => import("react-apexcharts"));
-import Chart from "react-apexcharts";
 type Props = {
   listCustomerDebit: ICustomerDebit[];
 };

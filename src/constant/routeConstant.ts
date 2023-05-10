@@ -20,6 +20,7 @@ export const PATH_APP = {
     invidual: `${ROOT_STATISTIC}/thong-ke-ca-nhan`,
     customer: `${ROOT_STATISTIC}/doanh-so-khach-hang`,
     debit: `${ROOT_STATISTIC}/doanh-so-cong-no`,
+    debitDetail: `${ROOT_STATISTIC}/doanh-so-cong-no/:company_id`,
   },
   profile: `/profile`,
   user: {

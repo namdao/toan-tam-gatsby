@@ -7,7 +7,7 @@ import printTypeLangs from "scenes/printtype/langs/vi";
 import categoryLangs from "scenes/categories/langs/vi";
 import paperLangs from "scenes/papers/langs/vi";
 import outsourceLangs from "scenes/outsources/langs/vi";
-
+import statisticLangs from "scenes/statistic/langs/vi";
 const vi = {
   hi: "Xin chào",
   logout: "Đăng xuất",
@@ -17,13 +17,6 @@ const vi = {
   permissionDenied: "Bạn không có quyền truy cập!!!",
   notfound: "Không tìm thấy trang bạn truy cập!",
   gotoHome: "Về trang chủ",
-  statistic: {
-    title: "Thống kê",
-    sumary: "Thống kê tổng quát",
-    invidual: "Thống kê cá nhân",
-    customer: "Doanh số khách hàng",
-    debit: "Doanh sách công nợ",
-  },
   basicInfo: {
     title: "Thông tin chung",
     user: {
@@ -103,4 +96,5 @@ export default {
   category: categoryLangs,
   paper: paperLangs,
   outsource: outsourceLangs,
+  statistic: statisticLangs,
 };

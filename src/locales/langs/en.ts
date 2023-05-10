@@ -7,6 +7,7 @@ import printTypeLangs from "scenes/printtype/langs/en";
 import categoryLangs from "scenes/categories/langs/en";
 import paperLangs from "scenes/papers/langs/vi";
 import outsourceLangs from "scenes/outsources/langs/vi";
+import statisticLangs from "scenes/statistic/langs/vi";
 
 const en = {
   hi: "Hi",
@@ -56,4 +57,5 @@ export default {
   category: categoryLangs,
   paper: paperLangs,
   outsource: outsourceLangs,
+  statistic: statisticLangs,
 };
