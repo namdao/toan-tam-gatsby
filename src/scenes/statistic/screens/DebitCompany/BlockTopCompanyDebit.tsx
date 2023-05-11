@@ -20,13 +20,6 @@ const BlockTopCompanyDebit: FC<Props> = ({ listCustomerDebit }) => {
   const chartSeries = top10Company.map((i) => i.value);
 
   const chartOptions = useChart({
-    chart: {
-      events: {
-        dataPointSelection: (e, chart, options) => {
-          console.log(chart, options);
-        },
-      },
-    },
     tooltip: {
       marker: { show: false },
       y: {
@@ -55,6 +48,13 @@ const BlockTopCompanyDebit: FC<Props> = ({ listCustomerDebit }) => {
         horizontal: true,
         barHeight: "80%",
         borderRadius: 2,
+      },
+    },
+    yaxis: {
+      labels: {
+        minWidth: 200,
+        maxWidth: 500,
+        // maxWidth: "100%",
       },
     },
     xaxis: {
