@@ -12,7 +12,7 @@ import React, { FC } from "react";
 import { BlockInfoOrderSkelekton } from "scenes/orders/components/BlockOrderDetailSkeleton";
 import { StyleTitleTypo } from "./style";
 import { IOrderDetail } from "scenes/orders/redux/types";
-import { fCurrency, fNumber } from "utils/formatNumber";
+import { fNumber } from "utils/formatNumber";
 import Label from "components/label";
 
 type IPropsInfoOrder = {
@@ -68,7 +68,7 @@ const BlockPriceOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
               </Typography>
               <Typography variant="body1">
                 {" "}
-                {data?.unit_price ? fCurrency(data.unit_price.toString()) : "-"}
+                {data?.unit_price ? fNumber(data.unit_price.toString()) : "-"}
               </Typography>
             </Stack>
             <Stack alignItems="center">
@@ -76,7 +76,7 @@ const BlockPriceOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
                 {translate("orders.orderDetail.price.designFee")}
               </Typography>
               <Typography variant="body1">
-                {data?.design_fee ? fCurrency(data.design_fee.toString()) : "-"}
+                {data?.design_fee ? fNumber(data.design_fee.toString()) : "-"}
               </Typography>
             </Stack>
             <Stack alignItems="center">
@@ -85,7 +85,7 @@ const BlockPriceOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
               </Typography>
               <Typography variant="body1">
                 {data?.shipping_fee
-                  ? fCurrency(data?.shipping_fee?.toString())
+                  ? fNumber(data?.shipping_fee?.toString())
                   : "-"}
               </Typography>
             </Stack>
@@ -94,7 +94,7 @@ const BlockPriceOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
                 {translate("orders.orderDetail.price.deposite")}
               </Typography>
               <Typography variant="body1">
-                {data?.deposite ? fCurrency(data.deposite?.toString()) : "-"}
+                {data?.deposite ? fNumber(data.deposite?.toString()) : "-"}
               </Typography>
             </Stack>
           </Stack>
