@@ -50,6 +50,11 @@ export type IOrderTabWaitingPrint = {
 };
 export const ORDER_TAB_PROCESSING: IOrderTabProcessing[] = [
   {
+    name: "orders.orderProcessing.sale",
+    value: ORDER_STATUS_NAME.SALE,
+    color: "info",
+  },
+  {
     name: "orders.orderProcessing.designed",
     value: ORDER_STATUS_NAME.DESIGNED,
     color: "info",
