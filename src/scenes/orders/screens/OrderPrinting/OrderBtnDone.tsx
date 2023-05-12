@@ -29,7 +29,7 @@ type IOrderBtnAccept = {
 };
 type FormValuesProps = {
   note: string;
-  outsource_date: Date | null;
+  outsource_date: Date;
 };
 const OrderBtnDone: FC<IOrderBtnAccept> = ({ order }) => {
   const { onFinishOrder } = useOrderPrinting();
@@ -43,7 +43,7 @@ const OrderBtnDone: FC<IOrderBtnAccept> = ({ order }) => {
   const methods = useForm<FormValuesProps>({
     resolver: yupResolver(OrderUpdateSchema),
     defaultValues: {
-      outsource_date: null,
+      outsource_date: new Date(),
       note: "",
     },
   });

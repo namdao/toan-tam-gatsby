@@ -44,7 +44,7 @@ export const presets = [
     name: "orange",
     lighter: "#FEF4D4",
     light: "#FED680",
-    main: "#fda92d",
+    main: "#FDBCCF",
     dark: "#B66816",
     darker: "#793908",
     contrastText: themePalette.grey[800],
