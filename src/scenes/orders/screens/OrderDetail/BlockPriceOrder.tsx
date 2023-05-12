@@ -30,11 +30,9 @@ const BlockPriceOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
     );
   }
   const amount = data
-    ? fCurrency(
+    ? fNumber(
         data.template_number * data.unit_price * data.quantity +
-          data.shipping_fee +
-          data.design_fee -
-          data.deposite
+          (data.shipping_fee + data.design_fee - data.deposite)
       )
     : 0;
   return (
@@ -111,7 +109,7 @@ const BlockPriceOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
               {translate("orders.orderDetail.price.amount")}
             </StyleTitleTypo>
             <Label color="error">
-              <Typography variant="h5">{amount}</Typography>
+              <Typography variant="h5">{amount} VNĐ</Typography>
             </Label>
           </Stack>
         </Card>
