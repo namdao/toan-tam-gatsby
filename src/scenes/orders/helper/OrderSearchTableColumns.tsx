@@ -8,7 +8,7 @@ import { IOrder } from "../redux/types";
 import { useAppSelector } from "store";
 import { PaperTypeSelector } from "scenes/papers/redux/slice";
 import Label from "components/label";
-import { fCurrency, fNumber } from "utils/formatNumber";
+import { fNumber } from "utils/formatNumber";
 import { LabelColor } from "components/label/types";
 import FullScreenDialogs from "../screens/OrderProcessing/DialogOrderSelected";
 
@@ -87,6 +87,6 @@ export const OrderSearchColumnTable: GridColDef[] = [
     field: "unit_price",
     headerName: "Đơn giá",
     minWidth: 100,
-    valueGetter: ({ value }) => (value ? fCurrency(value) : "-"),
+    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
   },
 ];

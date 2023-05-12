@@ -9,6 +9,7 @@ const OrderLangs = {
     printed: "Đã in",
     cancel: "Đã hủy",
     draft: "Nháp",
+    sale: "Đã chốt sale",
   },
   filterBy: "Tìm theo",
   searchBy: "Tìm kiếm",

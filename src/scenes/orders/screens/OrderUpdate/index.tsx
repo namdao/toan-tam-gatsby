@@ -15,7 +15,8 @@ import BlockFormOrderNeedConfirm from "./BlockFormOrderNeedConfirm";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { useAppSelector } from "store";
 import { AuthSelector } from "scenes/auth/redux/slice";
-import { ROLES } from "scenes/users/helper/RoleConstants";
+import appConstants from "constant/appConstant";
+const { ROLES } = appConstants;
 const Transition = forwardRef(
   (
     props: TransitionProps & {
@@ -44,8 +45,8 @@ const DialogOrderUpdate = ({
   const { loading, orderDetail, onOrderDetail } = useOrderDetail(orderId);
   const roleUser = useAppSelector(AuthSelector.getRolesUser);
   if (
-    roleUser[0].name !== ROLES.Admin &&
-    roleUser[0].name !== ROLES.Accountant
+    roleUser[0].name !== ROLES.ACCOUNTANT &&
+    roleUser[0].name !== ROLES.ADMIN
   ) {
     return <></>;
   }

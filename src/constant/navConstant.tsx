@@ -97,6 +97,7 @@ const navConfig = [
           ROLES.MANAGER,
           ROLES.ACCOUNTANT,
           ROLES.SALER,
+          ROLES.PRINTER,
           ROLES.STORE,
         ],
       },

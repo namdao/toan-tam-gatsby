@@ -60,7 +60,7 @@ export const DATA_TIMLINE_STATUS: Record<
       />
     ),
   },
-  [ORDER_STATUS_NAME.WAITING_PRINT]: {
+  [ORDER_STATUS_NAME.PRINTING]: {
     color: "info",
     icon: (
       <Iconify

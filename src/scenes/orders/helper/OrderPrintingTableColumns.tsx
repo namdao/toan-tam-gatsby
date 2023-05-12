@@ -6,9 +6,8 @@ import {
 } from "@mui/x-data-grid-pro";
 import { IOrderDetail } from "../redux/types";
 import Label from "components/label";
-import { fCurrency, fNumber } from "utils/formatNumber";
+import { fNumber } from "utils/formatNumber";
 import FullScreenDialogs from "../screens/OrderProcessing/DialogOrderSelected";
-import OrderBtnAccept from "scenes/orders/screens/OrderWaitingPrint/OrderBtnAccept";
 import { PaperType } from "./OrderTableColumns";
 import OrderBtnDone from "../screens/OrderPrinting/OrderBtnDone";
 import OrderBtnReject from "../screens/OrderPrinting/OrderBtnReject";
@@ -66,7 +65,7 @@ export const OrderPrintingTableColumns: GridColDef<IOrderDetail>[] = [
     minWidth: 150,
     headerAlign: "center",
     align: "center",
-    valueGetter: ({ value }) => (value ? `${fCurrency(value)} mẫu` : "-"),
+    valueGetter: ({ value }) => (value ? `${fNumber(value)} mẫu` : "-"),
   },
   {
     field: "print_types",

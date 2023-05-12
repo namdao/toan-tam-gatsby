@@ -2,14 +2,13 @@ import React from "react";
 import {
   GridColDef,
   GridRowParams,
-  GridActionsCellItem,
   GridRenderCellParams,
 } from "@mui/x-data-grid-pro";
 import Iconify from "components/iconify";
 import { ICON } from "constant/layoutConstant";
 import { IOrder } from "../redux/types";
 import Label from "components/label";
-import { fCurrency, fNumber } from "utils/formatNumber";
+import { fNumber } from "utils/formatNumber";
 import { getTotalAmount } from "utils/utility";
 import { useTheme } from "@mui/material/styles";
 import { format } from "date-fns";
@@ -78,7 +77,7 @@ export const OrderNeedCheckTableColumns: GridColDef[] = [
     field: "unit_price",
     headerName: "Đơn giá",
     minWidth: 100,
-    valueGetter: ({ value }) => (value ? fCurrency(value) : "-"),
+    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
   },
   {
     field: "design_fee",
@@ -86,7 +85,7 @@ export const OrderNeedCheckTableColumns: GridColDef[] = [
     minWidth: 100,
     headerAlign: "center",
     align: "center",
-    valueGetter: ({ value }) => (value ? fCurrency(value) : "-"),
+    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
   },
   {
     field: "shipping_fee",
@@ -94,7 +93,7 @@ export const OrderNeedCheckTableColumns: GridColDef[] = [
     minWidth: 100,
     headerAlign: "center",
     align: "center",
-    valueGetter: ({ value }) => (value ? fCurrency(value) : "-"),
+    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
   },
   {
     field: "deposite",
@@ -102,14 +101,14 @@ export const OrderNeedCheckTableColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     minWidth: 100,
-    valueGetter: ({ value }) => (value ? fCurrency(value) : "-"),
+    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
   },
   {
     field: "amount",
     headerName: "Thành tiền",
     minWidth: 150,
     renderCell: ({ row }: GridRenderCellParams<IOrder>) => {
-      const formatAmount = fCurrency(getTotalAmount(row));
+      const formatAmount = fNumber(getTotalAmount(row));
       return (
         <Label color="primary" variant="outlined">
           {formatAmount}
@@ -134,7 +133,7 @@ export const OrderNeedCheckTableColumns: GridColDef[] = [
     field: "cod",
     headerName: "Còn lại",
     minWidth: 100,
-    valueGetter: ({ value }) => (value ? fCurrency(value) : "-"),
+    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
   },
   {
     field: "cash",

@@ -62,7 +62,10 @@ export default function BlockFilter({
     setMethod(e.target.value);
   };
   const customerAutoComplete = customerList.map((e) => {
-    return { id: e.id, label: `${e.name} (${e.company?.company_name})` };
+    return {
+      id: e.id,
+      label: `${e.name} - (Công ty:${e.company?.company_name}) - ${e.phone}`,
+    };
   });
 
   const paperAutoComplete = paperList.map((e) => {
