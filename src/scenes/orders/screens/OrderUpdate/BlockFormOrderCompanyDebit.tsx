@@ -23,7 +23,7 @@ import { LoadingButton } from "@mui/lab";
 import {
   listPayment,
   LIST_MONEY_SOURCE,
-  listPaymentTypeViaNeedCollect,
+  listPaymentTypeViaCompanyDebit,
 } from "scenes/orders/helper/OrderConstant";
 import { getTotalAmount, getTotalFee } from "utils/utility";
 import { useOrderUpdate } from "scenes/orders/hooks/useOrderUpdate";
@@ -51,7 +51,7 @@ type FormValuesProps = {
   debt: boolean;
   need_check: boolean;
 };
-const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
+const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
   handleClose,
   orderDetail,
 }) => {
@@ -128,11 +128,6 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
         setValue("done", false);
         setValue("debt", true);
         setValue("need_check", false);
-        // Đơn thu khách thực tế đã đủ nhưng nhỏ hơn số tiền phải thu cần kiểm tra lại
-      } else if (paymentType === "need_check") {
-        setValue("done", false);
-        setValue("debt", false);
-        setValue("need_check", true);
       }
     }
   }, [paymentType]);
@@ -155,11 +150,9 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
   const onSubmit = async (data: FormValuesProps) => {
     let note = "";
     if (data.done) {
-      note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[0].label}`;
+      note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaCompanyDebit[0].label}`;
     } else if (data.debt) {
-      note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[1].label}`;
-    } else if (data.need_check) {
-      note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[2].label}`;
+      note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaCompanyDebit[1].label}`;
     }
     const payload = {
       cod: parseToNumber(data.cod),
@@ -219,7 +212,7 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
             <RHFRadioGroup
               row
               name="paymentType"
-              options={listPaymentTypeViaNeedCollect}
+              options={listPaymentTypeViaCompanyDebit}
             />
             <Stack flexDirection="row" justifyContent="space-between">
               <RHFDatePicker
@@ -274,4 +267,4 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
   );
 };
 
-export default BlockFormOrderNeedCollect;
+export default BlockFormOrderCompanyDebit;

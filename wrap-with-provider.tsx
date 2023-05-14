@@ -15,7 +15,7 @@ import ThemeProvider from "./src/theme";
 import ThemeSettings from "./src/manager/settingsManager/ThemeSettings";
 import ThemeLocalization from "./src/locales/ThemeLocalization";
 import SnackbarProvider from "./src/components/snackbar";
-
+import firebase from "./src/services/firebase";
 const clientSideEmotionCache = createEmotionCache();
 
 export const wrapRootProvider = ({ element }) => {
@@ -24,6 +24,7 @@ export const wrapRootProvider = ({ element }) => {
   //  - it will be called only once in browser, when React mounts
   const store = createStore();
   const persistor = persistStore(store);
+  firebase.initApp();
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

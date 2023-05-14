@@ -6,67 +6,23 @@ import {
 } from "@mui/x-data-grid-pro";
 import Iconify from "components/iconify";
 import { ICON } from "constant/layoutConstant";
-import { IOrder } from "../redux/types";
-import { useAppSelector } from "store";
-import { PaperTypeSelector } from "scenes/papers/redux/slice";
 import Label from "components/label";
 import { fNumber } from "utils/formatNumber";
 import { getTotalAmount } from "utils/utility";
 import { useTheme } from "@mui/material/styles";
-import { format, formatISO, parseISO } from "date-fns";
-import { LabelColor } from "components/label/types";
-import { ORDER_STATUS_NAME } from "./OrderConstant";
-import FullScreenDialogs from "../screens/OrderProcessing/DialogOrderSelected";
-import DialogOrderUpdate from "../screens/OrderUpdate";
+import { format } from "date-fns";
+import { IOrder } from "scenes/orders/redux/types";
+import DialogOrderUpdate from "scenes/orders/screens/OrderUpdate";
+import { ORDER_STATUS_VALUE } from "scenes/orders/helper/OrderConstant";
+import FullScreenDialogs from "scenes/orders/screens/OrderProcessing/DialogOrderSelected";
 
-export const PaperType = ({ paperId }: { paperId: number }) => {
-  const listPaper = useAppSelector(PaperTypeSelector.getListPaper);
-  const paperItem = listPaper.find((e) => e.id === paperId);
-  return <span>{paperItem?.paper_name}</span>;
-};
-export const OrderColumnTable: GridColDef[] = [
+export const DeibitCompanyDetailColumn: GridColDef[] = [
   {
     field: "order_no",
     headerName: "Mã đơn hàng",
-    minWidth: 150,
-    renderCell: ({ value, row }: GridRenderCellParams<IOrder>) => {
-      const theme = useTheme();
-      const updatedTime = parseISO(
-        formatISO(row.updated_time * 1000)
-      ).getTime();
-      const daysNoAction =
-        (new Date().getTime() - updatedTime) / (24 * 60 * 60 * 1000);
-      let icon: JSX.Element | null = null;
-      let colorOrder: LabelColor = "primary";
-      if (
-        row.status === ORDER_STATUS_NAME.CANCEL ||
-        row.status === ORDER_STATUS_NAME.DONE
-      ) {
-        icon = null;
-      } else if (daysNoAction >= 3 && daysNoAction < 5) {
-        icon = (
-          <Iconify
-            width={ICON.NAV_ITEM}
-            icon="mdi:number-three-circle-outline"
-            color={theme.palette.warning.main}
-          />
-        );
-        colorOrder = "warning";
-      } else if (daysNoAction >= 5) {
-        icon = (
-          <Iconify
-            width={ICON.NAV_ITEM}
-            icon="mdi:number-five-circle-outline"
-            color={theme.palette.error.main}
-          />
-        );
-        colorOrder = "error";
-      }
-      return (
-        <Label color={colorOrder} endIcon={icon}>
-          {value}
-        </Label>
-      );
+    minWidth: 120,
+    renderCell: ({ value }: GridRenderCellParams<IOrder>) => {
+      return <Label color="primary">{value}</Label>;
     },
   },
   {
@@ -74,16 +30,14 @@ export const OrderColumnTable: GridColDef[] = [
     type: "actions",
     headerName: "Hành động",
     minWidth: 100,
-    getActions: ({ row }: GridRowParams<IOrder>) => {
-      return [
-        <FullScreenDialogs orderId={row.id} orderName={row.order_no} />,
-        <DialogOrderUpdate
-          orderId={row.id}
-          orderName={row.order_no}
-          fromPage="ORDER_PROCESSING"
-        />,
-      ];
-    },
+    getActions: ({ row }: GridRowParams<IOrder>) => [
+      <FullScreenDialogs orderId={row.id} orderName={row.order_no} />,
+      <DialogOrderUpdate
+        orderId={row.id}
+        orderName={row.order_no}
+        fromPage="ORDER_COMPANY_DEBIT"
+      />,
+    ],
   },
   {
     field: "customer_name",
@@ -106,20 +60,6 @@ export const OrderColumnTable: GridColDef[] = [
     field: "category_name",
     headerName: "Loại hàng",
     minWidth: 200,
-  },
-  {
-    field: "paper_id",
-    headerName: "Loại giấy",
-    minWidth: 150,
-    renderCell: ({ value }: GridRenderCellParams<IOrder>) => {
-      return <PaperType paperId={value} />;
-    },
-  },
-  {
-    field: "method",
-    headerName: "Kích thước",
-    minWidth: 150,
-    valueGetter: ({ value }) => (value ? `${value} mm` : "-"),
   },
   {
     field: "template_number",
@@ -159,7 +99,9 @@ export const OrderColumnTable: GridColDef[] = [
   {
     field: "deposite",
     headerName: "Tạm ứng",
-    minWidth: 200,
+    headerAlign: "center",
+    align: "center",
+    minWidth: 100,
     valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
   },
   {
@@ -189,9 +131,40 @@ export const OrderColumnTable: GridColDef[] = [
     },
   },
   {
-    field: "created_time",
-    headerName: "Ngày tạo đơn",
-    minWidth: 200,
+    field: "status",
+    headerName: "Trạng thái",
+    minWidth: 150,
+    valueGetter: ({ value }: { value: keyof typeof ORDER_STATUS_VALUE }) =>
+      value ? ORDER_STATUS_VALUE[value] : "-",
+  },
+  {
+    field: "deliver",
+    headerName: "Giao hàng",
+    minWidth: 150,
+  },
+  {
+    field: "cod",
+    headerName: "Còn lại",
+    minWidth: 100,
+    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
+  },
+  {
+    field: "cash",
+    headerName: "Đã thu",
+    minWidth: 100,
+    headerAlign: "center",
+    align: "center",
+    valueGetter: ({ value }) => value || "-",
+  },
+  {
+    field: "deliver_provider",
+    headerName: "Đơn vị GH",
+    minWidth: 100,
+  },
+  {
+    field: "updated_time",
+    headerName: "Ngày cập nhật",
+    minWidth: 150,
     valueGetter: ({ value }: { value: number }) =>
       format(value * 1000, "dd/MM/yyyy"),
   },

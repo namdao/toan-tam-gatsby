@@ -76,8 +76,8 @@ const BlockPrintAndSendEmail = React.forwardRef(
           {translate("orders.orderNeedCollect.debit")}
         </LoadingButton>
         <LoadingButton
-          loading={loading}
           size="large"
+          loading={loading}
           variant="outlined"
           disabled={disableEmail}
           onClick={handleSendEmail}

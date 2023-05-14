@@ -16,6 +16,7 @@ import { GridActionsCellItem } from "@mui/x-data-grid";
 import { useAppSelector } from "store";
 import { AuthSelector } from "scenes/auth/redux/slice";
 import appConstants from "constant/appConstant";
+import BlockFormOrderCompanyDebit from "./BlockFormOrderCompanyDebit";
 const { ROLES } = appConstants;
 const Transition = forwardRef(
   (
@@ -33,7 +34,8 @@ type IPropsOrderUpdate = {
     | "ORDER_PROCESSING"
     | "ORDER_NEED_COLLECT"
     | "ORDER_NEED_CHECK"
-    | "ORDER_NEED_CONFIRM";
+    | "ORDER_NEED_CONFIRM"
+    | "ORDER_COMPANY_DEBIT";
 };
 const DialogOrderUpdate = ({
   orderId,
@@ -92,6 +94,14 @@ const DialogOrderUpdate = ({
             orderDetail={orderDetail}
           />
         );
+      case "ORDER_COMPANY_DEBIT": {
+        return (
+          <BlockFormOrderCompanyDebit
+            handleClose={handleClose}
+            orderDetail={orderDetail}
+          />
+        );
+      }
       default:
         return <></>;
     }

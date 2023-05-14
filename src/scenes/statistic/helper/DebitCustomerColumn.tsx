@@ -22,7 +22,7 @@ const navigateDebitDetail =
       )
     );
   };
-export const DeibitCustomerColumn: GridColDef[] = [
+export const DebitCustomerColumn: GridColDef[] = [
   {
     field: "actions",
     type: "actions",

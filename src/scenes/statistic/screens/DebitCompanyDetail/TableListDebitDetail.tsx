@@ -13,14 +13,11 @@ import {
   GridRowSelectionModel,
   GridPaginationModel,
 } from "@mui/x-data-grid-pro";
-import { OrderCollectTableColumns } from "scenes/orders/helper/OrderCollectTableColumns";
-import { useListOrderColect } from "scenes/orders/hooks/useOrderNeedCollect";
-import BlockFilter from "./BlockFilter";
 import { Card } from "@mui/material";
 import { Stack } from "@mui/system";
 import BlockPrintAndSendEmail, { IPropsPrint } from "./BlockPrintAndSendEmail";
-import { useSnackbar } from "notistack";
-import { useLocales } from "locales";
+import { useStatisticDebitCompany } from "scenes/statistic/hooks/useStatisticDebitCompany";
+import { DeibitCompanyDetailColumn } from "scenes/statistic/helper/DebitCompanyDetailColumn";
 
 const MemoizedRow = React.memo(GridRow);
 
@@ -29,36 +26,29 @@ export type IMagicTableNeedCollectRef = {
   onRefreshOrderList: () => void;
 };
 export const magicTableNeedCollectRef = createRef<IMagicTableNeedCollectRef>();
-const OrderTable: React.FC = () => {
+const TableListDebitDetail: React.FC<{ company_id: number }> = ({
+  company_id,
+}) => {
   const {
     onNextPage,
-    loading,
     orderList,
     total,
-    setDateCreated,
-    setDateUpdated,
-    createdDate,
-    updatedDate,
-    customer,
     pageModel,
-    setCustomer,
-    onOrderListCollect,
-  } = useListOrderColect();
+    onGetOrdetListDebitByCompany,
+  } = useStatisticDebitCompany(company_id);
   const buttonRef = useRef<IPropsPrint>(null);
-  const { translate } = useLocales();
 
-  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
-    onOrderListCollect();
-  }, [createdDate, updatedDate, customer]);
+    onGetOrdetListDebitByCompany();
+  }, []);
 
   useImperativeHandle(magicTableNeedCollectRef, () => ({
-    onRefreshOrderList: onOrderListCollect,
+    onRefreshOrderList: onGetOrdetListDebitByCompany,
   }));
   const paginationModel = pageModel;
   const pinOrderLeft = useMemo(
     () =>
-      OrderCollectTableColumns.filter(
+      DeibitCompanyDetailColumn.filter(
         (e) => e.field === "order_no" || e.field === "actions"
       ).map((e) => e.field),
     []
@@ -67,35 +57,15 @@ const OrderTable: React.FC = () => {
     onNextPage(model.page, model.pageSize);
   };
 
-  const isSameCustomer = (listIds: GridRowSelectionModel) => {
-    const listCustomerId = orderList
-      .filter((e) => listIds.includes(e.id))
-      .map((f) => f.customer_id);
-    const firstCustomer = listCustomerId[0];
-    for (let i = 0; i < listCustomerId.length; i++) {
-      const currentCustomer = listCustomerId[i];
-      if (currentCustomer !== firstCustomer) {
-        return true;
-      }
-    }
-    return false;
-  };
-
   const onRowSelect = (listIds: GridRowSelectionModel) => {
-    if (isSameCustomer(listIds)) {
-      enqueueSnackbar({
-        message: translate(
-          "orders.orderNeedCollect.error.notSupportMultiCustomer"
-        ),
-        variant: "error",
-      });
-      buttonRef?.current?.disablePrintPdf();
-      buttonRef?.current?.disableSendEmail();
-    } else {
+    if (listIds.length > 0) {
       buttonRef?.current?.enablePrintPdf();
       buttonRef?.current?.enableSendEmail();
-      buttonRef?.current?.setListIds(listIds as number[]);
+    } else {
+      buttonRef?.current?.disablePrintPdf();
+      buttonRef?.current?.disableSendEmail();
     }
+    buttonRef?.current?.setListIds(listIds as number[]);
   };
 
   return (
@@ -106,23 +76,14 @@ const OrderTable: React.FC = () => {
         justifyContent="space-between"
         sx={{ px: 2.5, py: 3 }}
       >
-        <BlockFilter
-          setDateCreated={setDateCreated}
-          setDateUpdated={setDateUpdated}
-          createdDate={createdDate}
-          updatedDate={updatedDate}
-          setCustomer={setCustomer}
-          customer={customer}
-        />
         <BlockPrintAndSendEmail ref={buttonRef} />
       </Stack>
       <Box sx={{ height: 600, width: "100%" }}>
         <DataGridPro
-          loading={loading}
           checkboxSelection
           rows={orderList}
           rowCount={total}
-          columns={OrderCollectTableColumns}
+          columns={DeibitCompanyDetailColumn}
           onRowSelectionModelChange={onRowSelect}
           initialState={{
             pinnedColumns: {
@@ -144,4 +105,4 @@ const OrderTable: React.FC = () => {
     </Card>
   );
 };
-export default OrderTable;
+export default TableListDebitDetail;

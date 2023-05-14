@@ -131,6 +131,16 @@ export const listPaymentTypeViaNeedCollect = [
     value: "need_check",
   },
 ];
+export const listPaymentTypeViaCompanyDebit = [
+  {
+    label: "Thu đủ",
+    value: "done",
+  },
+  {
+    label: "Thu chưa đủ",
+    value: "debt",
+  },
+];
 export const listPaymentTypeViaNeedCheck = [
   {
     label: "Thu đủ",

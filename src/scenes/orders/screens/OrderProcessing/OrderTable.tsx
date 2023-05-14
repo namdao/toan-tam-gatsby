@@ -47,6 +47,9 @@ const OrderTable: React.FC<IPropsOrderTable> = ({ status }) => {
   return (
     <Box sx={{ height: 600, width: "100%" }}>
       <DataGridPro
+        onColumnVisibilityModelChange={(model, detail) => {
+          console.log(model, detail);
+        }}
         rows={orders}
         rowCount={totalRow}
         columns={OrderColumnTable}

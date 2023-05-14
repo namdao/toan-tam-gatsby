@@ -2,7 +2,7 @@ import { Box, Card, CardHeader, Grid } from "@mui/material";
 import { DataGridPro, GridRow, GridColumnHeaders } from "@mui/x-data-grid-pro";
 import { useLocales } from "locales";
 import React, { FC, useMemo } from "react";
-import { DeibitCustomerColumn } from "scenes/statistic/helper/DeibitCustomerColumn";
+import { DebitCustomerColumn } from "scenes/statistic/helper/DebitCustomerColumn";
 import { ICustomerDebit } from "scenes/statistic/redux/type";
 
 type Props = {
@@ -15,7 +15,7 @@ const TableListDebit: FC<Props> = ({ listCustomerDebit }) => {
   const { translate } = useLocales();
   const pinOrderLeft = useMemo(
     () =>
-      DeibitCustomerColumn.filter(
+      DebitCustomerColumn.filter(
         (e) => e.field === "company_name" || e.field === "actions"
       ).map((e) => e.field),
     []
@@ -29,7 +29,7 @@ const TableListDebit: FC<Props> = ({ listCustomerDebit }) => {
           <DataGridPro
             rows={listCustomerDebit}
             rowCount={listCustomerDebit.length}
-            columns={DeibitCustomerColumn}
+            columns={DebitCustomerColumn}
             disableRowSelectionOnClick
             pageSizeOptions={[20, 50, 100]}
             components={{
