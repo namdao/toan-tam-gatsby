@@ -28,3 +28,21 @@ export type IReqCompanyDebitDetail = {
   debt: boolean;
   company_id: number;
 };
+
+export type IReqReportRevenue = {
+  page: number;
+  per_page: number;
+  date_from: string;
+  date_to: string;
+  money: number;
+};
+export type IReportRevenue = {
+  company_id: number;
+  company_name: string;
+  total_income: number;
+  total_orders: number;
+};
+export type IResReportRevenue = {
+  items: IReportRevenue[];
+  total: number;
+};

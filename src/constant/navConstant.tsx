@@ -5,10 +5,9 @@ import Iconify from "components/iconify";
 import UserList from "scenes/users/screens/UserList";
 import { ICON } from "./layoutConstant";
 // Screens
-import StatisticsCustomer from "scenes/statistic/screens/StatisticsCustomer";
+import StatisticsCustomer from "scenes/statistic/screens/StatiscticsCustomer";
 import StatisticsSummary from "scenes/statistic/screens/StatisticsSummary";
 import StatisticsSale from "scenes/statistic/screens/StatisticsSale";
-import StatisticsDebit from "scenes/statistic/screens/StatisticsDebit";
 import UserAdd from "scenes/users/screens/UserAdd";
 import CustomerList from "scenes/customer/screens/CustomerList";
 import CustomerAdd from "scenes/customer/screens/CustomerAdd";
@@ -30,6 +29,7 @@ import OrderPrinting from "scenes/orders/screens/OrderPrinting";
 import OrderWaitingPrint from "scenes/orders/screens/OrderWaitingPrint";
 import DebitCompany from "scenes/statistic/screens/DebitCompany";
 import DebitCompanyDetail from "scenes/statistic/screens/DebitCompanyDetail";
+import StatiscticsCustomerDetail from "scenes/statistic/screens/StatiscticsCustomerDetail";
 
 const { ROLES } = appConstant;
 const iconify = (name: string) => <Iconify width={ICON.NAV_ITEM} icon={name} />;
@@ -49,6 +49,7 @@ const navConfig = [
       {
         title: "statistic.sumary",
         path: PATH_APP.statistic.summary,
+        hideMenu: true,
         icon: iconify("tabler:device-desktop-analytics"),
         component: StatisticsSummary,
         children: [],
@@ -75,6 +76,14 @@ const navConfig = [
         path: PATH_APP.statistic.debitDetail,
         hideMenu: true,
         component: DebitCompanyDetail,
+        children: [],
+        roles: [ROLES.ADMIN],
+      },
+      {
+        title: "statistic.debitCompanyDetail.title",
+        path: PATH_APP.statistic.customerRevenueDetail,
+        hideMenu: true,
+        component: StatiscticsCustomerDetail,
         children: [],
         roles: [ROLES.ADMIN],
       },

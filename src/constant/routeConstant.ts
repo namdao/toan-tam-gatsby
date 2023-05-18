@@ -19,6 +19,7 @@ export const PATH_APP = {
     summary: `${ROOT_STATISTIC}/thong-ke-tong-quat`,
     invidual: `${ROOT_STATISTIC}/thong-ke-ca-nhan`,
     customer: `${ROOT_STATISTIC}/doanh-so-khach-hang`,
+    customerRevenueDetail: `${ROOT_STATISTIC}/doanh-so-khach-hang/:company_id`,
     debit: `${ROOT_STATISTIC}/doanh-so-cong-no`,
     debitDetail: `${ROOT_STATISTIC}/doanh-so-cong-no/:company_id`,
   },

@@ -1,6 +1,6 @@
 import axios from "axios";
 import appConstant from "constant/appConstant";
-import { IReqCompanyDebitDetail } from "./type";
+import { IReqCompanyDebitDetail, IReqReportRevenue } from "./type";
 
 const { API_URL } = appConstant;
 
@@ -11,3 +11,5 @@ export const apiOrderLisDetailCompanyDebit = (params: IReqCompanyDebitDetail) =>
   axios.get(API_URL.ORDERS3, {
     params,
   });
+export const apiRevenueCustomer = (params: IReqReportRevenue) =>
+  axios.get(API_URL.REPORT_CUSTOMER, { params });

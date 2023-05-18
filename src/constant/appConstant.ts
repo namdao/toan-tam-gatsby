@@ -31,6 +31,7 @@ const appConstant = {
     REJECT_ORDER: (id: number) => `orders/${id}/reject`,
     TOTAL_DEBIT: "/total-debit",
     CUSTOMER_DEBIT: "/customer-debit",
+    REPORT_CUSTOMER: "/reports/customers",
   },
   LANGS_DEFAULT: "vi",
   ROLES: {
