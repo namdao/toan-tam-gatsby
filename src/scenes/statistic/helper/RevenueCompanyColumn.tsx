@@ -12,16 +12,11 @@ import { IReportRevenue } from "../redux/type";
 import { navigate } from "gatsby";
 import Iconify from "components/iconify";
 import { PATH_APP } from "constant/routeConstant";
+import { magicTableListRevenueRef } from "../screens/StatiscticsCustomer/TableListRevenue";
 
-const navigateCompanyRevenueDetail =
-  (company_id: number, company_name: string) => () => {
-    navigate(
-      PATH_APP.statistic.customerRevenueDetail.replace(
-        ":company_id",
-        `${company_id.toString()}?company=${company_name}`
-      )
-    );
-  };
+const navigateCompanyRevenueDetail = (row: IReportRevenue) => () => {
+  magicTableListRevenueRef.current?.onNavigateDetail(row);
+};
 export const RevenueCompanyColumn: GridColDef[] = [
   {
     field: "actions",
@@ -31,8 +26,8 @@ export const RevenueCompanyColumn: GridColDef[] = [
     getActions: ({ row }: GridRowParams<IReportRevenue>) => [
       <GridActionsCellItem
         label="Chi tiết"
-        onClick={navigateCompanyRevenueDetail(row.company_id, row.company_name)}
-        icon={<Iconify width={ICON.NAV_ITEM} icon="mdi:show" />}
+        onClick={navigateCompanyRevenueDetail(row)}
+        icon={<Iconify width={ICON.NAV_ITEM} icon="la:share-square" />}
       />,
     ],
   },

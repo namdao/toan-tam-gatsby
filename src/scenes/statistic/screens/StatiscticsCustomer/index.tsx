@@ -61,7 +61,7 @@ const StatiscticsCustomer = () => {
         <BlockTopRevenue money={50000000} dateRange={dateListRange} />
         <BlockTopRevenue money={10000000} dateRange={dateListRange} />
         <BlockTopRevenue money={1000000} dateRange={dateListRange} />
-        <TableListRevenue dateRange={dateListRange} />
+        <TableListRevenue dateRange={dateListRange as Date[]} />
       </Grid>
     </Container>
   );

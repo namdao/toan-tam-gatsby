@@ -1,7 +1,7 @@
 import { Typography, TypographyProps } from "@mui/material";
 import { animate } from "framer-motion";
 import React, { useEffect, useRef } from "react";
-import { fCurrency } from "utils/formatNumber";
+import { fNumber } from "utils/formatNumber";
 
 const Counter = ({
   from,
@@ -29,9 +29,7 @@ const Counter = ({
               ? `${format(value.toFixed(2))} ${currency}`
               : 0;
           } else {
-            node.textContent = value
-              ? `${fCurrency(value.toFixed(2))} ${currency}`
-              : 0;
+            node.textContent = value ? `${fNumber(value)} ${currency}` : 0;
           }
         }
       },

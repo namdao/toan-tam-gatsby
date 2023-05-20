@@ -46,3 +46,9 @@ export type IResReportRevenue = {
   items: IReportRevenue[];
   total: number;
 };
+export type IReqReportRevenueDetail = {
+  page: number;
+  per_page: number;
+  date_from: string;
+  date_to: string;
+};

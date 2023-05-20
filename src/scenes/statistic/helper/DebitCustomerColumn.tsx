@@ -32,7 +32,7 @@ export const DebitCustomerColumn: GridColDef[] = [
       <GridActionsCellItem
         label="Chi tiết"
         onClick={navigateDebitDetail(row.company_id, row.company_name)}
-        icon={<Iconify width={ICON.NAV_ITEM} icon="mdi:show" />}
+        icon={<Iconify width={ICON.NAV_ITEM} icon="la:share-square" />}
       />,
     ],
   },

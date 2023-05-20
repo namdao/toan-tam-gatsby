@@ -29,12 +29,7 @@ const Header = () => {
         },
       ]}
       action={
-        <LoadingButton
-          loading={loading}
-          variant="outlined"
-          size="large"
-          startIcon={<Iconify icon="material-symbols:attach-money" />}
-        >
+        <LoadingButton loading={loading} variant="outlined" size="large">
           <Box component="span">
             <Counter from={0} to={moneyDebitProgress} />
             {` VNĐ`}

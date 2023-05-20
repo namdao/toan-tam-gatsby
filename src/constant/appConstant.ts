@@ -32,6 +32,7 @@ const appConstant = {
     TOTAL_DEBIT: "/total-debit",
     CUSTOMER_DEBIT: "/customer-debit",
     REPORT_CUSTOMER: "/reports/customers",
+    REPORT_CUSTOMER_DETAIL: (id: number) => `/reports/customers/${id}`,
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

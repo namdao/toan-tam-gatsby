@@ -5,25 +5,63 @@ import {
   GridColumnHeaders,
   GridPaginationModel,
 } from "@mui/x-data-grid-pro";
-import { DateRange } from "@mui/x-date-pickers-pro";
 import { useLocales } from "locales";
-import React, { FC, useEffect, useMemo } from "react";
+import React, {
+  createRef,
+  FC,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+} from "react";
 import { RevenueCompanyColumn } from "scenes/statistic/helper/RevenueCompanyColumn";
 import { useRevenueCompany } from "scenes/statistic/hooks/useRevenueCompany";
+import { IReportRevenue } from "scenes/statistic/redux/type";
+import { navigate } from "gatsby";
+import { PATH_APP } from "constant/routeConstant";
+import { format } from "date-fns";
 
 type Props = {
-  dateRange: DateRange<Date>;
+  dateRange: Date[];
 };
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
+
+export type IMagicTableListRevenueRef = {
+  onNavigateDetail: (row: IReportRevenue) => void;
+};
+export const magicTableListRevenueRef = createRef<IMagicTableListRevenueRef>();
+
 const TableListRevenue: FC<Props> = ({ dateRange }) => {
   const { dataRevenue, getRevenueByList, pageModel, total, onNextPage } =
     useRevenueCompany();
+
   useEffect(() => {
     getRevenueByList(dateRange[0] || new Date(), dateRange[1] || new Date());
   }, [dateRange]);
+
+  const onNavigateOrderCompanyDetail = useCallback(
+    (row: IReportRevenue) => {
+      const { company_id, company_name } = row;
+      navigate(
+        PATH_APP.statistic.customerRevenueDetail.replace(
+          ":company_id",
+          `${company_id.toString()}?company=${company_name}&dateFrom=${format(
+            dateRange[0],
+            "yyyy-MM-dd"
+          )}&dateTo=${format(dateRange[1], "yyyy-MM-dd")}`
+        )
+      );
+    },
+    [dataRevenue]
+  );
+
+  useImperativeHandle(magicTableListRevenueRef, () => ({
+    onNavigateDetail: onNavigateOrderCompanyDetail,
+  }));
   const { translate } = useLocales();
+
   const pinOrderLeft = useMemo(
     () =>
       RevenueCompanyColumn.filter(

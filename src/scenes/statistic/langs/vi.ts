@@ -13,5 +13,8 @@ const statisticLangs = {
   revenueCompany: {
     title: "Danh sách doanh số khách hàng",
   },
+  revenueCompanyDetail: {
+    title: "Chi tiết doanh số",
+  },
 };
 export default statisticLangs;
