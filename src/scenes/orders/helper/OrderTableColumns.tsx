@@ -24,7 +24,7 @@ export const PaperType = ({ paperId }: { paperId: number }) => {
   const paperItem = listPaper.find((e) => e.id === paperId);
   return <span>{paperItem?.paper_name}</span>;
 };
-export const OrderColumnTable: GridColDef[] = [
+export const OrderColumnTable: GridColDef<IOrder>[] = [
   {
     field: "order_no",
     headerName: "Mã đơn hàng",
@@ -196,3 +196,15 @@ export const OrderColumnTable: GridColDef[] = [
       format(value * 1000, "dd/MM/yyyy"),
   },
 ];
+
+export const pinOrderLeft = OrderColumnTable.filter(
+  (e) => e.field === "order_no" || e.field === "actions"
+).map((e) => e.field);
+
+export const fieldStored = OrderColumnTable.map((e) => {
+  return e.field;
+}).reduce((result, item) => {
+  //@ts-ignore
+  result[item] = true;
+  return result;
+}, {});

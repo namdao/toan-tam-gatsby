@@ -171,3 +171,15 @@ export const OrderStoredTableColumns: GridColDef[] = [
       format(value * 1000, "dd/MM/yyyy"),
   },
 ];
+
+export const pinOrderLeft = OrderStoredTableColumns.filter(
+  (e) => e.field === "order_no" || e.field === "actions"
+).map((e) => e.field);
+
+export const fieldStored = OrderStoredTableColumns.map((e) => {
+  return e.field;
+}).reduce((result, item) => {
+  //@ts-ignore
+  result[item] = true;
+  return result;
+}, {});

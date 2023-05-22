@@ -1,14 +1,26 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Box from "@mui/material/Box";
 import {
   DataGridPro,
   GridRow,
   GridColumnHeaders,
   GridPaginationModel,
+  GridColumnVisibilityModel,
 } from "@mui/x-data-grid-pro";
-import { OrderWaitingTableColumns } from "scenes/orders/helper/OrderWaitingTableColumns";
+import {
+  OrderWaitingTableColumns,
+  pinOrderLeft,
+  fieldStored,
+} from "scenes/orders/helper/OrderWaitingTableColumns";
 import { IOrderDetail } from "scenes/orders/redux/types";
 import { IPage } from "scenes/orders/hooks/useOrderWaitingPrint";
+import { useAppSelector } from "store";
+import { AuthSelector } from "scenes/auth/redux/slice";
+import {
+  addTableColumn,
+  getTableColumn,
+  OrderFeature,
+} from "services/firebase/common";
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
@@ -25,16 +37,34 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
   onNextPage,
   pageModel,
 }) => {
-  const pinOrderLeft = useMemo(
-    () =>
-      OrderWaitingTableColumns.filter(
-        (e) => e.field === "order_no" || e.field === "actions"
-      ).map((e) => e.field),
-    []
-  );
+  const [storedColumn, setStoredColumn] = useState<Record<string, boolean>>({});
+  const currentUser = useAppSelector(AuthSelector.getProfile);
+  useEffect(() => {
+    const getColumn = async () => {
+      const columnStored = await getTableColumn({
+        type: OrderFeature.WAITING_PRINT,
+        user: currentUser.userName,
+      });
+      setStoredColumn(columnStored);
+    };
+    getColumn();
+  }, []);
 
   const setPagination = (model: GridPaginationModel) => {
     onNextPage(model.page, model.pageSize);
+  };
+
+  const onChangeColumn = async (params: GridColumnVisibilityModel) => {
+    const listParamsStore = {
+      ...fieldStored,
+      ...params,
+    };
+    await addTableColumn({
+      typeStored: OrderFeature.WAITING_PRINT,
+      dataColumn: listParamsStore,
+      user: currentUser.userName,
+    });
+    setStoredColumn(listParamsStore);
   };
 
   return (
@@ -43,6 +73,8 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
         rows={orderList}
         rowCount={total}
         columns={OrderWaitingTableColumns}
+        columnVisibilityModel={storedColumn}
+        onColumnVisibilityModelChange={onChangeColumn}
         disableRowSelectionOnClick
         initialState={{
           pinnedColumns: {

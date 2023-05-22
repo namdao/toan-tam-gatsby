@@ -4,6 +4,7 @@ import React, {
   useImperativeHandle,
   useMemo,
   useRef,
+  useState,
 } from "react";
 import Box from "@mui/material/Box";
 import {
@@ -12,8 +13,13 @@ import {
   GridColumnHeaders,
   GridRowSelectionModel,
   GridPaginationModel,
+  GridColumnVisibilityModel,
 } from "@mui/x-data-grid-pro";
-import { OrderCollectTableColumns } from "scenes/orders/helper/OrderCollectTableColumns";
+import {
+  OrderCollectTableColumns,
+  pinOrderLeft,
+  fieldStored,
+} from "scenes/orders/helper/OrderCollectTableColumns";
 import { useListOrderColect } from "scenes/orders/hooks/useOrderNeedCollect";
 import BlockFilter from "./BlockFilter";
 import { Card } from "@mui/material";
@@ -21,6 +27,13 @@ import { Stack } from "@mui/system";
 import BlockPrintAndSendEmail, { IPropsPrint } from "./BlockPrintAndSendEmail";
 import { useSnackbar } from "notistack";
 import { useLocales } from "locales";
+import {
+  addTableColumn,
+  getTableColumn,
+  OrderFeature,
+} from "services/firebase/common";
+import { AuthSelector } from "scenes/auth/redux/slice";
+import { useAppSelector } from "store";
 
 const MemoizedRow = React.memo(GridRow);
 
@@ -48,21 +61,28 @@ const OrderTable: React.FC = () => {
   const { translate } = useLocales();
 
   const { enqueueSnackbar } = useSnackbar();
+  const [storedColumn, setStoredColumn] = useState<Record<string, boolean>>({});
+  const currentUser = useAppSelector(AuthSelector.getProfile);
+
   useEffect(() => {
     onOrderListCollect();
   }, [createdDate, updatedDate, customer]);
 
+  useEffect(() => {
+    const getColumn = async () => {
+      const columnStored = await getTableColumn({
+        type: OrderFeature.NEED_COLLECT,
+        user: currentUser.userName,
+      });
+      setStoredColumn(columnStored);
+    };
+    getColumn();
+  }, []);
   useImperativeHandle(magicTableNeedCollectRef, () => ({
     onRefreshOrderList: onOrderListCollect,
   }));
   const paginationModel = pageModel;
-  const pinOrderLeft = useMemo(
-    () =>
-      OrderCollectTableColumns.filter(
-        (e) => e.field === "order_no" || e.field === "actions"
-      ).map((e) => e.field),
-    []
-  );
+
   const setPagination = (model: GridPaginationModel) => {
     onNextPage(model.page, model.pageSize);
   };
@@ -79,6 +99,23 @@ const OrderTable: React.FC = () => {
       }
     }
     return false;
+  };
+
+  // if (Object.entries(storedColumn).length < 1) {
+  //   return <></>;
+  // }
+
+  const onChangeColumn = async (params: GridColumnVisibilityModel) => {
+    const listParamsStore = {
+      ...fieldStored,
+      ...params,
+    };
+    await addTableColumn({
+      typeStored: OrderFeature.NEED_COLLECT,
+      dataColumn: listParamsStore,
+      user: currentUser.userName,
+    });
+    setStoredColumn(listParamsStore);
   };
 
   const onRowSelect = (listIds: GridRowSelectionModel) => {
@@ -123,6 +160,8 @@ const OrderTable: React.FC = () => {
           rows={orderList}
           rowCount={total}
           columns={OrderCollectTableColumns}
+          columnVisibilityModel={storedColumn}
+          onColumnVisibilityModelChange={onChangeColumn}
           onRowSelectionModelChange={onRowSelect}
           initialState={{
             pinnedColumns: {

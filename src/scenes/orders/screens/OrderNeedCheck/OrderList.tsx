@@ -2,8 +2,7 @@ import React, {
   createRef,
   useEffect,
   useImperativeHandle,
-  useMemo,
-  useRef,
+  useState,
 } from "react";
 import Box from "@mui/material/Box";
 import {
@@ -11,12 +10,24 @@ import {
   GridRow,
   GridColumnHeaders,
   GridPaginationModel,
+  GridColumnVisibilityModel,
 } from "@mui/x-data-grid-pro";
-import { OrderNeedCheckTableColumns } from "scenes/orders/helper/OrderNeedCheckTableColumns";
+import {
+  OrderNeedCheckTableColumns,
+  pinOrderLeft,
+  fieldStored,
+} from "scenes/orders/helper/OrderNeedCheckTableColumns";
 import { useListOrderNeedCheck } from "scenes/orders/hooks/useOrderNeedCheck";
 import BlockFilter from "./BlockFilter";
 import { Card } from "@mui/material";
 import { Stack } from "@mui/system";
+import {
+  addTableColumn,
+  getTableColumn,
+  OrderFeature,
+} from "services/firebase/common";
+import { useAppSelector } from "store";
+import { AuthSelector } from "scenes/auth/redux/slice";
 
 const MemoizedRow = React.memo(GridRow);
 
@@ -41,7 +52,18 @@ const OrderTable: React.FC = () => {
     setCustomer,
     onOrderListNeedCheck,
   } = useListOrderNeedCheck();
-
+  const [storedColumn, setStoredColumn] = useState<Record<string, boolean>>({});
+  const currentUser = useAppSelector(AuthSelector.getProfile);
+  useEffect(() => {
+    const getColumn = async () => {
+      const columnStored = await getTableColumn({
+        type: OrderFeature.NEED_CHECK,
+        user: currentUser.userName,
+      });
+      setStoredColumn(columnStored);
+    };
+    getColumn();
+  }, []);
   useEffect(() => {
     onOrderListNeedCheck();
   }, [createdDate, updatedDate, customer]);
@@ -49,16 +71,28 @@ const OrderTable: React.FC = () => {
   useImperativeHandle(magicTableNeedCheckRef, () => ({
     onRefreshOrderList: onOrderListNeedCheck,
   }));
+
+  // if (Object.entries(storedColumn).length < 1) {
+  //   return <></>;
+  // }
+
   const paginationModel = pageModel;
-  const pinOrderLeft = useMemo(
-    () =>
-      OrderNeedCheckTableColumns.filter(
-        (e) => e.field === "order_no" || e.field === "actions"
-      ).map((e) => e.field),
-    []
-  );
+
   const setPagination = (model: GridPaginationModel) => {
     onNextPage(model.page, model.pageSize);
+  };
+
+  const onChangeColumn = async (params: GridColumnVisibilityModel) => {
+    const listParamsStore = {
+      ...fieldStored,
+      ...params,
+    };
+    await addTableColumn({
+      typeStored: OrderFeature.NEED_CHECK,
+      dataColumn: listParamsStore,
+      user: currentUser.userName,
+    });
+    setStoredColumn(listParamsStore);
   };
 
   return (
@@ -84,6 +118,8 @@ const OrderTable: React.FC = () => {
           rows={orderList}
           rowCount={total}
           columns={OrderNeedCheckTableColumns}
+          columnVisibilityModel={storedColumn}
+          onColumnVisibilityModelChange={onChangeColumn}
           disableRowSelectionOnClick
           initialState={{
             pinnedColumns: {

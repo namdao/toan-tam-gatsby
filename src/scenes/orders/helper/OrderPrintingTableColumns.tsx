@@ -108,3 +108,14 @@ export const OrderPrintingTableColumns: GridColDef<IOrderDetail>[] = [
     minWidth: 200,
   },
 ];
+export const pinOrderLeft = OrderPrintingTableColumns.filter(
+  (e) => e.field === "order_no" || e.field === "actions"
+).map((e) => e.field);
+
+export const fieldStored = OrderPrintingTableColumns.map((e) => {
+  return e.field;
+}).reduce((result, item) => {
+  //@ts-ignore
+  result[item] = true;
+  return result;
+}, {});

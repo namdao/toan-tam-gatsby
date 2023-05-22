@@ -90,3 +90,15 @@ export const OrderSearchColumnTable: GridColDef[] = [
     valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
   },
 ];
+
+export const pinOrderLeft = OrderSearchColumnTable.filter(
+  (e) => e.field === "order_no" || e.field === "actions"
+).map((e) => e.field);
+
+export const fieldStored = OrderSearchColumnTable.map((e) => {
+  return e.field;
+}).reduce((result, item) => {
+  //@ts-ignore
+  result[item] = true;
+  return result;
+}, {});

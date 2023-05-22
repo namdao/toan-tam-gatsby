@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import {
   DataGridPro,
@@ -6,14 +6,25 @@ import {
   GridColumnHeaders,
   GridRowSelectionModel,
   GridPaginationModel,
+  GridColumnVisibilityModel,
 } from "@mui/x-data-grid-pro";
 import { ORDER_STATUS_NAME } from "scenes/orders/helper/OrderConstant";
-import { OrderStoredTableColumns } from "scenes/orders/helper/OrderStoredTableColumns";
+import {
+  OrderStoredTableColumns,
+  pinOrderLeft,
+  fieldStored,
+} from "scenes/orders/helper/OrderStoredTableColumns";
 import { useAppDispatch, useAppSelector } from "store";
 import { ordersAction, OrdersSelector } from "scenes/orders/redux/slice";
 import { useOrderAllStatus } from "scenes/orders/hooks/useOrderProcessing";
 import { enqueueSnackbar } from "notistack";
 import { useLocales } from "locales";
+import { AuthSelector } from "scenes/auth/redux/slice";
+import {
+  addTableColumn,
+  getTableColumn,
+  OrderFeature,
+} from "services/firebase/common";
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
@@ -42,17 +53,25 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
   const totalRow = useAppSelector((state) =>
     OrdersSelector.getTotalByStatus(state, status)
   );
+
+  const [storedColumn, setStoredColumn] = useState<Record<string, boolean>>({});
+  const currentUser = useAppSelector(AuthSelector.getProfile);
+  useEffect(() => {
+    const getColumn = async () => {
+      const columnStored = await getTableColumn({
+        type: OrderFeature.STORED,
+        user: currentUser.userName,
+      });
+      setStoredColumn(columnStored);
+    };
+    getColumn();
+  }, []);
+
   const paginationModel = {
     page: filter.page ?? 0,
     pageSize: filter.pageSize ?? 20,
   };
-  const pinOrderLeft = useMemo(
-    () =>
-      OrderStoredTableColumns.filter(
-        (e) => e.field === "order_no" || e.field === "actions"
-      ).map((e) => e.field),
-    []
-  );
+
   const setPagination = (model: GridPaginationModel) => {
     dispatch(ordersAction.setPagination({ data: model }));
     onNextPage(model.page, model.pageSize);
@@ -86,6 +105,19 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
     }
   };
 
+  const onChangeColumn = async (params: GridColumnVisibilityModel) => {
+    const listParamsStore = {
+      ...fieldStored,
+      ...params,
+    };
+    await addTableColumn({
+      typeStored: OrderFeature.STORED,
+      dataColumn: listParamsStore,
+      user: currentUser.userName,
+    });
+    setStoredColumn(listParamsStore);
+  };
+
   return (
     <Box sx={{ height: 600, width: "100%" }}>
       <DataGridPro
@@ -94,6 +126,8 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
         rows={orders}
         rowCount={totalRow}
         columns={OrderStoredTableColumns}
+        columnVisibilityModel={storedColumn}
+        onColumnVisibilityModelChange={onChangeColumn}
         initialState={{
           pinnedColumns: {
             left: pinOrderLeft,

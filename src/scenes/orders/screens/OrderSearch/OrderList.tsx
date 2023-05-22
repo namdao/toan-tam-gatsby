@@ -1,17 +1,29 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Box from "@mui/material/Box";
 import {
   DataGridPro,
   GridRow,
   GridColumnHeaders,
   GridPaginationModel,
+  GridColumnVisibilityModel,
   DataGridProProps,
 } from "@mui/x-data-grid-pro";
 import BlockFilter from "./BlockFilter";
 import { Card } from "@mui/material";
 import { useOrderSearch } from "scenes/orders/hooks/useOrderSearch";
-import { OrderSearchColumnTable } from "scenes/orders/helper/OrderSearchTableColumns";
+import {
+  OrderSearchColumnTable,
+  pinOrderLeft,
+  fieldStored,
+} from "scenes/orders/helper/OrderSearchTableColumns";
 import { IOrder } from "scenes/orders/redux/types";
+import { useAppSelector } from "store";
+import { AuthSelector } from "scenes/auth/redux/slice";
+import {
+  addTableColumn,
+  getTableColumn,
+  OrderFeature,
+} from "services/firebase/common";
 
 const MemoizedRow = React.memo(GridRow);
 
@@ -42,6 +54,19 @@ const OrderTable: React.FC = () => {
       setOrderList([]);
     }
   }, [method, paperName, orderName, customer]);
+
+  const [storedColumn, setStoredColumn] = useState<Record<string, boolean>>({});
+  const currentUser = useAppSelector(AuthSelector.getProfile);
+  useEffect(() => {
+    const getColumn = async () => {
+      const columnStored = await getTableColumn({
+        type: OrderFeature.SEARCH,
+        user: currentUser.userName,
+      });
+      setStoredColumn(columnStored);
+    };
+    getColumn();
+  }, []);
   const paginationModel = pageModel;
   const getTreeDataPath: DataGridProProps["getTreeDataPath"] = useCallback(
     (row: IOrder & { group: string[] }) => row.group,
@@ -55,15 +80,21 @@ const OrderTable: React.FC = () => {
     };
   }, []);
 
-  const pinOrderLeft = useMemo(
-    () =>
-      OrderSearchColumnTable.filter(
-        (e) => e.field === "order_no" || e.field === "actions"
-      ).map((e) => e.field),
-    []
-  );
   const setPagination = (model: GridPaginationModel) => {
     onNextPage(model.page, model.pageSize);
+  };
+
+  const onChangeColumn = async (params: GridColumnVisibilityModel) => {
+    const listParamsStore = {
+      ...fieldStored,
+      ...params,
+    };
+    await addTableColumn({
+      typeStored: OrderFeature.SEARCH,
+      dataColumn: listParamsStore,
+      user: currentUser.userName,
+    });
+    setStoredColumn(listParamsStore);
   };
 
   return (
@@ -85,6 +116,8 @@ const OrderTable: React.FC = () => {
           rows={orderList}
           rowCount={total}
           columns={OrderSearchColumnTable}
+          columnVisibilityModel={storedColumn}
+          onColumnVisibilityModelChange={onChangeColumn}
           disableRowSelectionOnClick
           initialState={{
             pinnedColumns: {

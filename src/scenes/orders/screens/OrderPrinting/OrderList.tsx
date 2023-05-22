@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
+  useState,
 } from "react";
 import Box from "@mui/material/Box";
 import {
@@ -11,10 +12,22 @@ import {
   GridColumnHeaders,
   GridPaginationModel,
   useGridApiRef,
+  GridColumnVisibilityModel,
 } from "@mui/x-data-grid-pro";
 import { Card } from "@mui/material";
-import { OrderPrintingTableColumns } from "scenes/orders/helper/OrderPrintingTableColumns";
+import {
+  OrderPrintingTableColumns,
+  pinOrderLeft,
+  fieldStored,
+} from "scenes/orders/helper/OrderPrintingTableColumns";
 import { useOrderPrinting } from "scenes/orders/hooks/useOrderPrinting";
+import { useAppSelector } from "store";
+import { AuthSelector } from "scenes/auth/redux/slice";
+import {
+  getTableColumn,
+  OrderFeature,
+  addTableColumn,
+} from "services/firebase/common";
 
 const MemoizedRow = React.memo(GridRow);
 
@@ -26,24 +39,48 @@ export const magicTableRef = createRef<IMagicTableRef>();
 const OrderTable: React.FC = () => {
   const { orderList, total, onNextPage, onOrderPrintingList, pageModel } =
     useOrderPrinting();
-  const apiRef = useGridApiRef();
 
+  const apiRef = useGridApiRef();
+  const [storedColumn, setStoredColumn] = useState<Record<string, boolean>>({});
+  const currentUser = useAppSelector(AuthSelector.getProfile);
   useImperativeHandle(magicTableRef, () => ({
     refreshList: onOrderPrintingList,
   }));
 
   useEffect(() => {
+    const getColumn = async () => {
+      const columnStored = await getTableColumn({
+        type: OrderFeature.PRINTING,
+        user: currentUser.userName,
+      });
+      setStoredColumn(columnStored);
+    };
+    getColumn();
+  }, []);
+
+  useEffect(() => {
     onOrderPrintingList();
   }, []);
 
+  // if (Object.entries(storedColumn).length < 1) {
+  //   return <></>;
+  // }
+
+  const onChangeColumn = async (params: GridColumnVisibilityModel) => {
+    const listParamsStore = {
+      ...fieldStored,
+      ...params,
+    };
+    await addTableColumn({
+      typeStored: OrderFeature.PRINTING,
+      dataColumn: listParamsStore,
+      user: currentUser.userName,
+    });
+    setStoredColumn(listParamsStore);
+  };
+
   const paginationModel = pageModel;
-  const pinOrderLeft = useMemo(
-    () =>
-      OrderPrintingTableColumns.filter(
-        (e) => e.field === "order_no" || e.field === "actions"
-      ).map((e) => e.field),
-    []
-  );
+
   const setPagination = (model: GridPaginationModel) => {
     onNextPage(model.page, model.pageSize);
   };
@@ -56,6 +93,8 @@ const OrderTable: React.FC = () => {
           rows={orderList}
           rowCount={total}
           columns={OrderPrintingTableColumns}
+          columnVisibilityModel={storedColumn}
+          onColumnVisibilityModelChange={onChangeColumn}
           disableRowSelectionOnClick
           initialState={{
             pinnedColumns: {

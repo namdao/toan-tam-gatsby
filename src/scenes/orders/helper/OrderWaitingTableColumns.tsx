@@ -108,3 +108,14 @@ export const OrderWaitingTableColumns: GridColDef<IOrderDetail>[] = [
     valueGetter: ({ value }) => format(new Date(value), "dd/MM/yyyy HH:mm"),
   },
 ];
+export const pinOrderLeft = OrderWaitingTableColumns.filter(
+  (e) => e.field === "order_no" || e.field === "actions"
+).map((e) => e.field);
+
+export const fieldStored = OrderWaitingTableColumns.map((e) => {
+  return e.field;
+}).reduce((result, item) => {
+  //@ts-ignore
+  result[item] = true;
+  return result;
+}, {});
