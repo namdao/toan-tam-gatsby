@@ -53,13 +53,7 @@ export default function CardSummary({
       />
 
       <Typography variant="h3">{fShortenNumber(total)}</Typography>
-      <Counter
-        from={1}
-        to={total}
-        format={fNumber}
-        variant="h6"
-        currency="VNĐ"
-      />
+      <Counter from={1} to={total} variant="h6" currency="VNĐ" />
       <Typography variant="subtitle2" sx={{ opacity: 0.64 }}>
         {title}
       </Typography>

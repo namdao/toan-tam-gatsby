@@ -25,9 +25,7 @@ const Counter = ({
       onUpdate(value) {
         if (node) {
           if (format) {
-            node.textContent = value
-              ? `${format(value.toFixed(2))} ${currency}`
-              : 0;
+            node.textContent = value ? `${format(value)} ${currency}` : 0;
           } else {
             node.textContent = value ? `${fNumber(value)} ${currency}` : 0;
           }
