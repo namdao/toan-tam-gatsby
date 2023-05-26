@@ -4,7 +4,7 @@ import { endOfMonth, format, startOfMonth } from "date-fns";
 import React, { FC, useEffect } from "react";
 import { useReportUser } from "scenes/users/hooks/useUserReport";
 import { IReqEmployeeReport } from "scenes/users/redux/types";
-import { fShortenNumber, fCurrency } from "utils/formatNumber";
+import { fShortenNumber, fNumber } from "utils/formatNumber";
 
 type IPropsUser = {
   userId: number;
@@ -102,11 +102,7 @@ const UserReport: FC<IPropsUser> = ({ userId }) => {
             {loadingYear ? (
               <Skeleton />
             ) : (
-              <Counter
-                from={0}
-                to={dataReportOfYear?.total_income || 0}
-                format={fCurrency}
-              />
+              <Counter from={0} to={dataReportOfYear?.total_income || 0} />
             )}
           </Typography>
         </div>
@@ -124,11 +120,7 @@ const UserReport: FC<IPropsUser> = ({ userId }) => {
             {loadingMonth ? (
               <Skeleton />
             ) : (
-              <Counter
-                from={0}
-                to={dataReportOfMonth?.total_income || 0}
-                format={fCurrency}
-              />
+              <Counter from={0} to={dataReportOfMonth?.total_income || 0} />
             )}
           </Typography>
         </div>
