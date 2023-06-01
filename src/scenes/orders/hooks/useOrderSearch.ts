@@ -1,19 +1,24 @@
 import { IResponseType } from "constant/commonType";
 import { format } from "date-fns";
-import { isArray, isNumber } from "lodash";
+import { groupBy, isArray, isNumber } from "lodash";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
+import { ORDER_STATUS_NAME } from "../helper/OrderConstant";
 import { apiOrderSearch } from "../redux/api";
 import { IOrder, IReqOrderSearch, IResOrderListCollect } from "../redux/types";
 import { ISelect } from "../screens/OrderSearch/BlockFilter";
 
+type IGroupOrder = IOrder & {
+  group: string[];
+  createdTime: string;
+};
 export const useOrderSearch = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [customer, setCustomer] = useState<ISelect | null>(null);
   const [method, setMethod] = useState<string>("");
   const [orderName, setOrderName] = useState<string>("");
   const [paperName, setPaperName] = useState<ISelect | null>(null);
-  const [orderList, setOrderList] = useState<IOrder[]>([]);
+  const [orderList, setOrderList] = useState<IGroupOrder[]>([]);
   const [total, setTotal] = useState<number>(0);
   const [pageModel, setPageModel] = useState<{
     page: number;
@@ -35,23 +40,36 @@ export const useOrderSearch = () => {
       );
       if (result?.data) {
         if (isNumber(result.data.total) && isArray(result.data.items)) {
-          let timeCreate = format(new Date(), "dd/MM/yyyy");
-          let isNotSame = false;
-          const dataMap = result.data.items.map((e) => {
-            const parseTime = format(e.created_time * 1000, "dd/MM/yyyy");
-            if (timeCreate !== parseTime) {
-              timeCreate = parseTime;
-              isNotSame = true;
-            } else {
-              isNotSame = false;
-            }
-            const groupTime = !isNotSame
-              ? [timeCreate, e.order_no]
-              : [parseTime];
-            return {
-              group: groupTime,
-              ...e,
-            };
+          // Filter order without status cancel and Convert timeStamp to date time
+          const convertCreatedTime = result.data.items
+            .filter((f) => f.status !== ORDER_STATUS_NAME.CANCEL)
+            .map((e) => {
+              const parseTime = format(e.created_time * 1000, "dd/MM/yyyy");
+              return {
+                ...e,
+                createdTime: parseTime,
+              };
+            });
+          // group by datetime
+          const groupByTimeCreate = Object.entries(
+            groupBy(convertCreatedTime, "createdTime")
+          );
+
+          const dataMap: IGroupOrder[] = [];
+          groupByTimeCreate.forEach((e) => {
+            const dataKey = e[0];
+            const dataBykey = e[1];
+            dataBykey.forEach((dt, index) => {
+              const row = {
+                group: [dataKey],
+                ...dt,
+              };
+              if (index !== 0) {
+                row.group = [dataKey, dt.order_no];
+              }
+
+              dataMap.push(row);
+            });
           });
           setOrderList(dataMap);
           setTotal(result.data.total);
