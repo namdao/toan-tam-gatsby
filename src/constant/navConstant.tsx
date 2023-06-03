@@ -77,7 +77,7 @@ const navConfig = [
         hideMenu: true,
         component: DebitCompanyDetail,
         children: [],
-        roles: [ROLES.ADMIN],
+        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
       },
       {
         title: "statistic.debitCompanyDetail.title",
