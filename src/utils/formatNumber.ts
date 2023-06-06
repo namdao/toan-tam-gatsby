@@ -43,7 +43,7 @@ export function fPercent(number: InputValue) {
 }
 
 export function fShortenNumber(number: InputValue) {
-  const format = number ? numeral(number).format("0a") : "";
+  const format = number ? numeral(number).format("0.0a") : "";
 
   return result(format, ".00");
 }

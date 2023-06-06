@@ -23,8 +23,11 @@ type IProps = {
 };
 const StyledCell = styled(TableCell)(() => ({
   border: "1px solid rgba(224, 224, 224, 1)",
+  color: "#000",
 }));
-
+const TypoPrint = styled(Typography)(() => ({
+  color: "#000",
+}));
 const RetailBill = forwardRef(({ data }: IProps, ref) => {
   if (data.length < 1) return <></>;
   const { customer } = data[0];
@@ -33,49 +36,44 @@ const RetailBill = forwardRef(({ data }: IProps, ref) => {
     <Stack flexDirection="row" justifyContent="space-between">
       <img src={Images.logoPrint} width="30%" height="50%" />
       <Box>
-        <Typography
-          variant="body1"
-          gutterBottom
-          textAlign="right"
-          sx={{ m: 0 }}
-        >
+        <TypoPrint variant="body1" gutterBottom textAlign="right" sx={{ m: 0 }}>
           <b>CÔNG TY TNHH TM - DV - IN ẤN TOÀN TÂM</b>
-        </Typography>
+        </TypoPrint>
         <Stack flexDirection="row" justifyContent="flex-end">
           <Iconify icon="material-symbols:home-outline" width={22} />
-          <Typography
+          <TypoPrint
             variant="body1"
             gutterBottom
             textAlign="right"
             sx={{ m: 0, pl: 1 }}
           >
             265B Trịnh Đình Trọng, P.Hòa Thạnh, Q. Tân Phú, TP. HCM
-          </Typography>
+          </TypoPrint>
         </Stack>
         <Stack flexDirection="row" justifyContent="flex-end">
           <Iconify icon="material-symbols:home-outline" width={22} />
-          <Typography
+          <TypoPrint
             variant="body1"
             gutterBottom
             textAlign="right"
             sx={{ m: 0, pl: 1 }}
           >
             280-282 Lê Sao P.Phú Thạnh Q.Tân Phú TPHCM
-          </Typography>
+          </TypoPrint>
         </Stack>
         <Stack flexDirection="row" justifyContent="flex-end">
           <Iconify icon="material-symbols:phone-enabled-outline" width={22} />
-          <Typography
+          <TypoPrint
             variant="body1"
             gutterBottom
             textAlign="right"
             sx={{ m: 0, pl: 1 }}
           >
             DĐ: 0903399760 - 0933028787
-          </Typography>
+          </TypoPrint>
         </Stack>
         <Stack flexDirection="row" justifyContent="flex-end">
-          <Typography
+          <TypoPrint
             variant="body1"
             gutterBottom
             textAlign="right"
@@ -84,13 +82,13 @@ const RetailBill = forwardRef(({ data }: IProps, ref) => {
             }}
           >
             Mã số:{" "}
-            <Typography
+            <TypoPrint
               component="span"
               sx={{ border: "2px solid rgba(0,0,0, 1)", p: 0.5 }}
             >
               {newOrder.order_no}
-            </Typography>
-          </Typography>
+            </TypoPrint>
+          </TypoPrint>
         </Stack>
       </Box>
     </Stack>
@@ -100,18 +98,18 @@ const RetailBill = forwardRef(({ data }: IProps, ref) => {
     return (
       <Stack>
         <Box sx={{ flex: 1, pb: 2 }}>
-          <Typography variant="h3" textAlign="center">
+          <TypoPrint variant="h3" textAlign="center">
             <Box component="span" fontWeight="500">
               HOÁ ĐƠN BÁN LẺ
             </Box>
-          </Typography>
-          <Typography variant="body1">
+          </TypoPrint>
+          <TypoPrint variant="body1">
             {`Người mua hàng: `}
             <Box component="span" sx={{ fontWeight: "bold" }}>
               {customer.name}
             </Box>
-          </Typography>
-          <Typography variant="body1">
+          </TypoPrint>
+          <TypoPrint variant="body1">
             <Box component="span">
               {`Địa chỉ: `}
               <Box component="span" sx={{ fontWeight: "bold" }}>
@@ -119,15 +117,15 @@ const RetailBill = forwardRef(({ data }: IProps, ref) => {
                 {customer.city}
               </Box>
             </Box>
-          </Typography>
-          <Typography variant="body1">
+          </TypoPrint>
+          <TypoPrint variant="body1">
             <Box component="span">
               {`Điện thoại: `}
               <Box component="span" sx={{ fontWeight: "bold" }}>
                 {customer.phone}
               </Box>
             </Box>
-          </Typography>
+          </TypoPrint>
         </Box>
         <Table>
           <TableHead>
@@ -195,17 +193,17 @@ const RetailBill = forwardRef(({ data }: IProps, ref) => {
           justifyContent="space-around"
           sx={{ flex: 1, pt: 2 }}
         >
-          <Typography variant="caption" textAlign="center">
+          <TypoPrint variant="caption" textAlign="center">
             Người nhận
-          </Typography>
-          <Typography variant="caption" textAlign="center">
-            <Typography>
+          </TypoPrint>
+          <TypoPrint variant="caption" textAlign="center">
+            <TypoPrint>
               Tân Phú {format(new Date(), "dd")} tháng,{" "}
               {format(new Date(), "MM")} năm {format(new Date(), "yyyy")}
               <br />
-            </Typography>
+            </TypoPrint>
             Người lập phiếu
-          </Typography>
+          </TypoPrint>
         </Stack>
       </Stack>
     );

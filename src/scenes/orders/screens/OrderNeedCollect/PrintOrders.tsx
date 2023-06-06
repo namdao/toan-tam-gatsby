@@ -26,62 +26,61 @@ const StyledCell = styled(TableCell)(({ theme }) => ({
   border: "1px solid rgba(224, 224, 224, 1)",
   padding: "8px 6px",
   fontSize: "0.78rem",
+  color: "#000",
+}));
+const TypoPrint = styled(Typography)(() => ({
+  color: "#000",
 }));
 const PrintOrders = forwardRef(({ data }: IProps, ref) => {
   const sectionHeader = () => (
     <Stack flexDirection="row" justifyContent="space-between">
       <img src={Images.logoPrint} width="30%" height="50%" />
       <Box>
-        <Typography
-          variant="body1"
-          gutterBottom
-          textAlign="right"
-          sx={{ m: 0 }}
-        >
+        <TypoPrint variant="body1" gutterBottom textAlign="right" sx={{ m: 0 }}>
           <b>CÔNG TY TNHH TM - DV - IN ẤN TOÀN TÂM</b>
-        </Typography>
+        </TypoPrint>
         <Stack flexDirection="row">
           <Iconify icon="material-symbols:home-outline" width={22} />
-          <Typography
+          <TypoPrint
             variant="body1"
             gutterBottom
             textAlign="right"
             sx={{ m: 0, pl: 1 }}
           >
             265B Trịnh Đình Trọng, P.Hòa Thạnh, Q. Tân Phú, TP. HCM
-          </Typography>
+          </TypoPrint>
         </Stack>
 
         <Stack flexDirection="row" justifyContent="flex-end">
           <Iconify icon="ic:outline-email" width={22} />
-          <Typography
+          <TypoPrint
             variant="body1"
             gutterBottom
             textAlign="right"
             sx={{ m: 0, px: 1 }}
           >
             toantam.ketoan@gmail.com
-          </Typography>
+          </TypoPrint>
           <Iconify icon="mdi:web" width={22} />
-          <Typography
+          <TypoPrint
             variant="body1"
             gutterBottom
             textAlign="right"
             sx={{ m: 0, pl: 1 }}
           >
             intoantam.com
-          </Typography>
+          </TypoPrint>
         </Stack>
         <Stack flexDirection="row" justifyContent="flex-end">
           <Iconify icon="material-symbols:phone-enabled-outline" width={22} />
-          <Typography
+          <TypoPrint
             variant="body1"
             gutterBottom
             textAlign="right"
             sx={{ m: 0, pl: 1 }}
           >
             0931 87 87 18 - <span>MST:</span> 031338242
-          </Typography>
+          </TypoPrint>
         </Stack>
       </Box>
     </Stack>
@@ -104,34 +103,34 @@ const PrintOrders = forwardRef(({ data }: IProps, ref) => {
     return (
       <Stack>
         <Box sx={{ flex: 1 }}>
-          <Typography variant="h3" textAlign="center">
+          <TypoPrint variant="h3" textAlign="center">
             <Box component="span" fontWeight="500">
               CÔNG NỢ PHẢI THU
             </Box>
-          </Typography>
-          <Typography variant="body1">
+          </TypoPrint>
+          <TypoPrint variant="body1">
             <Box component="span" sx={{ fontWeight: "bold" }}>
               {customer.company.company_name}
             </Box>
-          </Typography>
-          <Typography variant="body1">
+          </TypoPrint>
+          <TypoPrint variant="body1">
             <Box component="span">
               {`Tên KH/ Cty: `}
               <Box component="span" sx={{ fontWeight: "bold" }}>
                 {customer.name}
               </Box>
             </Box>
-          </Typography>
-          <Typography variant="body1">
+          </TypoPrint>
+          <TypoPrint variant="body1">
             <Box component="span">
               {`Email: `}
               <Box component="span" sx={{ fontWeight: "bold" }}>
                 {customer.email}
               </Box>
             </Box>
-          </Typography>
+          </TypoPrint>
           <Stack alignItems="flex-end" justifyContent="flex-end">
-            <Typography variant="body1">
+            <TypoPrint variant="body1">
               <Box component="span" sx={{ fontWeight: "bold" }}>
                 Từ{" "}
                 {format(parseISO(newOrder[0].real_delivery_date), "dd/MM/yyyy")}{" "}
@@ -141,7 +140,7 @@ const PrintOrders = forwardRef(({ data }: IProps, ref) => {
                   "dd/MM/yyyy"
                 )}
               </Box>
-            </Typography>
+            </TypoPrint>
           </Stack>
         </Box>
         <Table>
@@ -256,12 +255,12 @@ const PrintOrders = forwardRef(({ data }: IProps, ref) => {
           justifyContent="space-around"
           sx={{ flex: 1, pt: 2 }}
         >
-          <Typography variant="caption" textAlign="center">
+          <TypoPrint variant="caption" textAlign="center">
             Xác nhận của KH
-          </Typography>
-          <Typography variant="caption" textAlign="center">
+          </TypoPrint>
+          <TypoPrint variant="caption" textAlign="center">
             Người lập phiếu
-          </Typography>
+          </TypoPrint>
         </Stack>
       </Stack>
     );

@@ -6,6 +6,7 @@ import { useAppSelector } from "store";
 import Header from "./BlockHeader";
 import OrderList from "./OrderList";
 import Helmet from "react-helmet";
+import BtnCreateOrder from "./BtnCreateOrder";
 
 const OrderProcessing = () => {
   const themeStretch = useAppSelector(SettingsSelector.getThemeStretch);
@@ -16,6 +17,7 @@ const OrderProcessing = () => {
       <Container maxWidth={themeStretch ? false : "lg"}>
         <Header />
         {/* <BlockSummary /> */}
+        <BtnCreateOrder />
         <OrderList />
       </Container>
     </>
