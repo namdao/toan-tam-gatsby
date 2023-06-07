@@ -1,14 +1,15 @@
 import React from "react";
-import { Box } from "@mui/material";
 import Iconify from "components/iconify";
-import "./style.css";
+import { useTheme } from "@mui/material/styles";
+import { ContainerBtn, IconBtn } from "./stylesBtnCreate";
 
-const BtnCreateOrder = () => (
-  <Box
-    id="calltrap-btn"
-    className="b-calltrap-btn calltrap_offline hidden-phone visible-tablet"
-  >
-    <Iconify id="calltrap-ico" width={24} icon="material-symbols:add" />
-  </Box>
-);
+const BtnCreateOrder = () => {
+  const theme = useTheme();
+  return (
+    <ContainerBtn backgroundColor={theme.palette.primary.main}>
+      <Iconify width={24} icon="material-symbols:add" />
+      <IconBtn backgroundColor={theme.palette.primary.main} />
+    </ContainerBtn>
+  );
+};
 export default BtnCreateOrder;
