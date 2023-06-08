@@ -155,11 +155,11 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
       note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaCompanyDebit[1].label}`;
     }
     const payload = {
-      cod: parseToNumber(data.cod),
+      cod: parseToNumber(data.cod.replace(",", "")),
       note,
-      deposite: parseToNumber(data.deposite),
+      deposite: parseToNumber(data.deposite.replace(",", "")),
       payment_method: data.payment_method,
-      cash: parseToNumber(data.cash),
+      cash: parseToNumber(data.cash.replace(",", "")),
       done: data.done,
       debt: data.debt,
       need_check: data.need_check,

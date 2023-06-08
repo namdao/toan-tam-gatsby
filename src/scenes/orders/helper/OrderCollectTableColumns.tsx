@@ -154,7 +154,7 @@ export const OrderCollectTableColumns: GridColDef[] = [
     minWidth: 100,
     headerAlign: "center",
     align: "center",
-    valueGetter: ({ value }) => value || "-",
+    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
   },
   {
     field: "deliver_provider",

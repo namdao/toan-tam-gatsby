@@ -150,11 +150,11 @@ const BlockFormOrderNeedCheck: FC<IPropsForm> = ({
 
   const onSubmit = async (data: FormValuesProps) => {
     const payload = {
-      cod: parseToNumber(data.cod),
+      cod: parseToNumber(data.cod.replace(",", "")),
       note: data.note,
-      deposite: parseToNumber(data.deposite),
+      deposite: parseToNumber(data.deposite.replace(",", "")),
       payment_method: data.payment_method,
-      cash: parseToNumber(data.cash),
+      cash: parseToNumber(data.cash.replace(",", "")),
       done: data.done,
       debt: data.debt,
       need_check: data.need_check,
@@ -165,7 +165,7 @@ const BlockFormOrderNeedCheck: FC<IPropsForm> = ({
         LIST_MONEY_SOURCE.CASH
           ? data.who_collect_money
           : "",
-      company_debit: parseToNumber(data.company_debit),
+      company_debit: parseToNumber(data.company_debit.replace(",", "")),
     };
     onUpdateOrder(payload, onCallbackSuccess);
   };
