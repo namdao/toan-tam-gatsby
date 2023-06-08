@@ -90,11 +90,10 @@ const BlockFormOrderProcessing: FC<IPropsForm> = ({
   };
 
   const onSubmit = async (data: FormValuesProps) => {
-    console.log(data);
     const payload = {
-      cod: parseToNumber(data.cod.replace(",", "")),
+      cod: parseToNumber(data.cod.replaceAll(",", "")),
       note: data.note,
-      deposite: parseToNumber(data.deposite.replace(",", "")),
+      deposite: parseToNumber(data.deposite.replaceAll(",", "")),
       payment_method: data.payment_method,
     };
     onUpdateOrder(payload, onCallbackSuccess);
