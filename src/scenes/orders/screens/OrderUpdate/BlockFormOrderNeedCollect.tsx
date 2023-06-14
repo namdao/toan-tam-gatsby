@@ -42,7 +42,7 @@ type FormValuesProps = {
   deposite: string;
   cod: string;
   note: string;
-  cash: string;
+  cash: number | string;
   date_collect_money: Date;
   paymentType: string;
   who_collect_money: string;
@@ -87,6 +87,7 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
         : orderDetail?.payment_method,
     deposite: orderDetail?.deposite.toString(),
     cod: orderDetail && getTotalAmount(orderDetail).toString(),
+    cash: orderDetail && orderDetail.cash,
     note: "",
     totalAmount: orderDetail && getTotalFee(orderDetail),
     paymentType: "",
@@ -162,11 +163,11 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
       note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[2].label}`;
     }
     const payload = {
-      cod: parseToNumber(data.cod.replaceAll(",", "")),
+      cod: parseToNumber(data?.cod?.replaceAll(",", "")),
       note,
-      deposite: parseToNumber(data.deposite.replaceAll(",", "")),
+      deposite: parseToNumber(data?.deposite?.replaceAll(",", "")),
       payment_method: data.payment_method,
-      cash: parseToNumber(data.cash.replaceAll(",", "")),
+      cash: parseToNumber((data?.cash?.toString() || "0")?.replaceAll(",", "")),
       done: data.done,
       debt: data.debt,
       need_check: data.need_check,

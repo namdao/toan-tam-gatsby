@@ -40,7 +40,7 @@ type FormValuesProps = {
   deposite: string;
   cod: string;
   note: string;
-  cash: string;
+  cash: string | number;
   date_collect_money: Date;
   paymentType: string;
   who_collect_money: string;
@@ -86,6 +86,7 @@ const BlockFormOrderNeedCheck: FC<IPropsForm> = ({
         : orderDetail?.payment_method,
     deposite: orderDetail?.deposite.toString(),
     cod: orderDetail && getTotalAmount(orderDetail).toString(),
+    cash: orderDetail && orderDetail.cash,
     note: "",
     totalAmount: orderDetail && getTotalFee(orderDetail),
     paymentType: "",
@@ -150,11 +151,11 @@ const BlockFormOrderNeedCheck: FC<IPropsForm> = ({
 
   const onSubmit = async (data: FormValuesProps) => {
     const payload = {
-      cod: parseToNumber(data.cod.replaceAll(",", "")),
+      cod: parseToNumber(data?.cod?.replaceAll(",", "")),
       note: data.note,
-      deposite: parseToNumber(data.deposite.replaceAll(",", "")),
+      deposite: parseToNumber(data?.deposite?.replaceAll(",", "")),
       payment_method: data.payment_method,
-      cash: parseToNumber(data.cash.replaceAll(",", "")),
+      cash: parseToNumber((data?.cash.toString() || "0")?.replaceAll(",", "")),
       done: data.done,
       debt: data.debt,
       need_check: data.need_check,

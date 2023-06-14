@@ -37,7 +37,7 @@ type FormValuesProps = {
   deposite: string;
   cod: string;
   note: string;
-  cash: string;
+  cash: string | number;
   date_collect_money: Date;
   paymentType: string;
   who_collect_money: string;
@@ -66,6 +66,7 @@ const BlockFormOrderNeedConfirm: FC<IPropsForm> = ({
         : orderDetail?.payment_method,
     deposite: orderDetail?.deposite.toString(),
     cod: orderDetail && getTotalAmount(orderDetail).toString(),
+    cash: orderDetail && orderDetail.cash,
     note: "",
     totalAmount: orderDetail && getTotalFee(orderDetail),
     paymentType: "",
