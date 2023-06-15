@@ -154,6 +154,7 @@ const navConfig = [
           ROLES.SALER,
           ROLES.STORE,
           ROLES.DESIGNER,
+          ROLES.PRINTER,
         ],
       },
       {
