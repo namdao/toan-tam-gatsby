@@ -16,6 +16,8 @@ import OrderDetail from "../OrderDetail";
 import { ICON } from "constant/layoutConstant";
 import { useLocales } from "locales";
 import { GridActionsCellItem } from "@mui/x-data-grid";
+import "./styles.css";
+
 const Transition = forwardRef(
   (
     props: TransitionProps & {
@@ -52,13 +54,15 @@ function DialogOrderSelected({
       />
 
       <Dialog
-        fullScreen
         open={open}
         scroll="paper"
+        id="order-detail"
+        fullWidth
+        maxWidth="md"
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <AppBar position="fixed">
+        <AppBar position="sticky">
           <Toolbar>
             <Typography variant="h6" sx={{ flex: 1, ml: 2 }}>
               {translate("orders.orderProcessing.detail", {
