@@ -73,6 +73,7 @@ export const PATH_APP = {
       route: `${ROOT_ORDER}/cap-nhat-don-hang/:orderId`,
       link: (orderId: number) => `${ROOT_ORDER}/cap-nhat-don-hang/${orderId}`,
     },
+    create: `${ROOT_ORDER}/tao-don-hang`,
     processing: `${ROOT_ORDER}/don-hang-dang-thuc-hien`,
     needPaid: `${ROOT_ORDER}/don-hang-can-thanh-toan`,
     needCheck: `${ROOT_ORDER}/don-hang-can-kiem-tra`,

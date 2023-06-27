@@ -77,6 +77,7 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
     money_source: Yup.string().required(
       translate("orders.orderUpdate.error.moneySource")
     ),
+    note: Yup.string().required(translate("orders.orderUpdate.error.notes")),
   });
 
   const defaultValues = {
@@ -154,13 +155,13 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
   };
 
   const onSubmit = async (data: FormValuesProps) => {
-    let note = "";
+    let note = data.note;
     if (data.done) {
-      note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[0].label}`;
+      note += ` (${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[0].label})`;
     } else if (data.debt) {
-      note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[1].label}`;
+      note += ` (${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[1].label})`;
     } else if (data.need_check) {
-      note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[2].label}`;
+      note += ` (${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[2].label})`;
     }
     const payload = {
       cod: parseToNumber(data?.cod?.replaceAll(",", "")),
@@ -247,6 +248,12 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
                 label={translate("orders.orderUpdate.form.whoCollectionMoney")}
               />
             )}
+            <RHFTextField
+              name="note"
+              label={translate("orders.orderUpdate.form.note")}
+              multiline
+              rows={3}
+            />
           </Stack>
         </DialogContentText>
       </DialogContent>

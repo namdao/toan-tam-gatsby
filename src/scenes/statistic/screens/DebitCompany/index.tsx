@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useStatisticDebit } from "scenes/statistic/hooks/useStatisticDebit";
 import { SettingsSelector } from "services/settings/redux/slice";
 import { useAppSelector } from "store";
-import BlockSumaryDebit from "./BlockDebitSummary";
+import BlockDebitSummary from "./BlockDebitSummary";
 import BlockPercentDebit from "./BlockPercentDebit";
 import BlockTopCompanyDebit from "./BlockTopCompanyDebit";
 import TableListDebit from "./TableListDebit";
@@ -20,8 +20,8 @@ const DebitCompany = () => {
       <Typography variant="h4" sx={{ mb: 5 }}>
         Báo cáo danh sách công nợ
       </Typography>
+      <BlockDebitSummary />
       <Grid container spacing={3}>
-        <BlockSumaryDebit />
         <BlockPercentDebit listCustomerDebit={listCustomerDebit} />
         <BlockTopCompanyDebit listCustomerDebit={listCustomerDebit} />
         <TableListDebit listCustomerDebit={listCustomerDebit} />

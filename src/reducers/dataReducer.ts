@@ -6,6 +6,8 @@ import paperTypeReducer from "scenes/papers/redux/slice";
 import customerReducer from "scenes/customer/redux/slice";
 import companyReducer from "scenes/company/redux/slice";
 import categoriesReducer from "scenes/categories/redux/slice";
+import outsourceReducer from "scenes/outsources/redux/slice";
+import printTypeReducer from "scenes/printtype/redux/slice";
 
 export default combineReducers({
   auth: authReducer,
@@ -15,4 +17,6 @@ export default combineReducers({
   customer: customerReducer,
   company: companyReducer,
   categories: categoriesReducer,
+  outsource: outsourceReducer,
+  printType: printTypeReducer,
 });

@@ -32,12 +32,10 @@ export type ICategoryDefault =
   | "Túi giấy"
   | "Tờ rơi"
   | "other";
-export type IResCategories = Record<
-  ICategoryDefault,
-  {
-    category_name: string;
-    category_parent: IResCategory | null;
-    id: number;
-    parent_id: number | null;
-  }[]
->;
+export type IDataCategories = {
+  category_name: string;
+  category_parent: IResCategory | null;
+  id: number;
+  parent_id: number | null;
+};
+export type IResCategories = Record<ICategoryDefault, IDataCategories[]>;

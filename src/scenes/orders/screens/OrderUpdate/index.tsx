@@ -17,6 +17,9 @@ import { useAppSelector } from "store";
 import { AuthSelector } from "scenes/auth/redux/slice";
 import appConstants from "constant/appConstant";
 import BlockFormOrderCompanyDebit from "./BlockFormOrderCompanyDebit";
+import OrderNewEditForm from "scenes/orders/components/OrderNewEditForm";
+import { ORDER_STATUS_NAME } from "scenes/orders/helper/OrderConstant";
+import OrderConfirmDesign from "scenes/orders/components/OrderConfirmDesign";
 const { ROLES } = appConstants;
 const Transition = forwardRef(
   (
@@ -35,7 +38,8 @@ type IPropsOrderUpdate = {
     | "ORDER_NEED_COLLECT"
     | "ORDER_NEED_CHECK"
     | "ORDER_NEED_CONFIRM"
-    | "ORDER_COMPANY_DEBIT";
+    | "ORDER_COMPANY_DEBIT"
+    | "ORDER_SEARCH";
 };
 const DialogOrderUpdate = ({
   orderId,
@@ -48,7 +52,8 @@ const DialogOrderUpdate = ({
   const roleUser = useAppSelector(AuthSelector.getRolesUser);
   if (
     roleUser[0].name !== ROLES.ACCOUNTANT &&
-    roleUser[0].name !== ROLES.ADMIN
+    roleUser[0].name !== ROLES.ADMIN &&
+    roleUser[0].name !== ROLES.SALER
   ) {
     return <></>;
   }
@@ -62,6 +67,66 @@ const DialogOrderUpdate = ({
 
   const handleClickOpen = () => {
     setOpen(true);
+  };
+
+  const titleByFromPage =
+    fromPage === "ORDER_SEARCH"
+      ? translate("orders.orderProcessing.copy", { orderId: orderName })
+      : translate("orders.orderProcessing.update", { orderId: orderName });
+  const iconByFromPage =
+    fromPage === "ORDER_SEARCH"
+      ? "fluent:copy-arrow-right-20-regular"
+      : "material-symbols:edit-document-outline";
+  const onShowOrderByRole = () => {
+    if (fromPage === "ORDER_PROCESSING" && orderDetail) {
+      const statusOrder = orderDetail?.status;
+      switch (statusOrder) {
+        case ORDER_STATUS_NAME.DRAFT:
+          return (
+            <OrderNewEditForm
+              isDisable={false}
+              order={orderDetail}
+              handleClose={handleClose}
+            />
+          );
+        case ORDER_STATUS_NAME.SALE:
+          return (
+            <OrderNewEditForm
+              isDisable={true}
+              order={orderDetail}
+              handleClose={handleClose}
+            />
+          );
+        case ORDER_STATUS_NAME.WAITING_FEEDBACK:
+          return (
+            <OrderConfirmDesign order={orderDetail} handleClose={handleClose} />
+          );
+        default: {
+          if (roleUser[0].name === ROLES.SALER) {
+            return (
+              <OrderNewEditForm
+                isDisable={true}
+                order={orderDetail}
+                handleClose={handleClose}
+              />
+            );
+          } else {
+            return onShowFormOrder();
+          }
+        }
+      }
+    } else if (fromPage === "ORDER_SEARCH" && orderDetail) {
+      return (
+        <OrderNewEditForm
+          isDisable={false}
+          order={orderDetail}
+          handleClose={handleClose}
+          isCopy={true}
+        />
+      );
+    } else {
+      return onShowFormOrder();
+    }
   };
 
   const onShowFormOrder = () => {
@@ -112,25 +177,18 @@ const DialogOrderUpdate = ({
       <GridActionsCellItem
         label="Chi tiết"
         onClick={handleClickOpen}
-        icon={
-          <Iconify
-            width={ICON.NAV_ITEM}
-            icon="material-symbols:edit-document-outline"
-          />
-        }
+        icon={<Iconify width={ICON.NAV_ITEM} icon={iconByFromPage} />}
       />
       <Dialog
         open={open}
         scroll="paper"
         fullWidth
-        maxWidth="md"
+        maxWidth="lg"
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <DialogTitle>
-          {translate("orders.orderProcessing.update", { orderId: orderName })}
-        </DialogTitle>
-        {loading ? <BlockUpdateOrderSkeleton /> : onShowFormOrder()}
+        <DialogTitle>{titleByFromPage}</DialogTitle>
+        {loading ? <BlockUpdateOrderSkeleton /> : onShowOrderByRole()}
       </Dialog>
     </>
   );

@@ -1,6 +1,6 @@
 import SetupAxios from "manager/axiosManager";
 import { AuthSelector } from "scenes/auth/redux/slice";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import {
   settingsActions,
   SettingsSelector,
@@ -12,19 +12,27 @@ import { CitySelector } from "services/settings/redux/city.slice";
 import { useCity } from "services/settings/hooks/useCity";
 import { useCompany } from "scenes/company/hooks/useCompany";
 import { useCategory } from "scenes/categories/hooks/useCategory";
+import LoadingScreen from "components/loadingScreen";
+import { useOutSource } from "scenes/outsources/hooks/useOutSource";
+import { usePrintType } from "scenes/printtype/hooks/usePrintType";
 
-const CommonManager = () => {
+const CommonManager: FC<{ children: any }> = ({ children }) => {
   const dispatch = useAppDispatch();
   const { onGetPaperList } = usePaperTypes();
-  const { getCustomerList } = useCustomer();
+  const { getCustomerList, loadingCustomer } = useCustomer();
   const { getDataCity, getAllCity } = useCity();
-  const { onGetCompanies } = useCompany();
-  const { onGetCategoriesLikeMobile } = useCategory();
+  const { onGetCompanies, loading: loadingCompanies } = useCompany();
+  const { onGetCategoriesLikeMobile, loading: loadingCategory } = useCategory();
+  const { onGetOutSourceListForOtherPage, loading: loadingOutsource } =
+    useOutSource();
+  const { onGetPrintTypesAnotherPage, loading: loadingPrintType } =
+    usePrintType();
   const token = useAppSelector(AuthSelector.getToken);
   const url = useAppSelector(SettingsSelector.getUrl);
   const listDistrict = useAppSelector(CitySelector.getListDistrict);
   const listWards = useAppSelector(CitySelector.getListWards);
   const listCity = useAppSelector(CitySelector.getListCity);
+  const [loadingInitial, setLoadingInitial] = useState(true);
   useLayoutEffect(() => {
     SetupAxios.init();
     const newUrl = SetupAxios.setBaseUrl(url);
@@ -53,11 +61,27 @@ const CommonManager = () => {
       getCustomerList();
       onGetCompanies();
       onGetCategoriesLikeMobile();
+      onGetOutSourceListForOtherPage();
+      onGetPrintTypesAnotherPage();
     } else {
       SetupAxios.clearHeaderToken();
+      setLoadingInitial(false);
     }
   }, [token]);
-  return <></>;
+
+  useEffect(() => {
+    if (
+      !loadingCustomer &&
+      !loadingCompanies &&
+      !loadingCategory &&
+      !!listCity &&
+      !loadingOutsource &&
+      !loadingPrintType
+    ) {
+      setLoadingInitial(false);
+    }
+  }, [loadingCustomer, loadingCompanies, loadingCategory, listCity]);
+  return <>{loadingInitial ? <LoadingScreen /> : children}</>;
 };
 
 export default CommonManager;

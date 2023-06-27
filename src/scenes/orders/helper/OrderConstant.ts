@@ -31,6 +31,11 @@ export enum ORDER_STATUS_NAME {
   DELIVER = 9,
   DONE = 10,
 }
+
+export enum ORDER_TYPE {
+  NORMAL = "NORMAL",
+  CUSTOM = "CUSTOM",
+}
 export enum SEARCH_BY {
   ALL = "all",
   CUSTOMER_NAME = "customer_name",
@@ -52,6 +57,38 @@ export const ORDER_TAB_PROCESSING: IOrderTabProcessing[] = [
   {
     name: "orders.orderProcessing.sale",
     value: ORDER_STATUS_NAME.SALE,
+    color: "info",
+  },
+  {
+    name: "orders.orderProcessing.designed",
+    value: ORDER_STATUS_NAME.DESIGNED,
+    color: "info",
+  },
+  {
+    name: "orders.orderProcessing.waitingPrint",
+    value: ORDER_STATUS_NAME.PRINTING,
+    color: "warning",
+  },
+  {
+    name: "orders.orderProcessing.printed",
+    value: ORDER_STATUS_NAME.PRINTED,
+    color: "success",
+  },
+  {
+    name: "orders.orderProcessing.draft",
+    value: ORDER_STATUS_NAME.DRAFT,
+    color: "default",
+  },
+];
+export const ORDER_TAB_PROCESSING_FOR_SALE: IOrderTabProcessing[] = [
+  {
+    name: "orders.orderProcessing.sale",
+    value: ORDER_STATUS_NAME.SALE,
+    color: "info",
+  },
+  {
+    name: "orders.orderProcessing.needConfirm",
+    value: ORDER_STATUS_NAME.WAITING_FEEDBACK,
     color: "info",
   },
   {

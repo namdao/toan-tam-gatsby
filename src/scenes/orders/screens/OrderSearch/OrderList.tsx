@@ -97,6 +97,8 @@ const OrderTable: React.FC = () => {
     setStoredColumn(listParamsStore);
   };
 
+  console.log(orderList);
+
   return (
     <Card>
       <BlockFilter

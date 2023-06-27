@@ -18,6 +18,8 @@ import { LabelColor } from "components/label/types";
 import { ORDER_STATUS_NAME } from "./OrderConstant";
 import FullScreenDialogs from "../screens/OrderProcessing/DialogOrderSelected";
 import DialogOrderUpdate from "../screens/OrderUpdate";
+import { getImageToAws } from "utils/imageHandler";
+import ImagePopup from "../components/ImagePopup";
 
 export const PaperType = ({ paperId }: { paperId: number }) => {
   const listPaper = useAppSelector(PaperTypeSelector.getListPaper);
@@ -96,6 +98,25 @@ export const OrderColumnTable: GridColDef<IOrder>[] = [
     minWidth: 150,
     headerAlign: "center",
     align: "center",
+  },
+  {
+    field: "images",
+    headerName: "Ảnh đơn hàng",
+    minWidth: 200,
+    headerAlign: "center",
+    align: "center",
+    renderCell: ({ value = [] }: GridRenderCellParams<IOrder>) => {
+      if (!value || value?.length < 0)
+        return <Iconify width={ICON.NAV_ITEM} icon="mdi:image-off-outline" />;
+      const imgUrl = getImageToAws(value[0]);
+      return <ImagePopup url={[imgUrl]} />;
+    },
+  },
+  {
+    field: "order_detail_notes",
+    headerName: "Ghi chú sản xuất",
+    minWidth: 200,
+    valueGetter: ({ value }) => (value ? value : "-"),
   },
   {
     field: "name",
@@ -182,7 +203,7 @@ export const OrderColumnTable: GridColDef<IOrder>[] = [
     renderCell: ({ row }: GridRenderCellParams<IOrder>) => {
       const theme = useTheme();
       const iconVat = row.vat ? "ic:outline-info" : "healthicons:yes-outline";
-      const colorVat = row.vat ? theme.palette.error : theme.palette.primary;
+      const colorVat = row.vat ? theme.palette.primary : theme.palette.error;
       return (
         <Iconify width={ICON.NAV_ITEM} icon={iconVat} color={colorVat.main} />
       );

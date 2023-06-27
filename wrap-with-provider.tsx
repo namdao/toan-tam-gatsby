@@ -29,7 +29,6 @@ export const wrapRootProvider = ({ element }) => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         {element}
-        <CommonManager />
       </PersistGate>
     </Provider>
   );
@@ -47,7 +46,9 @@ export const wrapPageProvider = ({ element }) => {
           <ThemeProvider>
             <ThemeSettings>
               <ThemeLocalization>
-                <SnackbarProvider>{element}</SnackbarProvider>
+                <SnackbarProvider>
+                  <CommonManager>{element}</CommonManager>
+                </SnackbarProvider>
               </ThemeLocalization>
             </ThemeSettings>
           </ThemeProvider>

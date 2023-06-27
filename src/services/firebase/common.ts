@@ -51,7 +51,6 @@ export const getTableColumn = async (
     if (app) {
       const docRef = doc(app, "users", data.user);
       const docSnapshot = await getDoc(docRef);
-      console.log("dsads");
       if (docSnapshot.exists()) {
         const dataColumn = docSnapshot.data();
         if (dataColumn[data.type]) {

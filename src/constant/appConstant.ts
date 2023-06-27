@@ -33,6 +33,10 @@ const appConstant = {
     CUSTOMER_DEBIT: "/customer-debit",
     REPORT_CUSTOMER: "/reports/customers",
     REPORT_CUSTOMER_DETAIL: (id: number) => `/reports/customers/${id}`,
+    CREATE_ORDER: "/orders/create",
+    REQUEST_UPLOAD_IMAGE: (id: number) => `/orders/${id}/uploads`,
+    DELETE_IMAGE: (id: number) => `/orders/${id}/remove-image`,
+    NOTIFICATION: "/notifications",
   },
   LANGS_DEFAULT: "vi",
   ROLES: {
@@ -45,5 +49,6 @@ const appConstant = {
     ACCOUNTANT: "Accountant",
     MANAGER: "Manager",
   },
+  URL_IMG: "https://toantam-order-images.s3.amazonaws.com/",
 };
 export default appConstant;

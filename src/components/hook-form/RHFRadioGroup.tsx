@@ -17,7 +17,7 @@ import {
 
 type Props = RadioGroupProps & {
   name: string;
-  options: { label: string; value: any }[];
+  options: { label: string; value: any; disable?: boolean }[];
   label?: string;
   spacing?: number;
   helperText?: React.ReactNode;
@@ -64,6 +64,7 @@ export default function RHFRadioGroup({
                 value={option.value}
                 control={<Radio />}
                 label={option.label}
+                disabled={option.disable}
                 sx={{
                   "&:not(:last-of-type)": {
                     mb: spacing || 0,

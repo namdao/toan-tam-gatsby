@@ -1,4 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  createRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import Box from "@mui/material/Box";
 import {
   DataGridPro,
@@ -25,12 +30,16 @@ import { AuthSelector } from "scenes/auth/redux/slice";
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
-
+type IMagicTableRef = {
+  refreshList: () => void;
+};
 type IPropsOrderTable = {
   status: ORDER_STATUS_NAME;
 };
+export const magicOrderProcessingRef = createRef<IMagicTableRef>();
+
 const OrderTable: React.FC<IPropsOrderTable> = ({ status }) => {
-  const { onNextPage } = useOrderAllStatus(status);
+  const { onNextPage, onOrderWithStatus } = useOrderAllStatus(status);
   const [storedColumn, setStoredColumn] = useState<Record<string, boolean>>({});
   const dispatch = useAppDispatch();
   const filter = useAppSelector(OrdersSelector.getFilterOrder);
@@ -41,7 +50,9 @@ const OrderTable: React.FC<IPropsOrderTable> = ({ status }) => {
     OrdersSelector.getTotalByStatus(state, status)
   );
   const currentUser = useAppSelector(AuthSelector.getProfile);
-
+  useImperativeHandle(magicOrderProcessingRef, () => ({
+    refreshList: onOrderWithStatus,
+  }));
   useEffect(() => {
     const getColumn = async () => {
       const columnStored = await getTableColumn({

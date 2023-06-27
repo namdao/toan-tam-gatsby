@@ -20,7 +20,7 @@ import {
 } from "../redux/types";
 
 export const useCategory = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [listCategory, setListCategory] = useState<IDataTableCategory[]>([]);
   const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -133,6 +133,7 @@ export const useCategory = () => {
 
   const onGetCategoriesLikeMobile = async () => {
     try {
+      setLoading(true);
       const result: IResponseType<IResCategories> =
         await apiGetCategoriesLikeMobiles();
       if (result.data) {
@@ -145,6 +146,8 @@ export const useCategory = () => {
           variant: "error",
         }
       );
+    } finally {
+      setLoading(false);
     }
   };
 

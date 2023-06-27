@@ -11,7 +11,6 @@ export interface LogoProps extends BoxProps {
 const Logo = forwardRef<HTMLDivElement, LogoProps>(
   ({ disabledLink = false, sx, sizeLogo = 200, ...other }, ref) => {
     const theme = useTheme();
-
     const PRIMARY_LIGHT = theme.palette.primary.light;
 
     const PRIMARY_MAIN = theme.palette.primary.main;

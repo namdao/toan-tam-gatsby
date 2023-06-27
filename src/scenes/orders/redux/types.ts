@@ -7,7 +7,11 @@ import {
 } from "constant/commonType";
 import { IResUser } from "scenes/auth/redux/types";
 import { IColor } from "scenes/printtype/redux/types";
-import { ORDER_STATUS_NAME, SEARCH_BY } from "../helper/OrderConstant";
+import {
+  ORDER_STATUS_NAME,
+  SEARCH_BY,
+  ORDER_TYPE,
+} from "../helper/OrderConstant";
 
 export type IResTotalDebigProgress = {
   total_debit: number;
@@ -74,7 +78,7 @@ export type IOrder = {
   note: string;
   number_print_face: number;
   order_no: string;
-  order_type: "CUSTOM";
+  order_type: ORDER_TYPE;
   outsource_after_print: null;
   outsource_date: number | null;
   outsource_ids: number[];
@@ -99,6 +103,7 @@ export type IOrder = {
   vat: boolean;
   vat_value: number;
   who_collect_money: string;
+  images: string[];
 };
 export type IResOrder2Status = {
   items: IOrder[];
@@ -142,7 +147,7 @@ export type IOrderDetail = {
   notes: INotes[];
   number_print_face: number;
   order_no: string;
-  order_type: "CUSTOM";
+  order_type: ORDER_TYPE;
   outsource_date: string | null;
   outsource_ids: number[];
   outsources: IOurSources[];
@@ -168,6 +173,8 @@ export type IOrderDetail = {
   vat: boolean;
   vat_value: number;
   who_collect_money: string;
+  images: string[];
+  order_detail_notes: string;
 };
 
 export type IRequestUpdateOrder = {
@@ -228,4 +235,91 @@ export type IReqPrintDoneOrder = {
   note: string;
   status: ORDER_STATUS_NAME;
   outsource_date: string;
+};
+
+export type IReqCreateOrder = {
+  customer_id: number;
+  delivery_address: string;
+  delivery_date: string;
+  receiver_info: string;
+  // order info
+  order_type: ORDER_TYPE;
+  name: string;
+  method: string;
+  category_id: number;
+  paper_id: number;
+  print_type_ids: number[];
+  number_print_face: number;
+  outsource_ids?: number[];
+  // payment info
+  template_number: number;
+  quantity: number;
+  unit_price: number;
+  design_fee: number;
+  shipping_fee: number;
+  deposite: number;
+  vat: boolean;
+  status: ORDER_STATUS_NAME;
+  payment_method: string;
+  note: string;
+  order_detail_notes: string;
+};
+
+export type IResCreateOrder = {
+  id: number;
+  created_time: string;
+  updated_time: string;
+  order_no: string;
+  name: string | null;
+  user_id: number | null;
+  creator_id: number;
+  customer_id: number;
+  category_id: number;
+  paper_id: number;
+  quantity: number | null;
+  template_number: number | null;
+  reference_order: null | number;
+  unit_price: number | null;
+  deposite: number | null;
+  design_fee: null | number;
+  shipping_fee: null | number;
+  note: null | string;
+  order_detail_notes: null | string;
+  delivery_date: string | null;
+  payment_method: string | null;
+  vat: boolean;
+  print_type_ids: number[] | [];
+  outsource_ids: number[] | [];
+  status: ORDER_STATUS_NAME;
+  number_print_face: number | null;
+  method: string | null;
+  delivery_address: string | null;
+  receiver_info: string | null;
+  receiver_phone: null;
+  outsource_date: null;
+  order_type: ORDER_TYPE;
+  cash: number;
+  cod: null | number;
+  company_debit: null | number;
+  done: boolean;
+  need_check: boolean;
+  debt: boolean;
+  vat_value: number;
+  tracking_id: string;
+  deliver_provider: string;
+  money_source: string;
+  who_collect_money: string;
+  date_collect_money: null | string;
+  confirmed_money: boolean;
+  images: null | string[];
+};
+
+export type IResUrlUpload = {
+  upload_url: string;
+};
+
+export type IQuickUpdateOrder = {
+  id: number;
+  note: string;
+  status: ORDER_STATUS_NAME;
 };

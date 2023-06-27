@@ -4,8 +4,6 @@ import { useFormContext, Controller } from "react-hook-form";
 // @mui
 import { Autocomplete, AutocompleteProps, TextField } from "@mui/material";
 
-// ----------------------------------------------------------------------
-
 interface Props<
   T,
   Multiple extends boolean | undefined,
@@ -29,28 +27,29 @@ export default function RHFAutocomplete<
   ...other
 }: Omit<Props<T, Multiple, DisableClearable, FreeSolo>, "renderInput">) {
   const { control, setValue } = useFormContext();
-
   return (
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState: { error } }) => (
-        <Autocomplete
-          {...field}
-          onChange={(event, newValue) =>
-            setValue(name, newValue, { shouldValidate: true })
-          }
-          renderInput={(params) => (
-            <TextField
-              label={label}
-              error={!!error}
-              helperText={error ? error?.message : helperText}
-              {...params}
-            />
-          )}
-          {...other}
-        />
-      )}
+      render={({ field, fieldState: { error }, formState }) => {
+        return (
+          <Autocomplete
+            value={field.value}
+            onChange={(event, newValue) => {
+              setValue(name, newValue, { shouldValidate: true });
+            }}
+            renderInput={(params) => (
+              <TextField
+                label={label}
+                error={!!error}
+                helperText={error ? error?.message : helperText}
+                {...params}
+              />
+            )}
+            {...other}
+          />
+        );
+      }}
     />
   );
 }

@@ -59,9 +59,11 @@
     "react-helmet": "6.1.0",
     "react-hook-form": "7.43.2",
     "react-i18next": "12.2.0",
+    "react-input-mask": "^3.0.0-alpha.2",
     "react-lazy-load-image-component": "1.5.6",
     "react-number-format": "5.1.4",
     "react-redux": "8.0.5",
+    "react-virtualized": "9.22.4",
     "react-to-print": "^2.14.12",
     "redux-form": "8.3.9",
     "redux-persist": "6.0.0",
@@ -69,6 +71,7 @@
     "simplebar-react": "3.2.1",
     "stylis": "4.1.2",
     "stylis-plugin-rtl": "2.1.1",
+    "yet-another-react-lightbox": "3.11.1",
     "yup": "1.0.1"
   },
   "devDependencies": {
@@ -79,6 +82,8 @@
     "@types/react-dom": "18.0.10",
     "@types/react-helmet": "5.0.21",
     "@types/react-lazy-load-image-component": "1.5.2",
+    "@types/react-input-mask": "3.0.2",
+    "@types/react-virtualized": "9.21.22",
     "@types/stylis": "4.0.2",
     "eslint": "8.34.0",
     "eslint-config-airbnb": "19.0.4",

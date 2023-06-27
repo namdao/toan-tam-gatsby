@@ -14,11 +14,18 @@ import Iconify from "components/iconify";
 import { PATH_APP } from "constant/routeConstant";
 
 const navigateDebitDetail =
-  (company_id: number, company_name: string) => () => {
+  (
+    company_id: number,
+    company_name: string,
+    total_debit: number,
+    total_paid: number,
+    delta: number
+  ) =>
+  () => {
     navigate(
       PATH_APP.statistic.debitDetail.replace(
         ":company_id",
-        `${company_id.toString()}?company=${company_name}`
+        `${company_id.toString()}?company=${company_name}&total_debit=${total_debit}&total_paid=${total_paid}&delta=${delta}`
       )
     );
   };
@@ -31,7 +38,13 @@ export const DebitCustomerColumn: GridColDef[] = [
     getActions: ({ row }: GridRowParams<ICustomerDebit>) => [
       <GridActionsCellItem
         label="Chi tiết"
-        onClick={navigateDebitDetail(row.company_id, row.company_name)}
+        onClick={navigateDebitDetail(
+          row.company_id,
+          row.company_name,
+          row.total_debit,
+          row.total_paid,
+          row.delta
+        )}
         icon={<Iconify width={ICON.NAV_ITEM} icon="la:share-square" />}
       />,
     ],

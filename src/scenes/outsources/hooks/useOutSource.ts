@@ -14,12 +14,59 @@ import {
   apiUpdateOutSource,
 } from "../redux/api";
 import { compareIdDesc } from "utils/utility";
+import { useAppDispatch } from "store";
+import { outsourceActions } from "../redux/slice";
 
 export const useOutSource = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
   const { translate } = useLocales();
   const [outsourceList, setOutSourceList] = useState<IOutSource[]>([]);
   const { enqueueSnackbar } = useSnackbar();
+
+  const onGetOutSourceListForOtherPage = async () => {
+    try {
+      setLoading(true);
+      const result: IResponseType<IResOutSourceType> =
+        await apiGetOutSourceList();
+      if (result?.data) {
+        let dataCombine: IOutSource[] = [];
+        const keysCat = Object.keys(result.data);
+        keysCat.forEach((e) => {
+          const listByParent = result?.data?.[e] || [];
+          dataCombine = dataCombine.concat(listByParent);
+        });
+        const listOutSourceParse = dataCombine.map((e) => {
+          return {
+            ...e,
+            label: e.name,
+          };
+        });
+        const listFinalOutsource = [
+          ...[
+            {
+              id: 0,
+              label: "Không cán màng",
+              group: "Gia công khác",
+              max_select: 1,
+              name: "Không cán màng",
+            },
+          ],
+          ...listOutSourceParse,
+        ];
+        dispatch(outsourceActions.setOutsourceSuccess(listFinalOutsource));
+      }
+    } catch (error) {
+      enqueueSnackbar(
+        (error as Error)?.message || "onGetOutSourceListForOtherPage error",
+        {
+          variant: "error",
+        }
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const onGetOutSourceList = async (action: "idle" | "refresh") => {
     try {
@@ -130,5 +177,6 @@ export const useOutSource = () => {
     onAddNewOutSource,
     onUpdateOutSource,
     onDeleteOutSource,
+    onGetOutSourceListForOtherPage,
   };
 };

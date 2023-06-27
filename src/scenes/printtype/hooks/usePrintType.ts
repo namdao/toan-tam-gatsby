@@ -2,6 +2,7 @@ import { IResponseType } from "constant/commonType";
 import { useLocales } from "locales";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
+import { useAppDispatch } from "store";
 import { compareIdDesc } from "utils/utility";
 import {
   apiAddPrintType,
@@ -9,6 +10,7 @@ import {
   apiGetPrintType,
   apiUpdatePrintType,
 } from "../redux/api";
+import { printTypeActions } from "../redux/slice";
 import { IColor, IReqPrintType, IResPrintType } from "../redux/types";
 
 export const usePrintType = () => {
@@ -16,6 +18,31 @@ export const usePrintType = () => {
   const [listPrintType, setListPrintType] = useState<IColor[]>([]);
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();
+  const dispatch = useAppDispatch();
+
+  const onGetPrintTypesAnotherPage = async () => {
+    try {
+      setLoading(true);
+      const result: IResponseType<IResPrintType> = await apiGetPrintType();
+      if (result.data && result.data.color) {
+        const dataSort = result.data.color.sort(compareIdDesc);
+        dispatch(printTypeActions.setPrintTypeSuccess(dataSort));
+      } else {
+        enqueueSnackbar(translate("printtype.error.printTypeList"), {
+          variant: "error",
+        });
+      }
+    } catch (error) {
+      enqueueSnackbar(
+        (error as Error)?.message || "onGetPrintTypesAnotherPage error",
+        {
+          variant: "error",
+        }
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
   const onGetPrintTypes = async (action: "idle" | "refresh") => {
     try {
       action === "idle" && setLoading(true);
@@ -111,5 +138,6 @@ export const usePrintType = () => {
     loading,
     listPrintType,
     setListPrintType,
+    onGetPrintTypesAnotherPage,
   };
 };

@@ -4,7 +4,12 @@ import { useFormContext, Controller } from "react-hook-form";
 // @mui
 import { FormHelperText } from "@mui/material";
 //
-// import { UploadAvatar, Upload, UploadBox, UploadProps } from "../upload";
+import {
+  UploadAvatar,
+  Upload,
+  UploadBox,
+  UploadProps,
+} from "components/upload";
 
 // ----------------------------------------------------------------------
 
@@ -13,11 +18,8 @@ interface Props extends Omit<any, "file"> {
   multiple?: boolean;
 }
 
-// ----------------------------------------------------------------------
-
 export function RHFUploadAvatar({ name, ...other }: Props) {
   const { control } = useFormContext();
-  return <></>;
   return (
     <Controller
       name={name}
@@ -44,11 +46,8 @@ export function RHFUploadAvatar({ name, ...other }: Props) {
   );
 }
 
-// ----------------------------------------------------------------------
-
 export function RHFUploadBox({ name, ...other }: Props) {
   const { control } = useFormContext();
-  return <></>;
   return (
     <Controller
       name={name}
@@ -60,11 +59,8 @@ export function RHFUploadBox({ name, ...other }: Props) {
   );
 }
 
-// ----------------------------------------------------------------------
-
 export function RHFUpload({ name, multiple, helperText, ...other }: Props) {
   const { control } = useFormContext();
-  return <></>;
   return (
     <Controller
       name={name}

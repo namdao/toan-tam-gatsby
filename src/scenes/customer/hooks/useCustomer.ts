@@ -13,11 +13,13 @@ import { customerActions } from "../redux/slice";
 import { IReqAddCustomer, IResCustomerList } from "../redux/types";
 
 export const useCustomer = () => {
+  const [loadingCustomer, setLoadingCustomer] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   const { translate } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
   const getCustomerList = async (isData = false) => {
     try {
+      setLoadingCustomer(true);
       if (!isData) {
         dispatch(customerActions.requestCustomer());
       }
@@ -32,6 +34,8 @@ export const useCustomer = () => {
     } catch (error) {
       enqueueSnackbar((error as Error)?.message || "getCustomerList error");
       dispatch(customerActions.requestCustomerFailed());
+    } finally {
+      setLoadingCustomer(false);
     }
   };
 
@@ -84,5 +88,5 @@ export const useCustomer = () => {
     }
     return status;
   };
-  return { getCustomerList, onAddCustomer, onUpdateCustomer };
+  return { getCustomerList, onAddCustomer, onUpdateCustomer, loadingCustomer };
 };

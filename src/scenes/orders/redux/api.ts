@@ -2,6 +2,8 @@ import axios from "axios";
 import appConstant from "constant/appConstant";
 import { ORDER_STATUS_NAME } from "../helper/OrderConstant";
 import {
+  IQuickUpdateOrder,
+  IReqCreateOrder,
   IReqOrderCategoryStatus,
   IReqOrderListCollect,
   IReqOrderListConfirm,
@@ -76,3 +78,21 @@ export const apiRejectOrder = (id: number, data: IReqRejectOrder) =>
 
 export const apiDonePrintOrder = (id: number, data: IReqPrintDoneOrder) =>
   axios.put(API_URL.ORDERS_ACTIONS(id), data);
+
+export const apiCreateOrder = (data: IReqCreateOrder) =>
+  axios.post(API_URL.CREATE_ORDER, data);
+
+export const apiRequestUploadImg = (id: number, filename: string) =>
+  axios.post(API_URL.REQUEST_UPLOAD_IMAGE(id), { filename });
+
+export const apiUpdateOrderCreate = (
+  orderId: number,
+  data: IReqCreateOrder | IQuickUpdateOrder
+) => axios.put(API_URL.ORDERS_ACTIONS(orderId), data);
+
+export const apiRemoveImg = (orderId: number, image_name: string) =>
+  axios.delete(API_URL.DELETE_IMAGE(orderId), {
+    data: {
+      image_name,
+    },
+  });

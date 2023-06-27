@@ -3,6 +3,7 @@ import { Tab, Tabs, Card } from "@mui/material";
 import {
   ORDER_STATUS_NAME,
   ORDER_TAB_PROCESSING,
+  ORDER_TAB_PROCESSING_FOR_SALE,
 } from "scenes/orders/helper/OrderConstant";
 import { useLocales } from "locales";
 import Label from "components/label";
@@ -14,6 +15,8 @@ import OrderTable from "./OrderTable";
 import BlockFilter from "./BlockFilter";
 import BlockDescription from "./BlockDescription";
 import { shallowEqual } from "react-redux";
+import { AuthSelector } from "scenes/auth/redux/slice";
+import { ROLES } from "scenes/users/helper/RoleConstants";
 
 const tabChild = (
   tab: IOrderTabProcessing,
@@ -29,6 +32,7 @@ const tabChild = (
   const total = useAppSelector((state) =>
     OrdersSelector.getTotalByStatus(state, tab.value)
   );
+
   useEffect(() => {
     setTimeout(() => {
       onOrderWithStatus();
@@ -60,7 +64,7 @@ const OrderList = () => {
     ORDER_STATUS_NAME.DESIGNED
   );
   const dispatch = useAppDispatch();
-
+  const roleUser = useAppSelector(AuthSelector.getRolesUser);
   useEffect(() => {
     return () => {
       dispatch(ordersAction.resetFilter());
@@ -74,6 +78,10 @@ const OrderList = () => {
     handleFilterStatus(newValue);
   };
 
+  const TAB_BY_ROLES =
+    roleUser[0].name === ROLES.Admin || roleUser[0].name === ROLES.Saler
+      ? ORDER_TAB_PROCESSING_FOR_SALE
+      : ORDER_TAB_PROCESSING;
   return (
     <Card>
       <BlockDescription />
@@ -85,7 +93,7 @@ const OrderList = () => {
           bgcolor: "background.neutral",
         }}
       >
-        {ORDER_TAB_PROCESSING.map((tab) => tabChild(tab, filterStatus))}
+        {TAB_BY_ROLES.map((tab) => tabChild(tab, filterStatus))}
       </Tabs>
       <BlockFilter />
       <OrderTable status={filterStatus} />

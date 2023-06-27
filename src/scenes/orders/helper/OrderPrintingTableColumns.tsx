@@ -11,6 +11,10 @@ import FullScreenDialogs from "../screens/OrderProcessing/DialogOrderSelected";
 import { PaperType } from "./OrderTableColumns";
 import OrderBtnDone from "../screens/OrderPrinting/OrderBtnDone";
 import OrderBtnReject from "../screens/OrderPrinting/OrderBtnReject";
+import { getImageToAws } from "utils/imageHandler";
+import Iconify from "components/iconify";
+import ImagePopup from "../components/ImagePopup";
+import { ICON } from "constant/layoutConstant";
 
 export const OrderPrintingTableColumns: GridColDef<IOrderDetail>[] = [
   {
@@ -36,6 +40,25 @@ export const OrderPrintingTableColumns: GridColDef<IOrderDetail>[] = [
     field: "name",
     headerName: "Tên file",
     minWidth: 300,
+  },
+  {
+    field: "images",
+    headerName: "Ảnh đơn hàng",
+    minWidth: 200,
+    headerAlign: "center",
+    align: "center",
+    renderCell: ({ value = [] }: GridRenderCellParams<IOrderDetail>) => {
+      if (!value || value?.length < 0)
+        return <Iconify width={ICON.NAV_ITEM} icon="mdi:image-off-outline" />;
+      const imgUrl = getImageToAws(value[0]);
+      return <ImagePopup url={[imgUrl]} />;
+    },
+  },
+  {
+    field: "order_detail_notes",
+    headerName: "Ghi chú sản xuất",
+    minWidth: 200,
+    valueGetter: ({ value }) => (value ? value : "-"),
   },
   {
     field: "category",

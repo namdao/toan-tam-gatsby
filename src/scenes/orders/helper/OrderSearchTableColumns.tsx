@@ -11,6 +11,11 @@ import Label from "components/label";
 import { fNumber } from "utils/formatNumber";
 import { LabelColor } from "components/label/types";
 import FullScreenDialogs from "../screens/OrderProcessing/DialogOrderSelected";
+import Iconify from "components/iconify";
+import { getImageToAws } from "utils/imageHandler";
+import ImagePopup from "../components/ImagePopup";
+import { ICON } from "constant/layoutConstant";
+import DialogOrderUpdate from "../screens/OrderUpdate";
 
 const PaperType = ({ paperId }: { paperId: number }) => {
   const listPaper = useAppSelector(PaperTypeSelector.getListPaper);
@@ -39,6 +44,11 @@ export const OrderSearchColumnTable: GridColDef[] = [
     minWidth: 100,
     getActions: ({ row }: GridRowParams<IOrder>) => [
       <FullScreenDialogs orderId={row.id} orderName={row.order_no} />,
+      <DialogOrderUpdate
+        orderId={row.id}
+        orderName={row.order_no}
+        fromPage="ORDER_SEARCH"
+      />,
     ],
   },
   {
@@ -57,6 +67,25 @@ export const OrderSearchColumnTable: GridColDef[] = [
     field: "name",
     headerName: "Tên file",
     minWidth: 300,
+  },
+  {
+    field: "images",
+    headerName: "Ảnh đơn hàng",
+    minWidth: 200,
+    headerAlign: "center",
+    align: "center",
+    renderCell: ({ value = [] }: GridRenderCellParams<IOrder>) => {
+      if (!value || value?.length < 0)
+        return <Iconify width={ICON.NAV_ITEM} icon="mdi:image-off-outline" />;
+      const imgUrl = getImageToAws(value[0]);
+      return <ImagePopup url={[imgUrl]} />;
+    },
+  },
+  {
+    field: "order_detail_notes",
+    headerName: "Ghi chú sản xuất",
+    minWidth: 200,
+    valueGetter: ({ value }) => (value ? value : "-"),
   },
   {
     field: "category_name",

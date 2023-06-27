@@ -14,6 +14,8 @@ import { useTheme } from "@mui/material/styles";
 import { format } from "date-fns";
 import FullScreenDialogs from "../screens/OrderProcessing/DialogOrderSelected";
 import DialogOrderUpdate from "../screens/OrderUpdate";
+import { getImageToAws } from "utils/imageHandler";
+import ImagePopup from "../components/ImagePopup";
 
 export const OrderNeedCheckTableColumns: GridColDef[] = [
   {
@@ -54,6 +56,25 @@ export const OrderNeedCheckTableColumns: GridColDef[] = [
     field: "name",
     headerName: "Tên file",
     minWidth: 300,
+  },
+  {
+    field: "images",
+    headerName: "Ảnh đơn hàng",
+    minWidth: 200,
+    headerAlign: "center",
+    align: "center",
+    renderCell: ({ value = [] }: GridRenderCellParams<IOrder>) => {
+      if (!value || value?.length < 0)
+        return <Iconify width={ICON.NAV_ITEM} icon="mdi:image-off-outline" />;
+      const imgUrl = getImageToAws(value[0]);
+      return <ImagePopup url={[imgUrl]} />;
+    },
+  },
+  {
+    field: "order_detail_notes",
+    headerName: "Ghi chú sản xuất",
+    minWidth: 200,
+    valueGetter: ({ value }) => (value ? value : "-"),
   },
   {
     field: "category_name",
@@ -123,7 +144,7 @@ export const OrderNeedCheckTableColumns: GridColDef[] = [
     renderCell: ({ row }: GridRenderCellParams<IOrder>) => {
       const theme = useTheme();
       const iconVat = row.vat ? "ic:outline-info" : "healthicons:yes-outline";
-      const colorVat = row.vat ? theme.palette.error : theme.palette.primary;
+      const colorVat = row.vat ? theme.palette.primary : theme.palette.error;
       return (
         <Iconify width={ICON.NAV_ITEM} icon={iconVat} color={colorVat.main} />
       );

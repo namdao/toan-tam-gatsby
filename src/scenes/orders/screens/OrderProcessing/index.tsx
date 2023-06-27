@@ -1,5 +1,5 @@
-import React from "react";
-import { Container } from "@mui/material";
+import React, { useEffect } from "react";
+import { Container, Box } from "@mui/material";
 import { useLocales } from "locales";
 import { SettingsSelector } from "services/settings/redux/slice";
 import { useAppSelector } from "store";

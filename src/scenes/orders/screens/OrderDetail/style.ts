@@ -7,8 +7,8 @@ export const StyledIcon = styled(Iconify)(({ theme }) => ({
   height: 20,
   marginTop: 1,
   flexShrink: 0,
-  marginRight: theme.spacing(2),
+  marginRight: theme.spacing(1),
 }));
 export const StyleTitleTypo = styled(Typography)(() => ({
-  paddingRight: 6,
+  paddingRight: 2,
 }));

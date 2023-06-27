@@ -13,7 +13,7 @@ import { companyActions } from "../redux/slice";
 import { IReqAddCompany, IResCompanies } from "../redux/types";
 
 export const useCompany = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { translate } = useLocales();

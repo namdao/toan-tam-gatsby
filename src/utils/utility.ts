@@ -8,13 +8,18 @@ const { ROLES } = appConstant;
 export const isBrowser = typeof window !== `undefined`;
 
 export const getTotalAmount = (order: IOrder | IOrderDetail) => {
-  const { deposite } = order || {};
+  const { deposite = 0 } = order || {};
   return getTotalFee(order) - deposite;
 };
 
 export const getTotalFee = (order: IOrder | IOrderDetail) => {
-  const { template_number, unit_price, quantity, shipping_fee, design_fee } =
-    order || {};
+  const {
+    template_number = 0,
+    unit_price = 0,
+    quantity = 0,
+    shipping_fee = 0,
+    design_fee = 0,
+  } = order || {};
   return template_number * unit_price * quantity + shipping_fee + design_fee;
 };
 

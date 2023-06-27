@@ -30,7 +30,7 @@ import OrderWaitingPrint from "scenes/orders/screens/OrderWaitingPrint";
 import DebitCompany from "scenes/statistic/screens/DebitCompany";
 import DebitCompanyDetail from "scenes/statistic/screens/DebitCompanyDetail";
 import StatiscticsCustomerDetail from "scenes/statistic/screens/StatiscticsCustomerDetail";
-// import OrderCreate from "scenes/orders/screens/OrderCreate";
+import OrderCreate from "scenes/orders/screens/OrderCreate";
 
 const { ROLES } = appConstant;
 const iconify = (name: string) => <Iconify width={ICON.NAV_ITEM} icon={name} />;
@@ -125,14 +125,14 @@ const navConfig = [
           ROLES.STORE,
         ],
       },
-      // {
-      //   title: "order.create",
-      //   path: PATH_APP.order.create,
-      //   component: OrderCreate,
-      //   hideMenu: true,
-      //   children: [],
-      //   roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.SALER],
-      // },
+      {
+        title: "order.create",
+        path: PATH_APP.order.create,
+        component: OrderCreate,
+        hideMenu: true,
+        children: [],
+        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.SALER],
+      },
       {
         title: "order.update",
         path: PATH_APP.order.update.route,

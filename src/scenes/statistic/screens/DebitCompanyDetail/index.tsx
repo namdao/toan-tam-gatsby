@@ -4,6 +4,7 @@ import { parseInt } from "lodash";
 import React, { FC } from "react";
 import { SettingsSelector } from "services/settings/redux/slice";
 import { useAppSelector } from "store";
+import BlockSumaryDebit from "./BlockDebitSummary";
 import Header from "./BlockHeader";
 import TableListDebitDetail from "./TableListDebitDetail";
 
@@ -16,9 +17,17 @@ const DebitCompanyDetail: FC<Props> = ({ location, company_id }) => {
   const themeStretch = useAppSelector(SettingsSelector.getThemeStretch);
 
   const titleCompany = params.get("company") || "";
+  const totalDebit = parseInt(params.get("total_debit") || "0");
+  const totalPaid = parseInt(params.get("total_paid") || "0");
+  const delta = parseInt(params.get("delta") || "0");
   return (
     <Container maxWidth={themeStretch ? false : "xl"}>
       <Header title={titleCompany} />
+      <BlockSumaryDebit
+        totalDebit={totalDebit}
+        totalPaid={totalPaid}
+        delta={delta}
+      />
       <TableListDebitDetail company_id={parseInt(company_id)} />
     </Container>
   );

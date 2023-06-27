@@ -29,7 +29,7 @@ const init = (): void => {
 
 const setBaseUrl = (newUrl: string): string => {
   let newBaseUrl = "";
-  if (process.env.IS_TEST_MODE === "false") {
+  if (process.env.IS_TEST_MODE !== "false") {
     newBaseUrl = appConstant.ENV.PROD;
   } else if (newUrl) {
     newBaseUrl = newUrl;
@@ -82,7 +82,13 @@ const setupOnResponseInterceptors = () => {
         const messageFinal = firstMessage?.[0] || firstMessage;
         enqueueSnackbar(messageFinal, { variant: "error" });
       } else {
-        enqueueSnackbar(messages || message || messasge, { variant: "error" });
+        enqueueSnackbar(
+          messages ||
+            message ||
+            messasge ||
+            JSON.stringify(response.data.errors),
+          { variant: "error" }
+        );
       }
     }
     return response?.data;
