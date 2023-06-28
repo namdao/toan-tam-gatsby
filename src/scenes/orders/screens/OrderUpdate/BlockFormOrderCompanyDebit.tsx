@@ -50,6 +50,7 @@ type FormValuesProps = {
   done: boolean;
   debt: boolean;
   need_check: boolean;
+  note: string;
 };
 const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
   handleClose,
@@ -77,6 +78,7 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
     money_source: Yup.string().required(
       translate("orders.orderUpdate.error.moneySource")
     ),
+    note: Yup.string().required(translate("orders.orderUpdate.error.notes")),
   });
 
   const defaultValues = {
@@ -239,6 +241,12 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
                 label={translate("orders.orderUpdate.form.whoCollectionMoney")}
               />
             )}
+            <RHFTextField
+              name="note"
+              label={translate("orders.orderUpdate.form.note")}
+              multiline
+              rows={3}
+            />
           </Stack>
         </DialogContentText>
       </DialogContent>
