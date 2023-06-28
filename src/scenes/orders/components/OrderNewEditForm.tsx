@@ -531,8 +531,8 @@ export default function OrderNewEditForm({
             <StyledIcon icon="codicon:symbol-method" width={32} />
             <RHFInputMask
               inputMask={{
-                mask: isDisable ? "" : "999 x 999 x 999",
-                maskPlaceholder: "___ x ___ x ___",
+                mask: isDisable ? "" : "9999 x 9999 x 9999",
+                maskPlaceholder: "____ x ____ x ____",
                 alwaysShowMask: true,
                 disabled: isDisable,
               }}
