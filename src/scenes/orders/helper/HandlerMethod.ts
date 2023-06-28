@@ -12,14 +12,14 @@ export const convertMethod = (method: string) => {
   return handlerMethod;
 };
 
-const MAX_X_PATTERN = 2;
+const MAX_X_PATTERN = 3;
 export const parseMethod = (method: string) => {
   const parsePattern = method.split("x");
   let res = "";
   parsePattern.forEach((e, i) => {
     if (i > MAX_X_PATTERN) return;
     const dataTrim = e.trim();
-    const resTotal = 3 - dataTrim.length;
+    const resTotal = 4 - dataTrim.length;
     const append = Array(resTotal).fill("_").join("");
     res += `${dataTrim}${append}`;
     if (i === parsePattern.length - 1 && i < MAX_X_PATTERN) {
