@@ -114,6 +114,9 @@ export interface FormOrderValuesProps {
     | null;
   imageList: string[] | null;
   amount: number;
+  method_width: string;
+  method_height: string;
+  method_high: string;
 }
 
 type Props = {
@@ -135,7 +138,8 @@ const OrderSubmitSchema = Yup.object().shape({
   delivery_date: Yup.date().typeError("Chọn ngày giao hàng"),
   receiver_info: Yup.string().required("Nhập người nhận hàng"),
   name: Yup.string().required("Nhập file thiết kế"),
-  method: Yup.string().required("Nhập kích thước"),
+  method_width: Yup.string().required("bắt buộc"),
+  method_height: Yup.string().required("bắt buộc"),
   category_id: Yup.object().required("Chọn hàng hóa"),
   paper_id: Yup.object().required("Chọn kiểu giấy").typeError("Chọn kiểu giấy"),
   print_type_ids: Yup.object()
@@ -255,8 +259,9 @@ export default function OrderNewEditForm({
     []
   );
 
-  const defaultValues = useMemo(
-    () => ({
+  const defaultValues = useMemo(() => {
+    const splitMethod = order?.method ? order.method.split("x") : "";
+    return {
       order_type: order?.order_type || ORDER_TYPE.CUSTOM,
       customerInfo: order?.customer_id
         ? customerAutoComplete.find((e) => e.id === order.customer_id)
@@ -264,7 +269,10 @@ export default function OrderNewEditForm({
       delivery_address: order?.delivery_address || "",
       receiver_info: order?.receiver_info || "",
       name: order?.name || "",
-      method: order?.method ? parseMethod(order.method) : "",
+      method_width: order?.method ? splitMethod[0] : "",
+      method_height: order?.method ? splitMethod[1] : "",
+      method_high:
+        order?.method && splitMethod.length > 2 ? splitMethod[2] : "",
       category_id: order?.category_id
         ? categoryAutoComplete.find((e) => e.id === order.category_id)
         : null,
@@ -298,11 +306,8 @@ export default function OrderNewEditForm({
             [outsourceList[0]],
       id: order?.id,
       status: order?.status,
-    }),
-    [order]
-  );
-
-  console.log(defaultValues, outsourceList[0]);
+    };
+  }, [order]);
 
   const methods = useForm<FormOrderValuesProps>({
     resolver,
@@ -412,7 +417,6 @@ export default function OrderNewEditForm({
     setValue("image", null);
   };
   const onSubmit = async (data: FormOrderValuesProps) => {
-    console.log(data);
     if (data.id && !isCopy) {
       updateOrder(data);
     } else {
@@ -528,8 +532,52 @@ export default function OrderNewEditForm({
         </Grid>
         <Grid item xs={12} md={6}>
           <Stack sx={{ px: 3, py: 2 }} direction="row" alignItems="center">
-            <StyledIcon icon="codicon:symbol-method" width={32} />
-            <RHFInputMask
+            {/* <StyledIcon icon="codicon:symbol-method" width={32} /> */}
+            <RHFTextField
+              disabled={isDisable}
+              name="method_width"
+              inputProps={{
+                type: "number",
+                onInput: (e) => {
+                  // @ts-ignore
+                  e.target.value = Math.max(0, parseInt(e.target.value))
+                    .toString()
+                    .slice(0, 4);
+                },
+                min: 0,
+              }}
+            />
+            X
+            <RHFTextField
+              disabled={isDisable}
+              name="method_height"
+              inputProps={{
+                type: "number",
+                onInput: (e) => {
+                  // @ts-ignore
+                  e.target.value = Math.max(0, parseInt(e.target.value))
+                    .toString()
+                    .slice(0, 4);
+                },
+                min: 0,
+              }}
+            />
+            X
+            <RHFTextField
+              disabled={isDisable}
+              name="method_high"
+              inputProps={{
+                type: "number",
+                onInput: (e) => {
+                  // @ts-ignore
+                  e.target.value = Math.max(0, parseInt(e.target.value))
+                    .toString()
+                    .slice(0, 4);
+                },
+                min: 0,
+              }}
+            />
+            {/* <RHFInputMask
               inputMask={{
                 mask: isDisable ? "" : "9999 x 9999 x 9999",
                 maskPlaceholder: "____ x ____ x ____",
@@ -540,7 +588,7 @@ export default function OrderNewEditForm({
               textFieldProps={{
                 label: translate("orders.orderCreate.form.method"),
               }}
-            />
+            /> */}
           </Stack>
         </Grid>
       </Stack>

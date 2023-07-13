@@ -32,7 +32,9 @@ const parseToOrderRequest = (data: FormOrderValuesProps) => {
       typeof data.template_number === "string"
         ? parseToNumber(data?.template_number?.replaceAll(",", "") || "0")
         : data.template_number || 0,
-    method: convertMethod(data.method),
+    method: data.method_high
+      ? `${data.method_width}x${data.method_height}x${data.method_high}`
+      : `${data.method_width}x${data.method_height}`,
     delivery_date: format(data.delivery_date, "yyyy-MM-dd"),
     outsource_ids: data.outsource_ids?.map((e) => e.id),
     quantity:

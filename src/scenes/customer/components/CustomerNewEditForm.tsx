@@ -113,7 +113,6 @@ export default function CustomerNewEditForm({
     citySelect: Yup.object().required("Chọn thành phố"),
     customer_type: Yup.string().required("Chọn loại khách hàng"),
   });
-  console.log(customer);
   const defaultValues = useMemo(
     () => ({
       id: customer?.id,
