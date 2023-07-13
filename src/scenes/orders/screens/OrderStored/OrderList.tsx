@@ -13,7 +13,6 @@ import { ordersAction, OrdersSelector } from "scenes/orders/redux/slice";
 import OrderTable from "./OrderTable";
 import BlockFilter from "./BlockFilter";
 import { shallowEqual } from "react-redux";
-import { useCustomer } from "scenes/customer/hooks/useCustomer";
 import BlockDeliveryPrint, { IPropsDeliveryPrint } from "./BlockDeliveryPrint";
 import { GridRowSelectionModel } from "@mui/x-data-grid";
 

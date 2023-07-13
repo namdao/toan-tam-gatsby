@@ -13,11 +13,13 @@ import {
   GridRowSelectionModel,
   GridPaginationModel,
 } from "@mui/x-data-grid-pro";
-import { Card } from "@mui/material";
+import { Button, Card, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import BlockPrintAndSendEmail, { IPropsPrint } from "./BlockPrintAndSendEmail";
 import { useStatisticDebitCompany } from "scenes/statistic/hooks/useStatisticDebitCompany";
 import { DeibitCompanyDetailColumn } from "scenes/statistic/helper/DebitCompanyDetailColumn";
+import Counter from "components/animate/counter";
+import { useLocales } from "locales";
 
 const MemoizedRow = React.memo(GridRow);
 
@@ -26,18 +28,30 @@ export type IMagicTableNeedCollectRef = {
   onRefreshOrderList: () => void;
 };
 export const magicTableNeedCollectRef = createRef<IMagicTableNeedCollectRef>();
-const TableListDebitDetail: React.FC<{ company_id: number }> = ({
-  company_id,
-}) => {
+
+const ButtonMoney = ({ money, title }: { money: number; title: string }) => (
+  <Button variant="outlined" size="large">
+    <Stack direction="column" sx={{ p: 1 }}>
+      <Typography variant="caption">{title}</Typography>
+      <Counter from={1} to={money} variant="h6" currency="VNĐ" />
+    </Stack>
+  </Button>
+);
+
+const TableListDebitDetail: React.FC<{
+  companyId: number;
+  totalDebit: number;
+  totalPaid: number;
+  delta: number;
+}> = ({ companyId, totalDebit, totalPaid, delta }) => {
   const {
     onNextPage,
     orderList,
     total,
     pageModel,
     onGetOrdetListDebitByCompany,
-  } = useStatisticDebitCompany(company_id);
+  } = useStatisticDebitCompany(companyId);
   const buttonRef = useRef<IPropsPrint>(null);
-
   useEffect(() => {
     onGetOrdetListDebitByCompany();
   }, []);
@@ -77,6 +91,11 @@ const TableListDebitDetail: React.FC<{ company_id: number }> = ({
         sx={{ px: 2.5, py: 3 }}
       >
         <BlockPrintAndSendEmail ref={buttonRef} />
+        <Stack direction="row" spacing={2}>
+          <ButtonMoney money={totalDebit} title="Tổng nợ" />
+          <ButtonMoney money={totalPaid} title="Tổng thu" />
+          <ButtonMoney money={delta} title="Còn lại" />
+        </Stack>
       </Stack>
       <Box sx={{ height: 600, width: "100%" }}>
         <DataGridPro

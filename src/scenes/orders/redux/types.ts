@@ -216,8 +216,11 @@ export type IResOrderListDetail = IOrderDetail & {
 
 export type IReqOrderListConfirm = IPage & {
   customer_id?: number;
+  company_id?: number;
   start_date: string;
   end_date: string;
+  search_by?: "all";
+  money_source: string;
 };
 
 export type IReqOrderSearch = IPage & {

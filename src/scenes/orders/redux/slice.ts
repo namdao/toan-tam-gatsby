@@ -26,6 +26,7 @@ type IPagination = {
 };
 export type IOrdersState = Record<ORDER_STATUS_NAME, IDataOrder> & {
   filter: IFilter;
+  tabsMoneySource: Record<string, number>;
 };
 const initialState: IOrdersState = {
   filter: {
@@ -37,6 +38,7 @@ const initialState: IOrdersState = {
     updateDate: null,
     customer_id: null,
   },
+  tabsMoneySource: {},
 } as IOrdersState;
 const ordersSlice = createSlice({
   name: "orders",
@@ -116,6 +118,14 @@ const ordersSlice = createSlice({
         updateDate: null,
       };
     },
+    setTotalTabSource: (
+      state,
+      action: PayloadAction<{ source: string; total: number }>
+    ) => {
+      // if (state.tabMoneySource[action.payload.source]) {
+      state.tabsMoneySource[action.payload.source] = action.payload.total;
+      // }
+    },
   },
 });
 
@@ -140,6 +150,8 @@ const getLoadingBySumary = (
   status: ORDER_STATUS_NAME
 ): boolean => state.data.order[status]?.loadingSumary ?? true;
 const getFilterOrder = (state: RootState) => state.data.order.filter;
+const getTotalMoneySource = (state: RootState) =>
+  state.data.order.tabsMoneySource;
 // Selectors
 export const OrdersSelector = {
   getTotalByStatus,
@@ -148,6 +160,7 @@ export const OrdersSelector = {
   getFilterOrder,
   getTotalFixByStatus,
   getLoadingBySumary,
+  getTotalMoneySource,
 };
 
 // Actions

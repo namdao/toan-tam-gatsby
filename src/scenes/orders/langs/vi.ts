@@ -128,6 +128,10 @@ const OrderLangs = {
   },
   orderNeedConfirm: {
     title: "Đơn hàng cần xác nhận",
+    tabCash: "Tiền mặt",
+    tabPerson: "Cá nhân",
+    tabCompany: "Công ty",
+    tabOthers: "Khác",
   },
   orderStore: {
     title: "Đơn hàng lưu kho",

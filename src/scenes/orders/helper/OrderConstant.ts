@@ -203,9 +203,10 @@ export const LIST_MONEY_SOURCE = {
   VIB_COMPANY: "VIB công ty",
   SACOMBANK_PERSON: "Sacombank cá nhân",
   SACOMBANK_COMPANY: "Sacombank công ty",
+  CASH: "Tiền mặt",
   ZALO_PAY: "Zalo pay",
   MOMO: "Momo",
-  CASH: "Tiền mặt",
+  NULL: "",
 };
 
 export const ORDER_TAB_WAITING_PRINT: IOrderTabWaitingPrint[] = [
@@ -228,5 +229,27 @@ export const ORDER_TAB_WAITING_PRINT: IOrderTabWaitingPrint[] = [
     name: "orders.orderWaitingPrintList.other",
     value: "other",
     color: "default",
+  },
+];
+export type IOrderTabNeedConfirm = {
+  name: string;
+  value: string;
+};
+export const ORDER_TAB_NEED_CONFIRM: IOrderTabNeedConfirm[] = [
+  {
+    name: "orders.orderNeedConfirm.tabCash",
+    value: "CASH",
+  },
+  {
+    name: "orders.orderNeedConfirm.tabPerson",
+    value: "SACOMBANK_PERSON,VIB_PERSON",
+  },
+  {
+    name: "orders.orderNeedConfirm.tabCompany",
+    value: "VIB_COMPANY,SACOMBANK_COMPANY",
+  },
+  {
+    name: "orders.orderNeedConfirm.tabOthers",
+    value: "~CASH,SACOMBANK_PERSON,VIB_PERSON,VIB_COMPANY,SACOMBANK_COMPANY",
   },
 ];

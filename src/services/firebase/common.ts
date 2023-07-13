@@ -22,7 +22,6 @@ export const addTableColumn = async (data: IPropsAddColumn) => {
     if (app) {
       const docRef = doc(app, "users", data.user);
       const docSnapshot = await getDoc(docRef);
-      console.log(docSnapshot.data());
       if (!docSnapshot.exists()) {
         await setDoc(docRef, {
           [data.typeStored]: data.dataColumn,

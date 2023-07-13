@@ -33,7 +33,7 @@ export default function BlockFilter({ customer, setCustomer }: IProps) {
   const isFiltered = customer;
   return (
     <Stack
-      display="block"
+      display="row"
       spacing={2}
       alignItems="center"
       direction={{

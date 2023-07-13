@@ -852,12 +852,22 @@ export default function OrderNewEditForm({
             <RHFTextField
               name="order_detail_notes"
               label={translate("orders.orderCreate.form.notes_detail")}
+              inputProps={{
+                maxLength: 255,
+              }}
+              multiline
+              rows={3}
             />
           </Grid>
           <Grid item xs={12} md={4} sx={{ px: 3 }}>
             <RHFTextField
               name="note"
               label={translate("orders.orderCreate.form.notes")}
+              inputProps={{
+                maxLength: 255,
+              }}
+              multiline
+              rows={3}
             />
           </Grid>
           <Grid item xs={12} md={4} sx={{ alignSelf: "center" }}>
@@ -929,12 +939,22 @@ export default function OrderNewEditForm({
             <RHFTextField
               name="order_detail_notes"
               label={translate("orders.orderCreate.form.notes_detail")}
+              inputProps={{
+                maxLength: 255,
+              }}
+              multiline
+              rows={3}
             />
           </Grid>
           <Grid item xs={12} md={4} sx={{ px: 3 }}>
             <RHFTextField
               name="note"
               label={translate("orders.orderCreate.form.notes")}
+              inputProps={{
+                maxLength: 255,
+              }}
+              multiline
+              rows={3}
             />
           </Grid>
           <Grid item xs={12} md={4} sx={{ alignSelf: "center" }}>

@@ -1,4 +1,5 @@
 import React, {
+  FC,
   createRef,
   useEffect,
   useImperativeHandle,
@@ -16,7 +17,7 @@ import {
 } from "@mui/x-data-grid-pro";
 import { useListOrderConfirm } from "scenes/orders/hooks/useOrderNeedConfirm";
 import BlockFilter from "./BlockFilter";
-import { Card } from "@mui/material";
+import { Card, Tab, Tabs } from "@mui/material";
 import {
   OrderNeedConfirmTableColumns,
   pinOrderLeft,
@@ -30,6 +31,12 @@ import {
   getTableColumn,
   OrderFeature,
 } from "services/firebase/common";
+import {
+  IOrderTabNeedConfirm,
+  ORDER_TAB_NEED_CONFIRM,
+} from "scenes/orders/helper/OrderConstant";
+import { useLocales } from "locales";
+import Label from "components/label";
 
 const MemoizedRow = React.memo(GridRow);
 
@@ -38,19 +45,69 @@ export type IMagicTableRef = {
   updateRowSuccess: (row: IOrder | IOrderDetail) => void;
 };
 export const magicTableRef = createRef<IMagicTableRef>();
+
+type IPropsTab = {
+  setMoneySource: (source: IOrderTabNeedConfirm) => void;
+  moneySource: IOrderTabNeedConfirm;
+};
+const TabsSource: FC<IPropsTab> = ({ moneySource, setMoneySource }) => {
+  const { translate } = useLocales();
+  const { onOrderListConfirmByMoneySource, totalMoneySource } =
+    useListOrderConfirm();
+  useEffect(() => {
+    ORDER_TAB_NEED_CONFIRM.forEach((e) => {
+      onOrderListConfirmByMoneySource(e.value);
+    });
+  }, []);
+
+  const onChangeStatus = (
+    _event: React.SyntheticEvent<Element, Event>,
+    newValue: IOrderTabNeedConfirm
+  ) => {
+    setMoneySource(newValue);
+  };
+  return (
+    <Tabs
+      value={moneySource}
+      onChange={onChangeStatus}
+      sx={{
+        px: 2,
+        bgcolor: "background.neutral",
+      }}
+    >
+      {ORDER_TAB_NEED_CONFIRM.map((tab) => (
+        <Tab
+          key={tab.value}
+          value={tab}
+          label={translate(tab.name)}
+          icon={
+            <Label color="success" sx={{ mr: 1 }}>
+              {totalMoneySource[tab.value]}
+            </Label>
+          }
+        />
+      ))}
+    </Tabs>
+  );
+};
+
 const OrderTable: React.FC = () => {
+  const apiRef = useGridApiRef();
+  const [storedColumn, setStoredColumn] = useState<Record<string, boolean>>({});
+
   const {
     onNextPage,
     loading,
     orderList,
-    total,
+    totalMoneySource,
     customer,
     pageModel,
     setCustomer,
     onOrderListConfirm,
+    setMoneySource,
+    moneySource,
+    setOrderList,
   } = useListOrderConfirm();
-  const apiRef = useGridApiRef();
-  const [storedColumn, setStoredColumn] = useState<Record<string, boolean>>({});
   const currentUser = useAppSelector(AuthSelector.getProfile);
   useImperativeHandle(magicTableRef, () => ({
     updateRowSuccess: rowUpdate,
@@ -69,11 +126,18 @@ const OrderTable: React.FC = () => {
 
   useEffect(() => {
     onOrderListConfirm();
-  }, [customer]);
+  }, [customer, moneySource]);
 
   // if (Object.entries(storedColumn).length < 1) {
   //   return <></>;
   // }
+
+  const sortDeleteAndAddRow = (row: IOrder) => {
+    const listNeedUpdate = orderList.filter((e) => e.id !== row.id);
+    row.confirmed_money = !row.confirmed_money;
+    listNeedUpdate.push(row);
+    setOrderList(listNeedUpdate);
+  };
 
   const onChangeColumn = async (params: GridColumnVisibilityModel) => {
     const listParamsStore = {
@@ -88,9 +152,10 @@ const OrderTable: React.FC = () => {
     setStoredColumn(listParamsStore);
   };
   const rowUpdate = (row: IOrder | IOrderDetail) => {
-    apiRef.current.updateRows([
-      { id: row.id, confirmed_money: !row.confirmed_money },
-    ]);
+    // apiRef.current.updateRows([
+    //   { id: row.id, confirmed_money: !row.confirmed_money },
+    // ]);
+    sortDeleteAndAddRow(row as IOrder);
   };
   const paginationModel = pageModel;
 
@@ -100,13 +165,14 @@ const OrderTable: React.FC = () => {
 
   return (
     <Card>
+      <TabsSource setMoneySource={setMoneySource} moneySource={moneySource} />
       <BlockFilter setCustomer={setCustomer} customer={customer} />
       <Box sx={{ height: 600, width: "100%" }}>
         <DataGridPro
           apiRef={apiRef}
           loading={loading}
           rows={orderList}
-          rowCount={total}
+          rowCount={totalMoneySource[moneySource.value]}
           columns={OrderNeedConfirmTableColumns}
           columnVisibilityModel={storedColumn}
           onColumnVisibilityModelChange={onChangeColumn}

@@ -19,6 +19,7 @@ import { magicTableRef } from "../screens/OrderNeedConfirm/OrderList";
 import { useOrderUpdate } from "../hooks/useOrderUpdate";
 import { getImageToAws } from "utils/imageHandler";
 import ImagePopup from "../components/ImagePopup";
+import { LIST_MONEY_SOURCE } from "./OrderConstant";
 
 const QuickUpdateConfirm = ({ row }: { row: IOrder }) => {
   const { onUpdateOrder, loading } = useOrderUpdate(row.id);
@@ -74,6 +75,13 @@ export const OrderNeedConfirmTableColumns: GridColDef[] = [
       />,
       <QuickUpdateConfirm row={row} />,
     ],
+  },
+  {
+    field: "money_source",
+    headerName: "Nguồn thu",
+    minWidth: 200,
+    valueGetter: ({ value }: { value: keyof typeof LIST_MONEY_SOURCE }) =>
+      value ? LIST_MONEY_SOURCE[value] : "-",
   },
   {
     field: "customer_name",

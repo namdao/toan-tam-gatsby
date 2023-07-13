@@ -154,6 +154,7 @@ const DeliveryBillV2 = forwardRef(({ data }: IProps, ref) => {
               <StyledCell>Số lượng in</StyledCell>
               <StyledCell>Đơn giá</StyledCell>
               <StyledCell>Thành tiền</StyledCell>
+              <StyledCell>Tạm ứng</StyledCell>
             </TableRow>
           </TableHead>
           <TableBody sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}>
@@ -171,6 +172,9 @@ const DeliveryBillV2 = forwardRef(({ data }: IProps, ref) => {
                     <StyledCell>{fNumber(order.quantity)}</StyledCell>
                     <StyledCell>{fNumber(order.unit_price)}</StyledCell>
                     <StyledCell>{fNumber(getTotalFee(order))}</StyledCell>
+                    <StyledCell>
+                      {order.deposite ? fNumber(order.deposite) : "-"}
+                    </StyledCell>
                   </TableRow>
                 );
               })}
