@@ -226,7 +226,7 @@ export default function OrderNewEditForm({
         }
         return {
           id: e.id,
-          label: `${e.name} (${e.company?.company_name})`,
+          label: `${e.name} - ${e.phone} - (${e.company?.company_name}) `,
           customerName: e.name,
           address: fullAddress,
         };
