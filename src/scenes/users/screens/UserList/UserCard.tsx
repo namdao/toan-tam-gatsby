@@ -47,14 +47,13 @@ export default function UserCard({ user, openUser }: Props) {
     openUser(user);
   };
   return (
-    <Card sx={{ textAlign: "center" }}>
+    <Card sx={{ textAlign: "center", position: "relative" }}>
       <Box
         sx={{
           position: "absolute",
           right: 10,
           top: 10,
-          width: 30,
-          height: 40,
+          display: "flex",
           zIndex: 99,
           cursor: "pointer",
         }}
@@ -105,7 +104,6 @@ export default function UserCard({ user, openUser }: Props) {
           ratio="16/9"
         />
       </Box>
-
       <Typography variant="subtitle1" sx={{ mt: 6, mb: 0.5 }}>
         {fullName}
       </Typography>

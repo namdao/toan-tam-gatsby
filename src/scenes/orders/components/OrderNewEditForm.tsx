@@ -234,6 +234,12 @@ export default function OrderNewEditForm({
     []
   );
 
+  // const arry = customerAutoComplete.map((e) => e.label);
+  // const toFindDuplicates = (arry1) => {
+  //   return arry1.filter((item, index) => arry1.indexOf(item) !== index);
+  // };
+  // const duplicateElementa = toFindDuplicates(arry);
+  // console.log(duplicateElementa);
   const printTypeAutocomplete = useMemo(
     () =>
       listPrintType.map((e) => {
