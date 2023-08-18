@@ -4,6 +4,7 @@ import React, {
   useImperativeHandle,
   useMemo,
   useRef,
+  useState,
 } from "react";
 import Box from "@mui/material/Box";
 import {
@@ -12,14 +13,21 @@ import {
   GridColumnHeaders,
   GridRowSelectionModel,
   GridPaginationModel,
+  GridColumnVisibilityModel,
 } from "@mui/x-data-grid-pro";
 import { Button, Card, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import BlockPrintAndSendEmail, { IPropsPrint } from "./BlockPrintAndSendEmail";
 import { useStatisticDebitCompany } from "scenes/statistic/hooks/useStatisticDebitCompany";
-import { DeibitCompanyDetailColumn } from "scenes/statistic/helper/DebitCompanyDetailColumn";
+import {
+  DeibitCompanyDetailColumn,
+  fieldStored,
+} from "scenes/statistic/helper/DebitCompanyDetailColumn";
 import Counter from "components/animate/counter";
 import { useLocales } from "locales";
+import { addTableColumn, OrderFeature } from "services/firebase/common";
+import { useAppSelector } from "store";
+import { AuthSelector } from "scenes/auth/redux/slice";
 
 const MemoizedRow = React.memo(GridRow);
 
@@ -55,7 +63,7 @@ const TableListDebitDetail: React.FC<{
   useEffect(() => {
     onGetOrdetListDebitByCompany();
   }, []);
-
+  const currentUser = useAppSelector(AuthSelector.getProfile);
   useImperativeHandle(magicTableNeedCollectRef, () => ({
     onRefreshOrderList: onGetOrdetListDebitByCompany,
   }));
@@ -67,6 +75,7 @@ const TableListDebitDetail: React.FC<{
       ).map((e) => e.field),
     []
   );
+  const [storedColumn, setStoredColumn] = useState<Record<string, boolean>>({});
   const setPagination = (model: GridPaginationModel) => {
     onNextPage(model.page, model.pageSize);
   };
@@ -80,6 +89,18 @@ const TableListDebitDetail: React.FC<{
       buttonRef?.current?.disableSendEmail();
     }
     buttonRef?.current?.setListIds(listIds as number[]);
+  };
+  const onChangeColumn = async (params: GridColumnVisibilityModel) => {
+    const listParamsStore = {
+      ...fieldStored,
+      ...params,
+    };
+    await addTableColumn({
+      typeStored: OrderFeature.DEBIT_COMPAY_DETAIL,
+      dataColumn: listParamsStore,
+      user: currentUser.userName,
+    });
+    setStoredColumn(listParamsStore);
   };
 
   return (
@@ -102,6 +123,7 @@ const TableListDebitDetail: React.FC<{
           checkboxSelection
           rows={orderList}
           rowCount={total}
+          columnVisibilityModel={storedColumn}
           columns={DeibitCompanyDetailColumn}
           onRowSelectionModelChange={onRowSelect}
           initialState={{

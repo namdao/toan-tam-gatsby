@@ -169,3 +169,11 @@ export const DeibitCompanyDetailColumn: GridColDef[] = [
       format(value * 1000, "dd/MM/yyyy"),
   },
 ];
+
+export const fieldStored = DeibitCompanyDetailColumn.map((e) => {
+  return e.field;
+}).reduce((result, item) => {
+  //@ts-ignore
+  result[item] = true;
+  return result;
+}, {});

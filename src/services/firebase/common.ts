@@ -10,6 +10,7 @@ export enum OrderFeature {
   NEED_CONFIRM = "OrderNeedConfirm",
   PRINTING = "OrderPrinting",
   SEARCH = "OrderSearch",
+  DEBIT_COMPAY_DETAIL = "DebitCompanyDetail",
 }
 type IPropsAddColumn = {
   user: string;
