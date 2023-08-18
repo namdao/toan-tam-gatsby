@@ -2,6 +2,7 @@ import React, {
   createRef,
   useEffect,
   useImperativeHandle,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -25,7 +26,11 @@ import {
 } from "scenes/statistic/helper/DebitCompanyDetailColumn";
 import Counter from "components/animate/counter";
 import { useLocales } from "locales";
-import { addTableColumn, OrderFeature } from "services/firebase/common";
+import {
+  addTableColumn,
+  getTableColumn,
+  OrderFeature,
+} from "services/firebase/common";
 import { useAppSelector } from "store";
 import { AuthSelector } from "scenes/auth/redux/slice";
 
@@ -79,6 +84,17 @@ const TableListDebitDetail: React.FC<{
   const setPagination = (model: GridPaginationModel) => {
     onNextPage(model.page, model.pageSize);
   };
+
+  useLayoutEffect(() => {
+    const getColumn = async () => {
+      const columnStored = await getTableColumn({
+        type: OrderFeature.DEBIT_COMPAY_DETAIL,
+        user: currentUser.userName,
+      });
+      setStoredColumn(columnStored);
+    };
+    getColumn();
+  }, []);
 
   const onRowSelect = (listIds: GridRowSelectionModel) => {
     if (listIds.length > 0) {
