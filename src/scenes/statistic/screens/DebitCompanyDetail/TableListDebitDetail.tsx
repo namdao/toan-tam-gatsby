@@ -125,6 +125,7 @@ const TableListDebitDetail: React.FC<{
           rowCount={total}
           columnVisibilityModel={storedColumn}
           columns={DeibitCompanyDetailColumn}
+          onColumnVisibilityModelChange={onChangeColumn}
           onRowSelectionModelChange={onRowSelect}
           initialState={{
             pinnedColumns: {
