@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect } from "react";
+import React, { useCallback } from "react";
 import * as Yup from "yup";
 import { useEffect, useMemo } from "react";
 // form
@@ -39,7 +39,6 @@ import {
 } from "scenes/categories/redux/types";
 import { PaperTypeSelector } from "scenes/papers/redux/slice";
 import { sortBy } from "lodash";
-import RHFInputMask from "components/hook-form/RHFInputMask";
 import { ORDER_STATUS_NAME, ORDER_TYPE } from "../helper/OrderConstant";
 import { IOrder, IOrderDetail } from "../redux/types";
 import { getTotalAmount } from "utils/utility";
@@ -51,10 +50,7 @@ import { OutsourceSelector } from "scenes/outsources/redux/slice";
 import { PrintTypeSelector } from "scenes/printtype/redux/slice";
 import { PATH_APP } from "constant/routeConstant";
 import { magicOrderProcessingRef } from "../screens/OrderProcessing/OrderTable";
-import { parseMethod } from "../helper/HandlerMethod";
-import appConstants from "constant/appConstant";
-import BlockTimeLine from "../screens/OrderDetail/BlockTimeline";
-
+import { addDays } from "date-fns";
 type CustomerItem = {
   id: number;
   label: string;
@@ -275,10 +271,10 @@ export default function OrderNewEditForm({
       delivery_address: order?.delivery_address || "",
       receiver_info: order?.receiver_info || "",
       name: order?.name || "",
-      method_width: order?.method ? splitMethod[0] : "",
-      method_height: order?.method ? splitMethod[1] : "",
+      method_width: order?.method ? Number(splitMethod[0]) : "",
+      method_height: order?.method ? Number(splitMethod[1]) : "",
       method_high:
-        order?.method && splitMethod.length > 2 ? splitMethod[2] : "",
+        order?.method && splitMethod.length > 2 ? Number(splitMethod[2]) : "",
       category_id: order?.category_id
         ? categoryAutoComplete.find((e) => e.id === order.category_id)
         : null,
@@ -292,9 +288,7 @@ export default function OrderNewEditForm({
       template_number: order?.template_number || null,
       quantity: order?.quantity || null,
       unit_price: order?.unit_price || null,
-      delivery_date: order?.delivery_date
-        ? new Date(order?.delivery_date)
-        : new Date(),
+      delivery_date: addDays(new Date(), 5),
       payment_method:
         order?.payment_method ||
         translate("orders.orderCreate.form.paymentCash"),

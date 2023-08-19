@@ -34,6 +34,7 @@ import {
   SettingsSelector,
 } from "services/settings/redux/slice";
 import { NAV } from "constant/layoutConstant";
+import EnvOptions from "./EnvOptions";
 
 // ----------------------------------------------------------------------
 
@@ -135,6 +136,11 @@ export default function SettingsDrawer() {
         <Divider sx={{ borderStyle: "dashed" }} />
 
         <Scrollbar sx={{ p: SPACING, pb: 0 }}>
+          {process.env.IS_TEST_MODE === "true" && (
+            <Block title="Env">
+              <EnvOptions />
+            </Block>
+          )}
           <Block title="Mode">
             <ModeOptions />
           </Block>
