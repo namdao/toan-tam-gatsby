@@ -34,7 +34,7 @@ export const useOrderWaitingPrint = (
   const onOrderWithCategories = async (pageReqModel: IPage = pageModel) => {
     try {
       const payload: IReqOrderCategoryStatus = {
-        status: ORDER_STATUS_NAME.DESIGNED,
+        status: `${ORDER_STATUS_NAME.DESIGNED},1`,
         order_by: "updated_time",
         page: pageReqModel.page,
         per_page: pageReqModel.pageSize,
