@@ -37,6 +37,15 @@ const appConstant = {
     REQUEST_UPLOAD_IMAGE: (id: number) => `/orders/${id}/uploads`,
     DELETE_IMAGE: (id: number) => `/orders/${id}/remove-image`,
     NOTIFICATION: "/notifications",
+    //
+    UPDATE_MULTI_ORDER_BY_STATUS: "/orders/batch",
+    // Gom nhom don hang
+    ORDER_GROUPS: "/orders/groups",
+    UPDATE_ORDER_GROUPS: (idGroup: number) => `/orders/groups/${idGroup}`,
+    // ds don hang theo khach hang
+    GET_CUSTOMER_BY_ORDER_STATUS: `/orders/customers`,
+    ORDER_BY_CUSTOMERS_ID: (idCustomer: number) =>
+      `/orders/customers/${idCustomer}/groups`,
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

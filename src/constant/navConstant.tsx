@@ -31,6 +31,7 @@ import DebitCompany from "scenes/statistic/screens/DebitCompany";
 import DebitCompanyDetail from "scenes/statistic/screens/DebitCompanyDetail";
 import StatiscticsCustomerDetail from "scenes/statistic/screens/StatiscticsCustomerDetail";
 import OrderCreate from "scenes/orders/screens/OrderCreate";
+import OrderPrinted from "scenes/orders/screens/OrderPrinted";
 
 const { ROLES } = appConstant;
 const iconify = (name: string) => <Iconify width={ICON.NAV_ITEM} icon={name} />;
@@ -210,6 +211,14 @@ const navConfig = [
         component: OrderPrinting,
         children: [],
         roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.PRINTER],
+      },
+      {
+        title: "order.printed",
+        path: PATH_APP.order.printed,
+        icon: iconify("mi:print"),
+        component: OrderPrinted,
+        children: [],
+        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.STORE],
       },
     ],
   },

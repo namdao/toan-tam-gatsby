@@ -3,7 +3,10 @@ import appConstant from "constant/appConstant";
 import { ORDER_STATUS_NAME } from "../helper/OrderConstant";
 import {
   IQuickUpdateOrder,
+  IReqCreateGroup,
   IReqCreateOrder,
+  IReqCustomerByStatus,
+  IReqGroupByStatus,
   IReqOrderCategoryStatus,
   IReqOrderListCollect,
   IReqOrderListConfirm,
@@ -12,6 +15,8 @@ import {
   IReqPrintDoneOrder,
   IReqRejectOrder,
   IRequestUpdateOrder,
+  IReqUpdateMultiOrder,
+  IReqUpdateOrderPrinted,
 } from "./types";
 
 const { API_URL } = appConstant;
@@ -96,3 +101,30 @@ export const apiRemoveImg = (orderId: number, image_name: string) =>
       image_name,
     },
   });
+
+export const apiGetOrderGroup = (params: IReqGroupByStatus) =>
+  axios.get(API_URL.ORDER_GROUPS, { params });
+
+export const apiCreateGroup = (data: IReqCreateGroup) =>
+  axios.post(API_URL.ORDER_GROUPS, data);
+
+export const apiUpdateOrderGroup = (
+  idGroup: number,
+  data: IReqUpdateOrderPrinted
+) => axios.put(API_URL.UPDATE_ORDER_GROUPS(idGroup), data);
+
+export const apiUpdateMultiOrderByOrderStatus = (data: IReqUpdateMultiOrder) =>
+  axios.put(API_URL.UPDATE_MULTI_ORDER_BY_STATUS, data);
+
+export const apiGetOrderByCustomer = (
+  customerId: number,
+  status: ORDER_STATUS_NAME
+) =>
+  axios.get(API_URL.ORDER_BY_CUSTOMERS_ID(customerId), {
+    params: {
+      status,
+    },
+  });
+
+export const apiGetCustomerByOrderStatus = (params: IReqCustomerByStatus) =>
+  axios.get(API_URL.GET_CUSTOMER_BY_ORDER_STATUS, { params });

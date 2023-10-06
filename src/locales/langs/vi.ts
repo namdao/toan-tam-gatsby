@@ -82,6 +82,7 @@ const vi = {
     stored: "Đơn hàng lưu kho",
     waitingPrint: "Đơn hàng chờ in",
     printing: "Đơn hàng đang in",
+    printed: "Đơn hàng đã in",
   },
 };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Tab, Tabs, Card, Stack } from "@mui/material";
+import { Tab, Tabs, Card, Stack, CircularProgress } from "@mui/material";
 import {
   ORDER_STATUS_NAME,
   ORDER_TAB_STORED,
@@ -7,65 +7,31 @@ import {
 import { useLocales } from "locales";
 import Label from "components/label";
 import { IOrderTabProcessing } from "scenes/orders/helper/OrderConstant";
-import { useOrderAllStatus } from "scenes/orders/hooks/useOrderProcessing";
-import { useAppDispatch, useAppSelector } from "store";
-import { ordersAction, OrdersSelector } from "scenes/orders/redux/slice";
 import OrderTable from "./OrderTable";
-import BlockFilter from "./BlockFilter";
-import { shallowEqual } from "react-redux";
-import BlockDeliveryPrint, { IPropsDeliveryPrint } from "./BlockDeliveryPrint";
+import BlockButtonAction, { IPropsDeliveryPrint } from "./BlockButtonAction";
 import { GridRowSelectionModel } from "@mui/x-data-grid";
+import useOrderByCustomer, {
+  IOrderByCustomer,
+} from "scenes/orders/hooks/useOrderByCustomer";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInView } from "react-intersection-observer";
+import SkeletonCustomer from "./SkeletonCustomer";
 
-const tabChild = (
-  tab: IOrderTabProcessing,
-  filterStatus: ORDER_STATUS_NAME
-) => {
+const tabChild = (tab: IOrderTabProcessing) => {
   const { translate } = useLocales();
-  const dispatch = useAppDispatch();
-  const dataFilter = useAppSelector(
-    OrdersSelector.getFilterOrder,
-    shallowEqual
-  );
-  const { onOrderWithStatus } = useOrderAllStatus(tab.value);
-  const total = useAppSelector((state) =>
-    OrdersSelector.getTotalByStatus(state, tab.value)
-  );
 
-  useEffect(() => {
-    onOrderWithStatus();
-    dispatch(ordersAction.resetPagination());
-  }, [
-    filterStatus,
-    dataFilter.createDate,
-    dataFilter.updateDate,
-    dataFilter.customer_id,
-  ]);
-  return (
-    <Tab
-      key={tab.value}
-      value={tab.value}
-      label={translate(tab.name)}
-      icon={
-        <Label color={tab.color} sx={{ mr: 1 }}>
-          {total}
-        </Label>
-      }
-    />
-  );
+  return <Tab key={tab.value} value={tab.value} label={translate(tab.name)} />;
 };
 const OrderList = () => {
-  const dispatch = useAppDispatch();
-  const buttonRef = useRef<IPropsDeliveryPrint>(null);
+  const listButtonRef = useRef<Record<number, IPropsDeliveryPrint | null>>({});
   const [filterStatus, handleFilterStatus] = useState<ORDER_STATUS_NAME>(
     ORDER_STATUS_NAME.STORED
   );
-
-  useEffect(() => {
-    return () => {
-      dispatch(ordersAction.resetFilter());
-    };
-  }, []);
-
+  const prevStatus = useRef(filterStatus);
+  const { getCustomerInfinity } = useOrderByCustomer(filterStatus);
+  const { ref, inView } = useInView({
+    threshold: 0.8,
+  });
   const onChangeStatus = (
     _event: React.SyntheticEvent<Element, Event>,
     newValue: ORDER_STATUS_NAME
@@ -76,22 +42,80 @@ const OrderList = () => {
   const onHandleBtnDelivery = ({
     isValid,
     listIds,
+    idCus,
   }: {
     isValid: boolean;
     listIds?: GridRowSelectionModel;
+    idCus: number;
   }) => {
     if (!isValid) {
-      buttonRef?.current?.disablePrintDelivery();
-      buttonRef?.current?.disablePrintDeliveryV2();
+      listButtonRef?.current?.[idCus]?.disablePrintDelivery();
+      listButtonRef?.current?.[idCus]?.disablePrintDeliveryV2();
+      if (filterStatus === ORDER_STATUS_NAME.STORED) {
+        listButtonRef?.current?.[idCus]?.disableBtnDelivery();
+      }
+      if (filterStatus === ORDER_STATUS_NAME.DELIVER) {
+        listButtonRef?.current?.[idCus]?.disableBtnDone();
+      }
     } else {
-      buttonRef?.current?.enablePrintDelivery();
-      buttonRef?.current?.enablePrintDeliveryV2();
-      buttonRef?.current?.setListIds(listIds as number[]);
+      listButtonRef?.current?.[idCus]?.enablePrintDelivery();
+      listButtonRef?.current?.[idCus]?.enablePrintDeliveryV2();
+      if (filterStatus === ORDER_STATUS_NAME.STORED) {
+        listButtonRef?.current?.[idCus]?.enableBtnDelivery();
+      }
+      if (filterStatus === ORDER_STATUS_NAME.DELIVER) {
+        listButtonRef?.current?.[idCus]?.enableBtnDone();
+      }
+      listButtonRef?.current?.[idCus]?.setListIds(listIds as number[]);
     }
   };
 
+  const setRef = (element: IPropsDeliveryPrint | null, key: number) => {
+    listButtonRef.current[key] = element;
+  };
+
+  const {
+    fetchNextPage,
+    hasNextPage,
+    data,
+    refetch,
+    isRefetching,
+    isFetching,
+  } = useInfiniteQuery<
+    {
+      data: IOrderByCustomer[];
+      pageParam: number;
+    },
+    any,
+    {
+      data: IOrderByCustomer[];
+    }
+  >({
+    queryFn: ({ pageParam = 1 }) => {
+      return getCustomerInfinity(pageParam, filterStatus);
+    },
+    getNextPageParam: (lastPage) => {
+      return lastPage.pageParam > -1 ? lastPage.pageParam : undefined;
+    },
+  });
+  useEffect(() => {
+    if (inView && hasNextPage && prevStatus.current === filterStatus) {
+      fetchNextPage();
+    } else if (prevStatus.current !== filterStatus) {
+      prevStatus.current = filterStatus;
+      refetch();
+    }
+  }, [inView, hasNextPage, filterStatus]);
+
+  const dataMerge: IOrderByCustomer[] = [];
+  data?.pages?.forEach((paging) =>
+    paging?.data?.forEach((cus) => {
+      dataMerge.push(cus);
+    })
+  );
+  const dataLoad = isRefetching ? [] : dataMerge;
   return (
-    <Card>
+    <Stack>
       <Tabs
         value={filterStatus}
         onChange={onChangeStatus}
@@ -100,22 +124,58 @@ const OrderList = () => {
           bgcolor: "background.neutral",
         }}
       >
-        {ORDER_TAB_STORED.map((tab) => tabChild(tab, filterStatus))}
+        {ORDER_TAB_STORED.map((tab) => tabChild(tab))}
       </Tabs>
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        sx={{ px: 2.5, py: 3 }}
-      >
-        <BlockFilter />
-        <BlockDeliveryPrint ref={buttonRef} />
-      </Stack>
-      <OrderTable
-        status={filterStatus}
-        callbackBtnPrint={onHandleBtnDelivery}
-      />
-    </Card>
+      {dataLoad.length > 0 ? (
+        dataLoad.map((cus, i) => {
+          return (
+            <Card
+              ref={dataMerge.length === i + 1 ? ref : null}
+              sx={{ mt: 2, mb: 2 }}
+            >
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                sx={{ px: 2.5, py: 3 }}
+              >
+                {/* <BlockFilter /> */}
+                <Label color="primary" sx={{ fontSize: 16 }}>
+                  {cus?.customer?.name} : {cus?.customer?.phone}
+                </Label>
+                <BlockButtonAction
+                  status={filterStatus}
+                  ref={(el) => setRef(el, cus.customer.id)}
+                  onRefreshList={refetch}
+                />
+              </Stack>
+              <OrderTable
+                idCus={cus.customer.id}
+                status={filterStatus}
+                orders={cus.listOrder}
+                callbackBtnPrint={onHandleBtnDelivery}
+              />
+            </Card>
+          );
+        })
+      ) : isRefetching ? (
+        <SkeletonCustomer />
+      ) : (
+        <Card sx={{ mt: 2, mb: 2, p: 3 }}>
+          <Label color="warning">
+            {filterStatus === ORDER_STATUS_NAME.DELIVER
+              ? "Không có khách hàng cần giao"
+              : "Không có khách hàng nào có đơn hàng lưu kho"}{" "}
+          </Label>
+        </Card>
+      )}
+      {isFetching && dataLoad.length > 0 && (
+        <Stack alignItems="center" sx={{ mt: 2 }}>
+          <CircularProgress />
+        </Stack>
+      )}
+    </Stack>
   );
 };
+
 export default OrderList;

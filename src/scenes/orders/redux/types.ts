@@ -11,6 +11,8 @@ import {
   ORDER_STATUS_NAME,
   SEARCH_BY,
   ORDER_TYPE,
+  GROUP_ORDER_TYPE,
+  STATUS_ORDER_GROUP,
 } from "../helper/OrderConstant";
 
 export type IResTotalDebigProgress = {
@@ -191,6 +193,9 @@ export type IRequestUpdateOrder = {
   who_collect_money?: string;
   company_debit?: number;
   confirmed_money?: boolean;
+  deliver_provider?: string;
+  tracking_id?: string;
+  status?: ORDER_STATUS_NAME;
 };
 
 export type IResUpdateOrder = {
@@ -324,5 +329,69 @@ export type IResUrlUpload = {
 export type IQuickUpdateOrder = {
   id: number;
   note: string;
+  status: ORDER_STATUS_NAME;
+};
+
+export type IReqGroupByStatus = {
+  status: GROUP_ORDER_TYPE;
+};
+export type IReqCustomerByStatus = IPage & {
+  status: ORDER_STATUS_NAME;
+};
+
+export type IReqUpdateMultiOrder = {
+  order_ids: number[];
+  status: ORDER_STATUS_NAME;
+  notes: string;
+};
+
+export type IReqCreateGroup = {
+  order_ids: number[];
+  group_type: GROUP_ORDER_TYPE;
+  name: string;
+};
+export type IReqUpdateOrderPrinted = {
+  order_ids: number[]; // cập nhật lại ds đơn theo group bị nhầm, có thể truyền rỗng nếu kg thay đổi
+  group_type: GROUP_ORDER_TYPE;
+  status: STATUS_ORDER_GROUP;
+  printed_orders: number[]; // cập nhật những đơn đã in
+  outsource_date: string;
+  notes: string;
+};
+
+export type IResCustomerByStatusOrder = {
+  items: ICustomer[];
+  total: number;
+};
+
+export type IResOrderByCustomer = {
+  items: IOrder[];
+  total: number;
+};
+
+type IDataGroup = {
+  created_time: string;
+  updated_time: string;
+  id: number;
+  group_name: string;
+  group_type: string;
+  status: GROUP_ORDER_TYPE;
+  orders: {
+    id: number;
+    order_no: string;
+    image: string;
+    status: ORDER_STATUS_NAME;
+  };
+};
+
+export type IResCreateGroup = IDataGroup;
+
+export type IResGroup = {
+  items: IDataGroup[];
+};
+export type IReqOrderDelivery = {
+  note: string;
+  deliver_provider: string;
+  tracking_id?: string;
   status: ORDER_STATUS_NAME;
 };

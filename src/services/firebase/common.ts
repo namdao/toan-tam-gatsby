@@ -9,6 +9,7 @@ export enum OrderFeature {
   NEED_COLLECT = "OrderNeedCollect",
   NEED_CONFIRM = "OrderNeedConfirm",
   PRINTING = "OrderPrinting",
+  PRINTED = "OrderPrinted",
   SEARCH = "OrderSearch",
   DEBIT_COMPAY_DETAIL = "DebitCompanyDetail",
 }

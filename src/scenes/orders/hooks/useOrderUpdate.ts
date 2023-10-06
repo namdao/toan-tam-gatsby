@@ -3,7 +3,11 @@ import { useLocales } from "locales";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 import { apiOrderUpdate } from "../redux/api";
-import { IRequestUpdateOrder, IResUpdateOrder } from "../redux/types";
+import {
+  IReqOrderDelivery,
+  IRequestUpdateOrder,
+  IResUpdateOrder,
+} from "../redux/types";
 
 export const useOrderUpdate = (orderId: number) => {
   const { translate } = useLocales();
@@ -36,6 +40,7 @@ export const useOrderUpdate = (orderId: number) => {
       setLoading(false);
     }
   };
+
   return {
     onUpdateOrder,
     loading,

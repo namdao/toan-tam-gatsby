@@ -81,5 +81,6 @@ export const PATH_APP = {
     stored: `${ROOT_ORDER}/don-hang-luu-kho`,
     waitingPrint: `${ROOT_ORDER}/don-hang-cho-in`,
     printing: `${ROOT_ORDER}/don-hang-dang-in`,
+    printed: `${ROOT_ORDER}/don-hang-da-in`,
   },
 };

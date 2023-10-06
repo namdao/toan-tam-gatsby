@@ -139,6 +139,22 @@ const OrderLangs = {
     tabDelivery: "Đang giao hàng",
     btnBillDelivery: "Biên bản GH",
     btnBillDelivery2: "Biên bản GH V2",
+    confirmDelivery: "Xác nhận giao hàng",
+    loadingCustomer: "Đang tải thêm khách hàng",
+    noCustomer: "Không còn khách hàng",
+    deliverProvider: "Đối tác giao hàng",
+    noteDeliver: "Ghi chú giao hàng",
+    noteCancel: "Lí do hủy",
+    others: "Khác",
+    companyStaff: "Nhân viên công ty",
+    ortherDeliver: "Tên người giao hàng",
+    errorOrtherDeliver: "Nhập tên người giao hàng",
+    trackingId: "Mã vận chuyển (nếu có)",
+    messageDeliverSuccess: "Cập nhật đơn hàng thành công",
+    done: "Đã giao",
+    cancelDelivery: "Huỷ giao",
+    messageDone: "{{name}} đã giao hàng thành công",
+    cancel: "Huỷ đơn",
   },
   orderSearch: {
     title: "Tìm kiếm đơn hàng",
@@ -171,6 +187,16 @@ const OrderLangs = {
     error: {
       reject: "Từ chối thất bại",
       done: "Hoàn thành thất bại",
+    },
+  },
+  orderPrinted: {
+    title: "Danh sách đã in",
+    store: "Lưu kho",
+    success: {
+      assign: "Lưu kho thành công",
+    },
+    error: {
+      assign: "Lưu kho thất bại",
     },
   },
   orderCreate: {

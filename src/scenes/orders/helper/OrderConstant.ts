@@ -9,8 +9,8 @@ export const ORDER_STATUS_VALUE = {
   2: "Đang thiết kế",
   3: "Chờ phản hồi thiết kế",
   4: "Đang thiết kế theo phản hồi",
-  5: "Đã thiết kế",
-  6: "Chờ in",
+  5: "Đã thiết kế (Chờ in)",
+  6: "Đang in",
   7: "Đã in",
   8: "Lưu kho",
   9: "Giao hàng",
@@ -253,3 +253,21 @@ export const ORDER_TAB_NEED_CONFIRM: IOrderTabNeedConfirm[] = [
     value: "~CASH,SACOMBANK_PERSON,VIB_PERSON,VIB_COMPANY,SACOMBANK_COMPANY",
   },
 ];
+
+export enum GROUP_ORDER_TYPE {
+  // 1 group 1 đơn
+  ONLY_ONE_ORDER = 0,
+  // 1 group nhiều đơn
+  MULTI_ORDER = 1,
+  // 1 đơn nhiều group
+  ONLY_ORDER_MULTI_GROUP = 2,
+}
+
+export enum STATUS_ORDER_GROUP {
+  // Tạo group nhưng còn chỉnh sửa chưa in
+  WAITING_CREATE_GROUP = 0,
+  // Xác nhận các đơn trong group và tiến hành in
+  PRINTING_GROUP = 1,
+  // Đã in các đơn trong group xong và chuyển sang kho
+  PRINTED_GROUP = 2,
+}

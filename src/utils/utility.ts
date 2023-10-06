@@ -3,6 +3,7 @@ import navConfig from "constant/navConstant";
 import appConstant from "constant/appConstant";
 import { navigate } from "gatsby";
 import { PATH_APP } from "constant/routeConstant";
+import { useEffect, useRef } from "react";
 
 const { ROLES } = appConstant;
 export const isBrowser = typeof window !== `undefined`;
@@ -88,3 +89,18 @@ export const navigateByRole = (role: string) => {
     }
   }
 };
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function useDidUpdate(callback: () => void, deps: unknown[]): void {
+  const hasMount = useRef(false);
+
+  useEffect(() => {
+    if (hasMount.current) {
+      callback();
+    } else {
+      hasMount.current = true;
+    }
+  }, deps);
+}

@@ -44,18 +44,6 @@ export const OrderStoredTableColumns: GridColDef[] = [
     ],
   },
   {
-    field: "customer_name",
-    headerName: "Tên khách hàng",
-    minWidth: 200,
-  },
-  {
-    field: "customer_phone",
-    headerName: "ĐT khách hàng",
-    minWidth: 150,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
     field: "name",
     headerName: "Tên file",
     minWidth: 300,
@@ -188,8 +176,8 @@ export const OrderStoredTableColumns: GridColDef[] = [
     field: "updated_time",
     headerName: "Ngày cập nhật",
     minWidth: 150,
-    valueGetter: ({ value }: { value: number }) =>
-      format(value * 1000, "dd/MM/yyyy"),
+    valueGetter: ({ value }: { value: string }) =>
+      format(new Date(value), "dd/MM/yyyy"),
   },
 ];
 

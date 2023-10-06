@@ -6,22 +6,18 @@ import { useAppSelector } from "store";
 import Header from "./BlockHeader";
 import OrderList from "./OrderList";
 import Helmet from "react-helmet";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-const queryClient = new QueryClient();
 
-const OrderProcessing = () => {
+const OrderPrinted = () => {
   const themeStretch = useAppSelector(SettingsSelector.getThemeStretch);
   const { translate } = useLocales();
   return (
     <>
-      <Helmet title={translate("orders.orderStore.title")} />
+      <Helmet title={translate("orders.orderPrinted.title")} />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <Header />
-        <QueryClientProvider client={queryClient}>
-          <OrderList />
-        </QueryClientProvider>
+        <OrderList />
       </Container>
     </>
   );
 };
-export default OrderProcessing;
+export default OrderPrinted;
