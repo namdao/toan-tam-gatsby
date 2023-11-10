@@ -1,4 +1,11 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  createRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Box from "@mui/material/Box";
 import {
   DataGridPro,
@@ -6,14 +13,20 @@ import {
   GridColumnHeaders,
   GridPaginationModel,
   GridColumnVisibilityModel,
+  GridRowSelectionModel,
+  useGridApiRef,
+  GridRowId,
 } from "@mui/x-data-grid-pro";
 import {
   OrderWaitingTableColumns,
   pinOrderLeft,
   fieldStored,
 } from "scenes/orders/helper/OrderWaitingTableColumns";
-import { IOrderDetail } from "scenes/orders/redux/types";
-import { IPage } from "scenes/orders/hooks/useOrderWaitingPrint";
+import { IOrder, IOrderDetail } from "scenes/orders/redux/types";
+import {
+  IPage,
+  useOrderWaitingPrint,
+} from "scenes/orders/hooks/useOrderWaitingPrint";
 import { useAppSelector } from "store";
 import { AuthSelector } from "scenes/auth/redux/slice";
 import {
@@ -21,22 +34,56 @@ import {
   getTableColumn,
   OrderFeature,
 } from "services/firebase/common";
+import { IPropsGroup } from "./OrderCreateGroup";
+import { IPaperTabs, PAPER_TABS } from "scenes/papers/helper/PaperConstant";
+import { Tab, Tabs } from "@mui/material";
+
+const tabChild = (tab: IPaperTabs) => {
+  return <Tab key={tab.value} value={tab} label={tab.label} />;
+};
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
+type IMagicTableRef = {
+  refreshList: () => void;
+};
 
+export const magicTableWaitingRef = createRef<IMagicTableRef>();
 type IPropsOrderTable = {
-  total: number;
-  orderList: IOrderDetail[];
-  onNextPage: (page: number, size: number) => void;
-  pageModel: IPage;
+  onSelectOrder: (val: IOrderDetail[]) => void;
+  onTabChange?: () => void;
+  listTotalSelection?: IOrderDetail[];
 };
 const OrderTable: React.FC<IPropsOrderTable> = ({
-  total,
-  orderList,
-  onNextPage,
-  pageModel,
+  onSelectOrder,
+  onTabChange,
+  listTotalSelection,
 }) => {
+  const [tabSelected, setSelectedTab] = useState<IPaperTabs>(PAPER_TABS[0]);
+  const [selectionModel, setSelectionModel] = React.useState<GridRowId[]>([]);
+  const {
+    onGetOrderPaperOrCategory,
+    onNextPage,
+    setPageModel,
+    total,
+    orderList,
+    pageModel,
+  } = useOrderWaitingPrint(tabSelected);
+  useEffect(() => {
+    onGetOrderPaperOrCategory();
+    onTabChange && onTabChange();
+  }, [tabSelected]);
+  const onChangeTab = (
+    _event: React.SyntheticEvent<Element, Event>,
+    newValue: IPaperTabs
+  ) => {
+    setPageModel({
+      page: 0,
+      pageSize: 20,
+    });
+    // setSelectionModel([]);
+    setSelectedTab(newValue);
+  };
   const [storedColumn, setStoredColumn] = useState<Record<string, boolean>>({});
   const currentUser = useAppSelector(AuthSelector.getProfile);
   useEffect(() => {
@@ -49,6 +96,24 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
     };
     getColumn();
   }, []);
+
+  useEffect(() => {
+    if (Array.isArray(listTotalSelection)) {
+      setSelectionModel(listTotalSelection.map((e) => e.id));
+    }
+  }, [listTotalSelection]);
+
+  const onResetList = () => {
+    onGetOrderPaperOrCategory();
+    setPageModel({
+      page: 0,
+      pageSize: 20,
+    });
+    setSelectionModel([]);
+  };
+  useImperativeHandle(magicTableWaitingRef, () => ({
+    refreshList: onResetList,
+  }));
 
   const setPagination = (model: GridPaginationModel) => {
     onNextPage(model.page, model.pageSize);
@@ -67,32 +132,56 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
     setStoredColumn(listParamsStore);
   };
 
+  const onRowSelect = (ids: GridRowSelectionModel) => {
+    const selectedIDs = new Set(ids);
+    const selectedRowData = orderList.filter((row) => selectedIDs.has(row.id));
+    console.log(selectedRowData);
+    onSelectOrder(selectedRowData);
+    setSelectionModel(ids);
+  };
+
+  console.log("render");
   return (
-    <Box sx={{ height: 600, width: "100%" }}>
-      <DataGridPro
-        rows={orderList}
-        rowCount={total}
-        columns={OrderWaitingTableColumns}
-        columnVisibilityModel={storedColumn}
-        onColumnVisibilityModelChange={onChangeColumn}
-        disableRowSelectionOnClick
-        initialState={{
-          pinnedColumns: {
-            left: pinOrderLeft,
-          },
-          pagination: { paginationModel: pageModel },
+    <>
+      <Tabs
+        value={tabSelected}
+        onChange={onChangeTab}
+        sx={{
+          px: 2,
+          bgcolor: "background.neutral",
         }}
-        pageSizeOptions={[20, 50, 100]}
-        components={{
-          Row: MemoizedRow,
-          ColumnHeaders: MemoizedColumnHeaders,
-        }}
-        pagination
-        paginationModel={pageModel}
-        paginationMode="server"
-        onPaginationModelChange={setPagination}
-      />
-    </Box>
+      >
+        {PAPER_TABS.map((tab) => tabChild(tab))}
+      </Tabs>
+      <Box sx={{ height: 600, width: "100%" }}>
+        <DataGridPro
+          rows={orderList}
+          rowCount={total}
+          checkboxSelection
+          columns={OrderWaitingTableColumns}
+          onRowSelectionModelChange={onRowSelect}
+          columnVisibilityModel={storedColumn}
+          onColumnVisibilityModelChange={onChangeColumn}
+          initialState={{
+            pinnedColumns: {
+              left: pinOrderLeft,
+            },
+            pagination: { paginationModel: pageModel },
+          }}
+          pageSizeOptions={[20, 50, 100]}
+          components={{
+            Row: MemoizedRow,
+            ColumnHeaders: MemoizedColumnHeaders,
+          }}
+          pagination
+          paginationModel={pageModel}
+          paginationMode="server"
+          onPaginationModelChange={setPagination}
+          rowSelectionModel={selectionModel}
+          keepNonExistentRowsSelected
+        />
+      </Box>
+    </>
   );
 };
 export default OrderTable;

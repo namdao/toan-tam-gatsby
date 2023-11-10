@@ -6,6 +6,7 @@ import {
   IPrintTypes,
 } from "constant/commonType";
 import { IResUser } from "scenes/auth/redux/types";
+import { IOutSource } from "scenes/outsources/redux/types";
 import { IColor } from "scenes/printtype/redux/types";
 import {
   ORDER_STATUS_NAME,
@@ -123,6 +124,7 @@ export type IOrderDetail = {
     id: number;
     parent_id: number;
   };
+  category_name?: string;
   category_id: number;
   cod: number;
   company_debit: string;
@@ -226,6 +228,9 @@ export type IReqOrderListConfirm = IPage & {
   end_date: string;
   search_by?: "all";
   money_source: string;
+};
+export type IReqOrderPaperList = IPage & {
+  paper_ids: string;
 };
 
 export type IReqOrderSearch = IPage & {
@@ -332,8 +337,10 @@ export type IQuickUpdateOrder = {
   status: ORDER_STATUS_NAME;
 };
 
-export type IReqGroupByStatus = {
-  status: GROUP_ORDER_TYPE;
+export type IReqGroupByStatus = IPage & {
+  status: STATUS_ORDER_GROUP;
+  order_no?: string;
+  group_types?: string;
 };
 export type IReqCustomerByStatus = IPage & {
   status: ORDER_STATUS_NAME;
@@ -349,14 +356,16 @@ export type IReqCreateGroup = {
   order_ids: number[];
   group_type: GROUP_ORDER_TYPE;
   name: string;
+  numberCreateOrder?: number;
+  status: STATUS_ORDER_GROUP;
 };
 export type IReqUpdateOrderPrinted = {
-  order_ids: number[]; // cập nhật lại ds đơn theo group bị nhầm, có thể truyền rỗng nếu kg thay đổi
-  group_type: GROUP_ORDER_TYPE;
-  status: STATUS_ORDER_GROUP;
-  printed_orders: number[]; // cập nhật những đơn đã in
-  outsource_date: string;
-  notes: string;
+  order_ids?: number[]; // cập nhật lại ds đơn theo group bị nhầm, có thể truyền rỗng nếu kg thay đổi
+  group_type?: GROUP_ORDER_TYPE;
+  status?: STATUS_ORDER_GROUP;
+  printed_orders?: number[]; // cập nhật những đơn đã in
+  outsource_date?: string;
+  notes?: string;
 };
 
 export type IResCustomerByStatusOrder = {
@@ -394,4 +403,51 @@ export type IReqOrderDelivery = {
   deliver_provider: string;
   tracking_id?: string;
   status: ORDER_STATUS_NAME;
+};
+
+// export type IOrderByGroup = {
+//   id: number;
+//   order_no: string;
+//   outsources: IOutSource[];
+//   images: string[];
+//   quantity: number;
+//   order_detail_notes: string;
+//   status: ORDER_STATUS_NAME;
+// };
+export type IOrderGroup = {
+  created_time: string;
+  updated_time: string;
+  id: number;
+  group_name: string;
+  group_type: GROUP_ORDER_TYPE;
+  status: STATUS_ORDER_GROUP;
+  orders: IOrderDetail[];
+  images?: string[];
+  group_no: string;
+};
+export type IResGetOrderGroup = {
+  items: IOrderGroup[];
+  total: number;
+};
+
+export type IReqOrderGroupComplete = {
+  filename: string;
+};
+export type IResOrderGroupComplete = {
+  upload_url: string;
+  group_no: string;
+};
+
+export type IReqGroupByOrder = {
+  status: STATUS_ORDER_GROUP;
+};
+export type IGroupByOrder = {
+  id: number;
+  order_no: string;
+  name: string;
+  groups: IOrderGroup[];
+};
+export type IResGroupByOrder = {
+  items: IGroupByOrder[];
+  total: number;
 };

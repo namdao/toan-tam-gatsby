@@ -4,6 +4,7 @@ import { persistReducer } from "redux-persist";
 import { RootState } from "store";
 import storage from "redux-persist/lib/storage";
 import { IPaperType } from "./types";
+import { PAPER_OTHERS } from "../helper/PaperConstant";
 
 export type PaperState = {
   list: IPaperType[];
@@ -30,7 +31,43 @@ const paperSlice = createSlice({
 
 // Selectors
 const getListPaper = (state: RootState) => state.data.paperType.list;
-export const PaperTypeSelector = { getListPaper };
+const getListIdPaperLikeName = (state: RootState, groupPaperName: string) => {
+  const listPaper = getListPaper(state);
+  const listIds: number[] = [];
+  const itemPaper = groupPaperName.split("-");
+  listPaper.forEach((e) => {
+    if (
+      e.paper_name.includes(itemPaper?.[0]) ||
+      e.paper_name.includes(itemPaper?.[1])
+    ) {
+      listIds.push(e.id);
+    }
+  });
+
+  return listIds;
+};
+const getListIdPaperOther = (state: RootState) => {
+  const listPaper = getListPaper(state);
+  const listIds: number[] = [];
+  listPaper.forEach((item) => {
+    switch (true) {
+      case item.paper_name.includes(PAPER_OTHERS.CanDiamond):
+      case item.paper_name.includes(PAPER_OTHERS.Carton):
+      case item.paper_name.includes(PAPER_OTHERS.GiayAnh):
+      case item.paper_name.includes(PAPER_OTHERS.GiayDau):
+      case item.paper_name.includes(PAPER_OTHERS.KhongThamDau):
+      case item.paper_name.includes(PAPER_OTHERS.Nhua):
+      case item.paper_name.includes(PAPER_OTHERS.Null):
+        listIds.push(item.id);
+    }
+  });
+  return listIds;
+};
+export const PaperTypeSelector = {
+  getListPaper,
+  getListIdPaperLikeName,
+  getListIdPaperOther,
+};
 
 // Actions
 export const paperTypeActions = paperSlice.actions;

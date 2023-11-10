@@ -4,6 +4,8 @@ import appConstant from "constant/appConstant";
 import { navigate } from "gatsby";
 import { PATH_APP } from "constant/routeConstant";
 import { useEffect, useRef } from "react";
+import { IOutSource } from "scenes/outsources/redux/types";
+import groupBy from "lodash/groupBy";
 
 const { ROLES } = appConstant;
 export const isBrowser = typeof window !== `undefined`;
@@ -104,3 +106,10 @@ export function useDidUpdate(callback: () => void, deps: unknown[]): void {
     }
   }, deps);
 }
+
+export const getDataOutsource = (outsources: IOutSource[]) => {
+  const dataGroupOutsources = groupBy(outsources, "group");
+
+  const keyOutSource = Object.keys(dataGroupOutsources);
+  return { keyOutSource, dataGroupOutsources };
+};

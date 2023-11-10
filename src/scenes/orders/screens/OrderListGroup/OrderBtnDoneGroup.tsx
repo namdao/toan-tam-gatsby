@@ -1,9 +1,8 @@
-import React, { FC, useState } from "react";
-import { useOrderPrinting } from "scenes/orders/hooks/useOrderPrinting";
-import { ORDER_STATUS_NAME } from "scenes/orders/helper/OrderConstant";
-import Iconify from "components/iconify";
-import { ICON } from "constant/layoutConstant";
-import { magicTablePrintingRef } from "./OrderList";
+import React, { FC, useCallback, useState } from "react";
+import {
+  GROUP_ORDER_TYPE,
+  STATUS_ORDER_GROUP,
+} from "scenes/orders/helper/OrderConstant";
 import {
   Dialog,
   DialogTitle,
@@ -11,28 +10,46 @@ import {
   DialogContentText,
   Stack,
   DialogActions,
+  Button,
 } from "@mui/material";
 import { useLocales } from "locales";
-import { IOrderDetail } from "scenes/orders/redux/types";
-import { GridActionsCellItem } from "@mui/x-data-grid";
+import { IReqUpdateOrderPrinted } from "scenes/orders/redux/types";
 import { LoadingButton } from "@mui/lab";
 import { alpha } from "@mui/system";
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import RHFDatePicker from "components/hook-form/RHFDatePicker";
-import FormProvider, { RHFTextField } from "components/hook-form";
+import FormProvider, { RHFTextField, RHFUpload } from "components/hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { format } from "date-fns";
+import { magicTablePrintingRef } from "../OrderPrinting/OrderList";
+import useOrderGroup from "scenes/orders/hooks/useOrderGroup";
 
 type IOrderBtnAccept = {
-  order: IOrderDetail;
+  idsOrder: number[];
+  idGroup: number;
+  groupName: string;
+  groupType: GROUP_ORDER_TYPE;
+  refetch: () => void;
 };
-type FormValuesProps = {
+export type FormValuesGroupProps = {
   note: string;
   outsource_date: Date;
+  filename:
+    | (File & {
+        preview: string;
+      })
+    | string
+    | null;
 };
-const OrderBtnDone: FC<IOrderBtnAccept> = ({ order }) => {
-  const { onFinishOrder } = useOrderPrinting();
+const OrderBtnDoneGroup: FC<IOrderBtnAccept> = ({
+  idsOrder,
+  idGroup,
+  groupName,
+  groupType,
+  refetch,
+}) => {
+  const { onUpdateOrderGroup, onCompleteOrderGroup } = useOrderGroup();
   const [open, setOpen] = useState(false);
   const { translate } = useLocales();
   const OrderUpdateSchema = Yup.object().shape({
@@ -40,7 +57,7 @@ const OrderBtnDone: FC<IOrderBtnAccept> = ({ order }) => {
     note: Yup.string().required("Nhập ghi chú"),
   });
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm<FormValuesGroupProps>({
     resolver: yupResolver(OrderUpdateSchema),
     defaultValues: {
       outsource_date: new Date(),
@@ -49,25 +66,32 @@ const OrderBtnDone: FC<IOrderBtnAccept> = ({ order }) => {
   });
 
   const {
+    setValue,
     reset,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const handleAcceptOrder = async (data: FormValuesProps) => {
-    const payload = {
-      note: data.note,
-      outsource_date: format(
-        new Date(data?.outsource_date || ""),
-        "yyyy-MM-dd hh:mm:ss"
-      ),
-      status: ORDER_STATUS_NAME.PRINTED,
-    };
-    const status = await onFinishOrder(order.id, payload);
-    if (status) {
-      handleClose();
-      magicTablePrintingRef.current?.refreshList();
-      reset();
+  const handleAcceptOrder = async (data: FormValuesGroupProps) => {
+    const isUploadSuccess = await onCompleteOrderGroup(idGroup, data);
+    if (isUploadSuccess) {
+      const payload: IReqUpdateOrderPrinted = {
+        notes: data.note,
+        outsource_date: format(
+          new Date(data?.outsource_date || ""),
+          "yyyy-MM-dd hh:mm:ss"
+        ),
+        status: STATUS_ORDER_GROUP.PRINTED_GROUP,
+        printed_orders: idsOrder,
+        group_type: groupType,
+      };
+      const status = await onUpdateOrderGroup(idGroup, payload);
+      if (status) {
+        handleClose();
+        magicTablePrintingRef.current?.refreshList();
+        reset();
+        refetch();
+      }
     }
   };
 
@@ -79,6 +103,25 @@ const OrderBtnDone: FC<IOrderBtnAccept> = ({ order }) => {
     setOpen(true);
   };
 
+  const handleDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+
+      const newFile = Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      });
+
+      if (file) {
+        setValue("filename", newFile, { shouldValidate: true });
+      }
+    },
+    [setValue]
+  );
+
+  const handleRemoveFile = () => {
+    setValue("filename", null);
+  };
+
   const onShowFormOrder = () => {
     return (
       <DialogContent>
@@ -88,6 +131,12 @@ const OrderBtnDone: FC<IOrderBtnAccept> = ({ order }) => {
               sx={{ minWidth: 400 }}
               name="outsource_date"
               label={translate("orders.orderPrintingList.outsourceDate")}
+            />
+            <RHFUpload
+              name="filename"
+              maxSize={3145728}
+              onDrop={handleDrop}
+              onDelete={handleRemoveFile}
             />
             <RHFTextField
               name="note"
@@ -103,13 +152,9 @@ const OrderBtnDone: FC<IOrderBtnAccept> = ({ order }) => {
 
   return (
     <>
-      <GridActionsCellItem
-        label="Xác nhận đơn"
-        onClick={handleClickOpen}
-        icon={
-          <Iconify width={ICON.NAV_ITEM} color="green" icon="el:ok-circle" />
-        }
-      />
+      <Button variant="contained" onClick={handleClickOpen}>
+        {translate("orders.orderPrintingList.btnDoneGroup")}
+      </Button>
       <Dialog
         open={open}
         scroll="paper"
@@ -119,7 +164,7 @@ const OrderBtnDone: FC<IOrderBtnAccept> = ({ order }) => {
       >
         <DialogTitle>
           {translate("orders.orderProcessing.update", {
-            orderId: order.order_no,
+            orderId: groupName,
           })}
         </DialogTitle>
         <FormProvider
@@ -155,4 +200,4 @@ const OrderBtnDone: FC<IOrderBtnAccept> = ({ order }) => {
     </>
   );
 };
-export default OrderBtnDone;
+export default OrderBtnDoneGroup;

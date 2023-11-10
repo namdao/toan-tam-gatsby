@@ -1,5 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Tab, Tabs, Card, Stack, CircularProgress } from "@mui/material";
+import {
+  Tab,
+  Tabs,
+  Card,
+  Stack,
+  CircularProgress,
+  IconButton,
+  Box,
+  Button,
+} from "@mui/material";
 import {
   ORDER_STATUS_NAME,
   ORDER_TAB_STORED,
@@ -13,9 +22,11 @@ import { GridRowSelectionModel } from "@mui/x-data-grid";
 import useOrderByCustomer, {
   IOrderByCustomer,
 } from "scenes/orders/hooks/useOrderByCustomer";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import SkeletonCustomer from "./SkeletonCustomer";
+import Iconify from "components/iconify";
+import { ICON } from "constant/layoutConstant";
 
 const tabChild = (tab: IOrderTabProcessing) => {
   const { translate } = useLocales();
@@ -27,11 +38,14 @@ const OrderList = () => {
   const [filterStatus, handleFilterStatus] = useState<ORDER_STATUS_NAME>(
     ORDER_STATUS_NAME.STORED
   );
+
+  const queryClient = useQueryClient();
   const prevStatus = useRef(filterStatus);
   const { getCustomerInfinity } = useOrderByCustomer(filterStatus);
   const { ref, inView } = useInView({
     threshold: 0.8,
   });
+
   const onChangeStatus = (
     _event: React.SyntheticEvent<Element, Event>,
     newValue: ORDER_STATUS_NAME
@@ -74,13 +88,17 @@ const OrderList = () => {
     listButtonRef.current[key] = element;
   };
 
+  const fetchCustomerInfinity = ({ pageParam = 1 }) => {
+    return getCustomerInfinity(pageParam, filterStatus);
+  };
+
   const {
     fetchNextPage,
-    hasNextPage,
     data,
     refetch,
-    isRefetching,
+    isInitialLoading,
     isFetching,
+    isRefetching,
   } = useInfiniteQuery<
     {
       data: IOrderByCustomer[];
@@ -89,33 +107,73 @@ const OrderList = () => {
     any,
     {
       data: IOrderByCustomer[];
+      pageParam: number;
     }
   >({
-    queryFn: ({ pageParam = 1 }) => {
-      return getCustomerInfinity(pageParam, filterStatus);
-    },
+    queryKey: ["orderStored"],
+    keepPreviousData: false,
+    refetchOnWindowFocus: false,
+    queryFn: fetchCustomerInfinity,
     getNextPageParam: (lastPage) => {
       return lastPage.pageParam > -1 ? lastPage.pageParam : undefined;
     },
   });
   useEffect(() => {
-    if (inView && hasNextPage && prevStatus.current === filterStatus) {
+    if (inView && prevStatus.current === filterStatus) {
       fetchNextPage();
     } else if (prevStatus.current !== filterStatus) {
       prevStatus.current = filterStatus;
       refetch();
     }
-  }, [inView, hasNextPage, filterStatus]);
+  }, [inView, filterStatus]);
 
+  const refetchList = () => {
+    queryClient.setQueryData<{
+      pages: [
+        {
+          data: IOrderByCustomer[];
+          pageParam: number;
+        }
+      ];
+    }>(["orderStored"], (oldData) => ({
+      pageParams: [1],
+      pages: [
+        {
+          data: [],
+          pageParam: 1,
+        },
+      ],
+    }));
+    refetch({ refetchPage: (page, index) => index === 0 });
+  };
   const dataMerge: IOrderByCustomer[] = [];
   data?.pages?.forEach((paging) =>
     paging?.data?.forEach((cus) => {
       dataMerge.push(cus);
     })
   );
-  const dataLoad = isRefetching ? [] : dataMerge;
+
+  const dataLoad = isInitialLoading || isRefetching ? [] : dataMerge;
   return (
     <Stack>
+      <Stack alignItems={"flex-end"}>
+        <IconButton
+          // variant="contained"
+          onClick={refetchList}
+          sx={{
+            width: 48,
+            height: 48,
+            my: 1,
+            backgroundColor: (theme) => theme.palette.primary.lighter,
+          }}
+        >
+          <Iconify
+            icon="solar:refresh-outline"
+            color={(theme) => theme.palette.primary.main}
+            width={24}
+          />
+        </IconButton>
+      </Stack>
       <Tabs
         value={filterStatus}
         onChange={onChangeStatus}
@@ -158,7 +216,7 @@ const OrderList = () => {
             </Card>
           );
         })
-      ) : isRefetching ? (
+      ) : isInitialLoading || isRefetching ? (
         <SkeletonCustomer />
       ) : (
         <Card sx={{ mt: 2, mb: 2, p: 3 }}>

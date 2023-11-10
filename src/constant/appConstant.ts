@@ -46,6 +46,11 @@ const appConstant = {
     GET_CUSTOMER_BY_ORDER_STATUS: `/orders/customers`,
     ORDER_BY_CUSTOMERS_ID: (idCustomer: number) =>
       `/orders/customers/${idCustomer}/groups`,
+    // upload hình ảnh group
+    REQUEST_UPLOAD_ORDER_GROUP_COMPLETE: (idGroup: number) =>
+      `/orders/groups/${idGroup}/complete`,
+    // Get ds group by order
+    GET_LIST_GROUP_BY_ORDER: "/orders/group-poly",
   },
   LANGS_DEFAULT: "vi",
   ROLES: {

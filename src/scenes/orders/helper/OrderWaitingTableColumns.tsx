@@ -8,7 +8,6 @@ import { IOrderDetail } from "../redux/types";
 import Label from "components/label";
 import { fNumber } from "utils/formatNumber";
 import FullScreenDialogs from "../screens/OrderProcessing/DialogOrderSelected";
-import OrderBtnAccept from "scenes/orders/screens/OrderWaitingPrint/OrderBtnAccept";
 import { PaperType } from "./OrderTableColumns";
 import { format } from "date-fns";
 import Iconify from "components/iconify";
@@ -31,7 +30,6 @@ export const OrderWaitingTableColumns: GridColDef<IOrderDetail>[] = [
     headerName: "Hành động",
     minWidth: 150,
     getActions: ({ row }: GridRowParams<IOrderDetail>) => [
-      <OrderBtnAccept id={row.id} />,
       <FullScreenDialogs orderId={row.id} orderName={row.order_no} />,
     ],
   },
@@ -60,10 +58,10 @@ export const OrderWaitingTableColumns: GridColDef<IOrderDetail>[] = [
     valueGetter: ({ value }) => (value ? value : "-"),
   },
   {
-    field: "category",
+    field: "category_name",
     headerName: "Loại hàng",
     minWidth: 150,
-    valueGetter: ({ row }) => row?.category?.category_name,
+    valueGetter: ({ row, value }) => value || row?.category?.category_name,
   },
   {
     field: "paper_id",
@@ -110,18 +108,20 @@ export const OrderWaitingTableColumns: GridColDef<IOrderDetail>[] = [
     align: "center",
     valueGetter: ({ value }) => `${value} x mm`,
   },
-  {
-    field: "outsources",
-    headerName: "Gia công",
-    minWidth: 300,
-    headerAlign: "center",
-    renderCell: ({ row }) => {
-      if (row.outsources.length < 1) return "Không gia công";
-      return row.outsources.map((e) => {
-        return <Label sx={{ mr: 1 }}>{e.name}</Label>;
-      });
-    },
-  },
+  // {
+  //   field: "outsources",
+  //   headerName: "Gia công",
+  //   minWidth: 300,
+  //   headerAlign: "center",
+  //   renderCell: ({ row }) => {
+  //     console.log(row.outsources);
+  //     if (row?.outsources || row?.outsources?.length < 1)
+  //       return "Không gia công";
+  //     return row?.outsources?.map((e) => {
+  //       return <Label sx={{ mr: 1 }}>{e.name}</Label>;
+  //     });
+  //   },
+  // },
   {
     field: "created_time",
     headerName: "Ngày tạo đơn hàng",

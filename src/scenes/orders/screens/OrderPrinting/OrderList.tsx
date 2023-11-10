@@ -35,7 +35,7 @@ const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
 export type IMagicTableRef = {
   refreshList: () => void;
 };
-export const magicTableRef = createRef<IMagicTableRef>();
+export const magicTablePrintingRef = createRef<IMagicTableRef>();
 const OrderTable: React.FC = () => {
   const { orderList, total, onNextPage, onOrderPrintingList, pageModel } =
     useOrderPrinting();
@@ -43,7 +43,7 @@ const OrderTable: React.FC = () => {
   const apiRef = useGridApiRef();
   const [storedColumn, setStoredColumn] = useState<Record<string, boolean>>({});
   const currentUser = useAppSelector(AuthSelector.getProfile);
-  useImperativeHandle(magicTableRef, () => ({
+  useImperativeHandle(magicTablePrintingRef, () => ({
     refreshList: onOrderPrintingList,
   }));
 

@@ -1,64 +1,23 @@
-import React, {
-  createRef,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from "react";
-import { Tab, Tabs, Card } from "@mui/material";
-import { ORDER_TAB_WAITING_PRINT } from "scenes/orders/helper/OrderConstant";
-import { useLocales } from "locales";
-import { IOrderTabWaitingPrint } from "scenes/orders/helper/OrderConstant";
-import { useOrderWaitingPrint } from "scenes/orders/hooks/useOrderWaitingPrint";
-import OrderTable from "./OrderTable";
-import { ICategoryDefault } from "scenes/categories/redux/types";
-
-type IMagicTableRef = {
-  refreshList: () => void;
-};
-export const magicTableRef = createRef<IMagicTableRef>();
-
-const tabChild = (tab: IOrderTabWaitingPrint) => {
-  const { translate } = useLocales();
-  return <Tab key={tab.value} value={tab.value} label={translate(tab.name)} />;
-};
+import React, { useRef } from "react";
+import { Card } from "@mui/material";
+import OrderTable, { magicTableWaitingRef } from "./OrderTable";
+import OrderCreateGroup, { IPropsGroup } from "./OrderCreateGroup";
+import { IOrderDetail } from "scenes/orders/redux/types";
 
 const OrderList = () => {
-  const [tabSelected, setSelectedTab] = useState<ICategoryDefault>("Card");
-  const { onOrderWithCategories, onNextPage, total, orderList, pageModel } =
-    useOrderWaitingPrint(tabSelected);
-  const onChangeTab = (
-    _event: React.SyntheticEvent<Element, Event>,
-    newValue: ICategoryDefault
-  ) => {
-    setSelectedTab(newValue);
+  const btnGroupRef = useRef<IPropsGroup>(null);
+
+  const onSelectOrder = (item: IOrderDetail[]) => {
+    btnGroupRef.current?.selectOrderGroup(item);
   };
+  const onTabChange = () => btnGroupRef.current?.resetOrderGroup();
 
-  useEffect(() => {
-    onOrderWithCategories();
-  }, [tabSelected]);
-
-  useImperativeHandle(magicTableRef, () => ({
-    refreshList: onOrderWithCategories,
-  }));
+  const onRefreshList = () => magicTableWaitingRef.current?.refreshList();
 
   return (
     <Card>
-      <Tabs
-        value={tabSelected}
-        onChange={onChangeTab}
-        sx={{
-          px: 2,
-          bgcolor: "background.neutral",
-        }}
-      >
-        {ORDER_TAB_WAITING_PRINT.map((tab) => tabChild(tab))}
-      </Tabs>
-      <OrderTable
-        total={total}
-        orderList={orderList}
-        onNextPage={onNextPage}
-        pageModel={pageModel}
-      />
+      <OrderCreateGroup ref={btnGroupRef} onRefreshList={onRefreshList} />
+      <OrderTable onSelectOrder={onSelectOrder} onTabChange={onTabChange} />
     </Card>
   );
 };

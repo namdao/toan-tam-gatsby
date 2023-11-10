@@ -174,6 +174,12 @@ const OrderLangs = {
     error: {
       assign: "Nhận đơn thất bại",
     },
+    group: {
+      btnMultiOrder: "1 bài nhiều đơn",
+      btnMultiGroup: "1 đơn nhiều bài",
+      btnOnlyOrder: "1 bài 1 đơn",
+      title: "Tạo bình bài",
+    },
   },
   orderPrintingList: {
     title: "Danh sách đang in",
@@ -188,6 +194,8 @@ const OrderLangs = {
       reject: "Từ chối thất bại",
       done: "Hoàn thành thất bại",
     },
+    btnDoneGroup: "Hoàn thành bình bài",
+    btnUpdateGroup: "Cập nhật bài",
   },
   orderPrinted: {
     title: "Danh sách đã in",

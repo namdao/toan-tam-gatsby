@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardHeader,
-  Grid,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Card, CardHeader, Grid, Stack, Typography } from "@mui/material";
 import Label from "components/label";
 import React, { FC, useMemo } from "react";
 import { BlockInfoOrderSkelekton } from "scenes/orders/components/BlockOrderDetailSkeleton";
@@ -24,7 +17,6 @@ type IPropsInfoOrder = {
 
 const BlockInfoOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
   const { translate } = useLocales();
-  const theme = useTheme();
   if (loading) {
     return (
       <Grid container spacing={3} sx={{ pt: 3 }}>
@@ -213,7 +205,7 @@ const BlockInfoOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
             title={
               translate("orders.orderDetail.info.title") + " " + data?.order_no
             }
-            sx={{ color: theme.palette.primary.main }}
+            sx={{ color: (theme) => theme.palette.primary.main }}
           />
           <Stack spacing={2} sx={{ p: 3 }}>
             {blockPriceInfo()}

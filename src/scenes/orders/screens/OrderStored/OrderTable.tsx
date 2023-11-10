@@ -45,7 +45,6 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
   idCus,
   callbackBtnPrint,
 }) => {
-  const { translate } = useLocales();
   const totalRow = orders?.length || 0;
 
   const [storedColumn, setStoredColumn] = useState<Record<string, boolean>>({});

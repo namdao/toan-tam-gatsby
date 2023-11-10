@@ -19,7 +19,7 @@ export const uploadImageToAws = async (url: string, file: File) => {
     if (result.status === 200) {
       return true;
     }
-    return true;
+    return false;
   } catch (error) {
     console.log(error);
     return false;

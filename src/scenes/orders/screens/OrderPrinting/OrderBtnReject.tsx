@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import { useOrderPrinting } from "scenes/orders/hooks/useOrderPrinting";
 import Iconify from "components/iconify";
 import { ICON } from "constant/layoutConstant";
-import { magicTableRef } from "./OrderList";
+import { magicTablePrintingRef } from "./OrderList";
 import {
   Dialog,
   DialogTitle,

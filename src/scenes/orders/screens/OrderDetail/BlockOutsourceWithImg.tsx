@@ -1,5 +1,4 @@
 import {
-  Box,
   Card,
   CardHeader,
   Grid,
@@ -8,13 +7,14 @@ import {
   useTheme,
 } from "@mui/material";
 import Label from "components/label";
-import appConstant from "constant/appConstant";
 import { useLocales } from "locales";
 import { groupBy } from "lodash";
 import React, { FC, useMemo } from "react";
 import { IOrderDetail } from "scenes/orders/redux/types";
-import Image from "components/image";
 import ImagePopup from "scenes/orders/components/ImagePopup";
+import { getImageToAws } from "utils/imageHandler";
+import { getDataOutsource } from "utils/utility";
+import { IOurSources } from "constant/commonType";
 
 type IPropsInfoOrder = {
   data: IOrderDetail | undefined;
@@ -22,21 +22,14 @@ type IPropsInfoOrder = {
 const BlockOutsourceWithImg: FC<IPropsInfoOrder> = ({ data }) => {
   const { translate } = useLocales();
   const theme = useTheme();
-  const dataGroupOutsources = useMemo(
-    () => groupBy(data?.outsources, "group"),
-    [data?.outsources]
-  );
-  const keyOutSource = useMemo(
-    () => Object.keys(dataGroupOutsources),
-    [dataGroupOutsources]
-  );
 
   const imgUrl =
     data && data?.images && data?.images?.length > 0
-      ? `${appConstant.URL_IMG}${data?.images[0]}`
+      ? getImageToAws(data.images[0])
       : null;
 
-  const renderRowOutSource = () => {
+  const renderRowOutSource = (outsources: IOurSources[]) => {
+    const { dataGroupOutsources, keyOutSource } = getDataOutsource(outsources);
     return keyOutSource.map((nameKey) => {
       const listChildByKey = dataGroupOutsources[nameKey];
       return (
@@ -62,7 +55,7 @@ const BlockOutsourceWithImg: FC<IPropsInfoOrder> = ({ data }) => {
             sx={{ color: theme.palette.primary.main }}
           />
           <Stack sx={{ p: 3 }}>
-            {renderRowOutSource()}
+            {data && data?.outsources && renderRowOutSource(data.outsources)}
             {imgUrl && (
               <ImagePopup
                 url={[imgUrl]}

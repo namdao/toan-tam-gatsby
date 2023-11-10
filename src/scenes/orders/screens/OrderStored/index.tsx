@@ -7,11 +7,11 @@ import Header from "./BlockHeader";
 import OrderList from "./OrderList";
 import Helmet from "react-helmet";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-const queryClient = new QueryClient();
 
-const OrderProcessing = () => {
+const OrderStored = () => {
   const themeStretch = useAppSelector(SettingsSelector.getThemeStretch);
   const { translate } = useLocales();
+  const queryClient = new QueryClient();
   return (
     <>
       <Helmet title={translate("orders.orderStore.title")} />
@@ -24,4 +24,4 @@ const OrderProcessing = () => {
     </>
   );
 };
-export default OrderProcessing;
+export default OrderStored;

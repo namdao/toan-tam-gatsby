@@ -12,7 +12,7 @@ import {
   IResOrderByCustomer,
 } from "../redux/types";
 
-const per_page = 2;
+const per_page = 5;
 export type IOrderByCustomer = {
   customer: ICustomer;
   listOrder: IOrder[];
@@ -23,7 +23,6 @@ const useOrderByCustomer = (status: ORDER_STATUS_NAME) => {
     status: ORDER_STATUS_NAME
   ) => {
     try {
-      console.log("getCustomerInfinity", currentPage, status);
       const result: IResponseType<IResCustomerByStatusOrder> =
         await apiGetCustomerByOrderStatus({
           status,
@@ -41,9 +40,10 @@ const useOrderByCustomer = (status: ORDER_STATUS_NAME) => {
             });
           }
         }
+        const pageParam = result.data?.items.length > 0 ? currentPage + 1 : -1;
         return {
           data: listTemp,
-          pageParam: result.data?.items.length > 0 ? currentPage + 1 : -1,
+          pageParam,
         };
       }
       return {
@@ -59,10 +59,13 @@ const useOrderByCustomer = (status: ORDER_STATUS_NAME) => {
     }
   };
 
-  const getOrderByCustomer = async (customerId: number) => {
+  const getOrderByCustomer = async (
+    customerId: number,
+    signal?: AbortSignal
+  ) => {
     try {
       const result: IResponseType<IResOrderByCustomer> =
-        await apiGetOrderByCustomer(customerId, status);
+        await apiGetOrderByCustomer(customerId, status, signal);
       if (result.data) {
         return {
           status: true,

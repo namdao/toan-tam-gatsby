@@ -4,14 +4,16 @@ import { isArray, isNumber } from "lodash";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 import { CategoriesSelector } from "scenes/categories/redux/slice";
-import { ICategoryDefault } from "scenes/categories/redux/types";
+import { IPaperTabs, PAPER_TABS } from "scenes/papers/helper/PaperConstant";
+import { PaperTypeSelector } from "scenes/papers/redux/slice";
 import { useAppSelector } from "store";
 import { ORDER_STATUS_NAME } from "../helper/OrderConstant";
 import { getListCategoryId } from "../helper/OrderWaitingPrint";
-import { apiAssignOrder, apiOrderCategory } from "../redux/api";
+import { apiAssignOrder, apiOrderCategory, apiOrderPaper } from "../redux/api";
 import {
   IOrderDetail,
   IReqOrderCategoryStatus,
+  IReqOrderPaperList,
   IResOrderByCategory,
 } from "../redux/types";
 
@@ -20,17 +22,43 @@ export type IPage = {
   pageSize: number;
 };
 export const useOrderWaitingPrint = (
-  categoryValue: ICategoryDefault = "Card"
+  tabSelected: IPaperTabs = PAPER_TABS[0]
 ) => {
   const dataCategory = useAppSelector(CategoriesSelector.getListCategories);
-  const categoriesByValue = getListCategoryId(dataCategory, categoryValue);
+
+  const listIdPaperOther = useAppSelector(
+    PaperTypeSelector.getListIdPaperOther
+  ).join(",");
+  const listIdPaperLikeName =
+    tabSelected.value !== PAPER_TABS[1].value ||
+    tabSelected.value !== PAPER_TABS[4].value
+      ? useAppSelector((state) =>
+          PaperTypeSelector.getListIdPaperLikeName(
+            state,
+            tabSelected.value
+          ).join(",")
+        )
+      : "";
+  // const categoriesByValue = getListCategoryId(dataCategory, categoryValue);
   const [orderList, setOrderList] = useState<IOrderDetail[]>([]);
+
   const [total, setTotal] = useState<number>(0);
   const [pageModel, setPageModel] = useState<IPage>({
     page: 0,
     pageSize: 20,
   });
   const { translate } = useLocales();
+  const isTabsCategory = tabSelected.value === "Sticker";
+  let listIdPaper = "";
+  if (tabSelected.value === PAPER_TABS[4].value) {
+    listIdPaper = listIdPaperOther;
+    // sticker là loại hàng hóa, không phải loại giấy
+  } else if (tabSelected.value === PAPER_TABS[1].value) {
+    listIdPaper = getListCategoryId(dataCategory, "Sticker");
+  } else {
+    listIdPaper = listIdPaperLikeName;
+  }
+
   const onOrderWithCategories = async (pageReqModel: IPage = pageModel) => {
     try {
       const payload: IReqOrderCategoryStatus = {
@@ -39,7 +67,7 @@ export const useOrderWaitingPrint = (
         page: pageReqModel.page,
         per_page: pageReqModel.pageSize,
         sort_direction: "desc",
-        category: categoriesByValue,
+        category: listIdPaper,
       };
       const result: IResponseType<IResOrderByCategory> = await apiOrderCategory(
         payload
@@ -56,10 +84,44 @@ export const useOrderWaitingPrint = (
       });
     }
   };
+  const onOrderWithPaperIds = async (pageReqModel: IPage = pageModel) => {
+    try {
+      const payload: IReqOrderPaperList = {
+        paper_ids: listIdPaper,
+        page: pageReqModel.page === 0 ? 1 : pageReqModel.page,
+        per_page: pageReqModel.pageSize,
+      };
+      const result: IResponseType<IResOrderByCategory> = await apiOrderPaper(
+        payload
+      );
+      if (result?.data) {
+        if (isNumber(result.data.total) && isArray(result.data.items)) {
+          setOrderList(result.data.items);
+          setTotal(result.data.total);
+        }
+      }
+    } catch (error) {
+      enqueueSnackbar((error as Error)?.message || "onOrderWithStatus error", {
+        variant: "error",
+      });
+    }
+  };
+
+  const onGetOrderPaperOrCategory = (pageReqModel: IPage = pageModel) => {
+    if (isTabsCategory) {
+      onOrderWithCategories(pageReqModel);
+    } else {
+      onOrderWithPaperIds(pageReqModel);
+    }
+  };
 
   const onNextPage = (page: number, pageSize: number) => {
     setPageModel({ page: page, pageSize });
-    onOrderWithCategories({ page: page + 1, pageSize });
+    if (isTabsCategory) {
+      onOrderWithCategories({ page: page + 1, pageSize });
+    } else {
+      onOrderWithPaperIds({ page: page + 1, pageSize });
+    }
   };
 
   const onAcceptOrder = async (id: number, statusOrder: ORDER_STATUS_NAME) => {
@@ -87,10 +149,13 @@ export const useOrderWaitingPrint = (
     }
     return status;
   };
+
   return {
-    onOrderWithCategories,
+    onOrderWithPaperIds,
     onNextPage,
     onAcceptOrder,
+    setPageModel,
+    onGetOrderPaperOrCategory,
     orderList,
     total,
     pageModel,

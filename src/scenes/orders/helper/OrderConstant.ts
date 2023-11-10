@@ -265,9 +265,12 @@ export enum GROUP_ORDER_TYPE {
 
 export enum STATUS_ORDER_GROUP {
   // Tạo group nhưng còn chỉnh sửa chưa in
-  WAITING_CREATE_GROUP = 0,
+  WAITING_APPROVED = 0,
   // Xác nhận các đơn trong group và tiến hành in
   PRINTING_GROUP = 1,
   // Đã in các đơn trong group xong và chuyển sang kho
   PRINTED_GROUP = 2,
+  // xóa group
+  DELETE_GROUP = -1,
+  DONE_GROUP = 3,
 }

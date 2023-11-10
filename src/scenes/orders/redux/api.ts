@@ -1,15 +1,19 @@
 import axios from "axios";
 import appConstant from "constant/appConstant";
+import { IResponseType } from "constant/commonType";
 import { ORDER_STATUS_NAME } from "../helper/OrderConstant";
 import {
   IQuickUpdateOrder,
   IReqCreateGroup,
   IReqCreateOrder,
   IReqCustomerByStatus,
+  IReqGroupByOrder,
   IReqGroupByStatus,
   IReqOrderCategoryStatus,
+  IReqOrderGroupComplete,
   IReqOrderListCollect,
   IReqOrderListConfirm,
+  IReqOrderPaperList,
   IReqOrderSearch,
   IReqOrderStatus,
   IReqPrintDoneOrder,
@@ -17,6 +21,10 @@ import {
   IRequestUpdateOrder,
   IReqUpdateMultiOrder,
   IReqUpdateOrderPrinted,
+  IResGetOrderGroup,
+  IResGroupByOrder,
+  IResOrderGroupComplete,
+  IResUrlUpload,
 } from "./types";
 
 const { API_URL } = appConstant;
@@ -87,7 +95,10 @@ export const apiDonePrintOrder = (id: number, data: IReqPrintDoneOrder) =>
 export const apiCreateOrder = (data: IReqCreateOrder) =>
   axios.post(API_URL.CREATE_ORDER, data);
 
-export const apiRequestUploadImg = (id: number, filename: string) =>
+export const apiRequestUploadImg = (
+  id: number,
+  filename: string
+): Promise<IResponseType<IResUrlUpload>> =>
   axios.post(API_URL.REQUEST_UPLOAD_IMAGE(id), { filename });
 
 export const apiUpdateOrderCreate = (
@@ -102,7 +113,9 @@ export const apiRemoveImg = (orderId: number, image_name: string) =>
     },
   });
 
-export const apiGetOrderGroup = (params: IReqGroupByStatus) =>
+export const apiGetOrderGroup = (
+  params: IReqGroupByStatus
+): Promise<IResponseType<IResGetOrderGroup>> =>
   axios.get(API_URL.ORDER_GROUPS, { params });
 
 export const apiCreateGroup = (data: IReqCreateGroup) =>
@@ -128,3 +141,22 @@ export const apiGetOrderByCustomer = (
 
 export const apiGetCustomerByOrderStatus = (params: IReqCustomerByStatus) =>
   axios.get(API_URL.GET_CUSTOMER_BY_ORDER_STATUS, { params });
+
+export const apiOrderPaper = (params: IReqOrderPaperList) =>
+  axios.get(API_URL.ORDERS4, {
+    params: {
+      ...params,
+      status: `${ORDER_STATUS_NAME.DESIGNED},${ORDER_STATUS_NAME.SALE}`,
+    },
+  });
+
+export const apiUploadImageGroup = (
+  idGroup: number,
+  body: IReqOrderGroupComplete
+): Promise<IResponseType<IResOrderGroupComplete>> =>
+  axios.post(API_URL.REQUEST_UPLOAD_ORDER_GROUP_COMPLETE(idGroup), body);
+
+export const apiGetGroupByOrder = (
+  params: IReqGroupByOrder
+): Promise<IResponseType<IResGroupByOrder>> =>
+  axios.get(API_URL.GET_LIST_GROUP_BY_ORDER, { params });
