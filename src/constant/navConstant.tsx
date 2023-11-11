@@ -270,7 +270,7 @@ const navConfig = [
         path: PATH_APP.customer.root,
         icon: iconify("mdi:user"),
         component: () => <></>,
-        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
+        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.SALER],
         children: [
           {
             title: "basicInfo.customer.list",
@@ -282,7 +282,7 @@ const navConfig = [
             title: "basicInfo.customer.add",
             path: PATH_APP.customer.add,
             component: CustomerAdd,
-            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT],
+            roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.SALER],
           },
           {
             title: "basicInfo.customer.update",

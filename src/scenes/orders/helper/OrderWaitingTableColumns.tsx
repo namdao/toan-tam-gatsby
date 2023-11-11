@@ -128,7 +128,12 @@ export const OrderWaitingTableColumns: GridColDef<IOrderDetail>[] = [
     headerAlign: "center",
     align: "center",
     minWidth: 200,
-    valueGetter: ({ value }) => format(new Date(value), "dd/MM/yyyy HH:mm"),
+    valueGetter: ({ value }) => {
+      if (typeof value === "number") {
+        return format(value * 1000, "dd/MM/yyyy HH:mm");
+      }
+      return format(new Date(value), "dd/MM/yyyy HH:mm");
+    },
   },
 ];
 export const pinOrderLeft = OrderWaitingTableColumns.filter(
