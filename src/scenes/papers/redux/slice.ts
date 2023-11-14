@@ -58,6 +58,10 @@ const getListIdPaperOther = (state: RootState) => {
       case item.paper_name.includes(PAPER_OTHERS.KhongThamDau):
       case item.paper_name.includes(PAPER_OTHERS.Nhua):
       case item.paper_name.includes(PAPER_OTHERS.Null):
+      case item.paper_name.includes(PAPER_OTHERS.Giay):
+      case item.paper_name.includes(PAPER_OTHERS.GiayNen):
+      case item.paper_name.includes(PAPER_OTHERS.GiayAnh):
+      case item.paper_name.includes(PAPER_OTHERS.MyThuat):
         listIds.push(item.id);
     }
   });

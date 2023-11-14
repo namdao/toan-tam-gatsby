@@ -12,12 +12,14 @@ export enum PAPER_NAME_TABS {
 export enum PAPER_OTHERS {
   CanDiamond = "Can Diamond",
   Carton = "Carton",
-  GiayAnh = "Giấy Ánh",
   GiayDau = "Giấy Dầu",
   KhongThamDau = "Không Thấm Dầu",
-  Kraft = "Kraft",
   Nhua = "Nhựa",
   Null = "Null",
+  Giay = "Giấy",
+  GiayNen = "Giay nen",
+  GiayAnh = "Giấy Ảnh",
+  MyThuat = "Mỹ Thuật",
 }
 export type IPaperTabs = {
   value: string;
