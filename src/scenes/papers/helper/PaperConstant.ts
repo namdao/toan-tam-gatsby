@@ -35,6 +35,10 @@ export const PAPER_TABS = [
     label: "Sticker - Nhãn dán",
   },
   {
+    value: "Decal",
+    label: "Decal (New)",
+  },
+  {
     value: "Fort-Kraft",
     label: "Fort - Kraft",
   },
