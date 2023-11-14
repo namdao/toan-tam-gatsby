@@ -78,7 +78,7 @@ const TableListRevenue: FC<Props> = ({ dateRange }) => {
     <Grid item xs={12} md={12} lg={12}>
       <Card>
         <CardHeader title={translate("statistic.revenueCompany.title")} />
-        <Box sx={{ height: 600, width: "100%" }}>
+        <Box sx={{ height: "100vh", width: "100%" }}>
           <DataGridPro
             rows={dataRevenue}
             rowCount={total}

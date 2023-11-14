@@ -134,7 +134,7 @@ const TableListDebitDetail: React.FC<{
           <ButtonMoney money={delta} title="Còn lại" />
         </Stack>
       </Stack>
-      <Box sx={{ height: 600, width: "100%" }}>
+      <Box sx={{ height: "100vh", width: "100%" }}>
         <DataGridPro
           checkboxSelection
           rows={orderList}

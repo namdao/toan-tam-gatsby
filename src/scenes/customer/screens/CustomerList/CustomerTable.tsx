@@ -34,7 +34,7 @@ const CustomerTable = () => {
   }
 
   return (
-    <Box sx={{ height: 600, width: "100%" }}>
+    <Box sx={{ height: "100vh", width: "100%" }}>
       <DataGridPro
         rows={customerList}
         rowCount={totalRow}

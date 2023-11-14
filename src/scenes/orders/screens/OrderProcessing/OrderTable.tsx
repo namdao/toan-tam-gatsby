@@ -90,7 +90,7 @@ const OrderTable: React.FC<IPropsOrderTable> = ({ status }) => {
     setStoredColumn(listParamsStore);
   };
   return (
-    <Box sx={{ height: 600, width: "100%" }}>
+    <Box sx={{ height: "100vh", width: "100%" }}>
       <DataGridPro
         rows={orders}
         rowCount={totalRow}

@@ -153,7 +153,7 @@ const OrderTable: React.FC = () => {
         />
         <BlockPrintAndSendEmail ref={buttonRef} />
       </Stack>
-      <Box sx={{ height: 600, width: "100%" }}>
+      <Box sx={{ height: "100vh", width: "100%" }}>
         <DataGridPro
           loading={loading}
           checkboxSelection
