@@ -20,7 +20,6 @@ import { IOurSources } from "constant/commonType";
 import { STATUS_ORDER_GROUP } from "scenes/orders/helper/OrderConstant";
 import { useAppSelector } from "store";
 import { AuthSelector } from "scenes/auth/redux/slice";
-import { ROLES } from "scenes/users/helper/RoleConstants";
 import useOrderGroup from "scenes/orders/hooks/useOrderGroup";
 import OrderBtnDoneGroup from "../OrderBtnDoneGroup";
 import OrderBtnRemoveGroup from "../OrderBtnRemoveGroup";
@@ -28,7 +27,9 @@ import OrderBtnApproveGroup from "../OrderBtnApproveGroup";
 import OrderBtnStoreGroup from "../OrderBtnStoreGroup";
 import SkeletonCustomer from "../../OrderStored/SkeletonCustomer";
 import OrderGroupDetail from "./OrderGroupDetail";
+import appconstants from "constant/appConstant";
 
+const { ROLES } = appconstants;
 type IProps = {
   screen: "WAITING_APPROVED" | "PRINTING" | "PRINTED";
 };
@@ -38,9 +39,9 @@ const GroupListByOrder: FC<IProps> = ({ screen }) => {
   });
   const { onGroupListByOrder } = useOrderGroup();
   const roleUser = useAppSelector(AuthSelector.getRolesUser);
-  const rolePrinter = roleUser[0].name === ROLES.Printer;
-  const roleStore = roleUser[0].name === ROLES.Store;
-  const roleAdmin = roleUser[0].name === ROLES.Admin;
+  const rolePrinter = roleUser[0].name === ROLES.PRINTER;
+  const roleStore = roleUser[0].name === ROLES.STORE;
+  const roleAdmin = roleUser[0].name === ROLES.ADMIN;
   const queryOrder = async ({ pageParam = 1 }) => {
     switch (screen) {
       case "WAITING_APPROVED":
