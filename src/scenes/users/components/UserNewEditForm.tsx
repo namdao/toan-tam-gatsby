@@ -12,9 +12,17 @@ import { PATH_APP } from "constant/routeConstant";
 // assets
 import { ROLES } from "scenes/users/helper/RoleConstants";
 // components
-import FormProvider, { RHFSelect, RHFTextField } from "components/hook-form";
+import FormProvider, {
+  RHFCheckbox,
+  RHFSelect,
+  RHFTextField,
+} from "components/hook-form";
 import { useLocales } from "locales";
-import { IResUser } from "scenes/users/redux/types";
+import {
+  IReqUpdateUser,
+  IResUser,
+  IStatusUser,
+} from "scenes/users/redux/types";
 import { useUserList } from "scenes/users/hooks/useUserList";
 import { navigate } from "gatsby";
 
@@ -26,6 +34,7 @@ interface FormValuesProps {
   username: string;
   password?: string;
   email: string;
+  status: boolean;
 }
 
 type Props = {
@@ -52,6 +61,7 @@ export default function UserNewEditForm({
     role_name: Yup.string().required("Chọn quyền"),
     username: Yup.string().required("Nhập username"),
     password: !isEdit ? Yup.string().required("Nhập Mật khẩu") : Yup.string(),
+    status: Yup.boolean(),
   });
 
   const defaultValues = useMemo(
@@ -62,6 +72,7 @@ export default function UserNewEditForm({
       email: currentUser?.email,
       role_name: currentUser?.roles[0].name,
       username: currentUser?.username,
+      status: currentUser?.status === IStatusUser.ACTIVE ? true : false,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -88,15 +99,19 @@ export default function UserNewEditForm({
   }, [isEdit, currentUser]);
 
   const onSubmit = async (data: FormValuesProps) => {
+    const payload: IReqUpdateUser = {
+      ...data,
+      status: data.status ? IStatusUser.ACTIVE : IStatusUser.INACTIVE,
+    };
     if (isEdit) {
-      const result = await onUpdateUser(data.id, data);
+      const result = await onUpdateUser(data.id, payload);
       if (result) {
         reset();
         onGetUserList && onGetUserList();
         closeModal && closeModal();
       }
     } else {
-      const result = await onAddUser(data);
+      const result = await onAddUser(payload);
       if (result) {
         navigate(PATH_APP.user.list);
       }
@@ -153,6 +168,7 @@ export default function UserNewEditForm({
                   </option>
                 ))}
               </RHFSelect>
+              <RHFCheckbox name="status" label="Kích hoạt" />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

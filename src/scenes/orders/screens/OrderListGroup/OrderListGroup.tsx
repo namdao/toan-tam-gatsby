@@ -32,6 +32,7 @@ import OrderBtnStoreGroup from "./OrderBtnStoreGroup";
 import useOrderGroup from "scenes/orders/hooks/useOrderGroup";
 import OrderBtnApproveGroup from "./OrderBtnApproveGroup";
 import appconstants from "constant/appConstant";
+import { SettingsSelector } from "services/settings/redux/slice";
 
 const { ROLES } = appconstants;
 type IProps = {
@@ -46,6 +47,7 @@ const OrderListGroup: FC<IProps> = ({ screen }) => {
   const rolePrinter = roleUser[0].name === ROLES.PRINTER;
   const roleStore = roleUser[0].name === ROLES.STORE;
   const roleAdmin = roleUser[0].name === ROLES.ADMIN;
+  const themeMode = useAppSelector(SettingsSelector.getThemeMode);
   const queryOrder = async ({ pageParam = 1 }) => {
     switch (screen) {
       case "WAITING_APPROVED":
@@ -106,6 +108,7 @@ const OrderListGroup: FC<IProps> = ({ screen }) => {
 
   const renderRowOutSource = (outsources: IOurSources[]) => {
     const { dataGroupOutsources, keyOutSource } = getDataOutsource(outsources);
+
     return keyOutSource.map((nameKey) => {
       const listChildByKey = dataGroupOutsources[nameKey];
       return (
@@ -313,8 +316,11 @@ const OrderListGroup: FC<IProps> = ({ screen }) => {
                           borderWidth: 1,
                           borderRadius: 2,
                           borderColor: (theme) => theme.palette.primary.light,
-                          backgroundColor: (theme) =>
-                            theme.palette.primary.lighter,
+                          backgroundColor: (theme) => {
+                            return themeMode === "light"
+                              ? theme.palette.primary.lighter
+                              : theme.palette.primary.dark;
+                          },
                         }}
                       >
                         <Typography

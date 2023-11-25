@@ -9,6 +9,7 @@ export type IResUser = {
   phone: string;
   username: string;
   roles: IRoles[];
+  status: IStatusUser;
 };
 
 export type IReqEmployeeReport = {
@@ -33,6 +34,11 @@ export type IReqUpdateUser = {
   username?: string;
   role_name?: string;
   email: string;
+  status: IStatusUser;
 };
-
+export enum IStatusUser {
+  INACTIVE = -1,
+  PENDING = 0,
+  ACTIVE = 1,
+}
 export type IReqAddUser = IReqUpdateUser;
