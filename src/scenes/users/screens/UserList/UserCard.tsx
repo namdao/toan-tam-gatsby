@@ -15,7 +15,7 @@ import Image from "components/image";
 import SvgColor from "components/svg-color";
 import dataMockConstant from "constant/dataMockConstant";
 import Svg from "utils/svg";
-import { IResUser } from "scenes/users/redux/types";
+import { IResUser, IStatusUser } from "scenes/users/redux/types";
 import UserReport from "./UserReport";
 import { PATH_APP } from "constant/routeConstant";
 import { navigate } from "gatsby";
@@ -40,14 +40,21 @@ type Props = {
 
 export default function UserCard({ user, openUser }: Props) {
   const theme = useTheme();
-  const { first_name, last_name, username, roles, email, id } = user;
+  const { first_name, last_name, username, roles, email, id, status } = user;
   const fullName = `${first_name} ${last_name}`;
 
   const onSetUser = () => {
     openUser(user);
   };
   return (
-    <Card sx={{ textAlign: "center", position: "relative" }}>
+    <Card
+      sx={{
+        textAlign: "center",
+        position: "relative",
+        opacity: status === IStatusUser.INACTIVE ? 0.5 : 1,
+        backgroundColor: status === IStatusUser.INACTIVE ? "#999696" : "white",
+      }}
+    >
       <Box
         sx={{
           position: "absolute",
@@ -77,7 +84,10 @@ export default function UserCard({ user, openUser }: Props) {
             bottom: -26,
             mx: "auto",
             position: "absolute",
-            color: "background.paper",
+            color:
+              user.status === IStatusUser.INACTIVE
+                ? "#999696"
+                : "background.paper",
           }}
         />
 
