@@ -238,6 +238,9 @@ export type IReqOrderSearch = IPage & {
   customer_id?: number;
   paper?: string;
   order_name?: string;
+  order_no?: string;
+  price?: number;
+  customer_name?: string;
 };
 
 export type IReqRejectOrder = {

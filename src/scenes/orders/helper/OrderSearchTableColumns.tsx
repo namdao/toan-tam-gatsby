@@ -3,6 +3,7 @@ import {
   GridColDef,
   GridRenderCellParams,
   GridRowParams,
+  GridActionsCellItem,
 } from "@mui/x-data-grid-pro";
 import { IOrder } from "../redux/types";
 import { useAppSelector } from "store";
@@ -16,11 +17,52 @@ import { getImageToAws } from "utils/imageHandler";
 import ImagePopup from "../components/ImagePopup";
 import { ICON } from "constant/layoutConstant";
 import DialogOrderUpdate from "../screens/OrderUpdate";
+import { useOrderUpdate } from "../hooks/useOrderUpdate";
+import { useTheme } from "@mui/material";
+import { magicTableSearchRef } from "../screens/OrderSearch/OrderList";
+import { ORDER_STATUS_NAME } from "./OrderConstant";
+import { AuthSelector } from "scenes/auth/redux/slice";
+import appconstants from "constant/appConstant";
 
+const { ROLES } = appconstants;
 const PaperType = ({ paperId }: { paperId: number }) => {
   const listPaper = useAppSelector(PaperTypeSelector.getListPaper);
   const paperItem = listPaper.find((e) => e.id === paperId);
   return <span>{paperItem?.paper_name}</span>;
+};
+
+const QuickCancelOrder = ({ row }: { row: IOrder }) => {
+  const { onUpdateOrder, loading } = useOrderUpdate(row.id);
+  const roleUser = useAppSelector(AuthSelector.getRolesUser);
+  if (ROLES.ADMIN !== roleUser[0].name) return null;
+  const callbackSuccess = () => {
+    magicTableSearchRef?.current?.refreshList();
+  };
+  const handlerQuickCancel = () => {
+    onUpdateOrder(
+      {
+        status: ORDER_STATUS_NAME.CANCEL,
+        note: `${roleUser[0].name} đã hủy đơn`,
+      },
+      callbackSuccess
+    );
+  };
+  const theme = useTheme();
+  let iconName = "material-symbols:delete-outline";
+  iconName = loading ? "eos-icons:loading" : iconName;
+  return (
+    <GridActionsCellItem
+      label="Huỷ đơn"
+      onClick={handlerQuickCancel}
+      icon={
+        <Iconify
+          width={ICON.NAV_ITEM}
+          icon={iconName}
+          color={theme.palette.error.main}
+        />
+      }
+    />
+  );
 };
 export const OrderSearchColumnTable: GridColDef[] = [
   {
@@ -41,7 +83,7 @@ export const OrderSearchColumnTable: GridColDef[] = [
     field: "actions",
     type: "actions",
     headerName: "Hành động",
-    minWidth: 100,
+    minWidth: 150,
     getActions: ({ row }: GridRowParams<IOrder>) => [
       <FullScreenDialogs orderId={row.id} orderName={row.order_no} />,
       <DialogOrderUpdate
@@ -49,6 +91,7 @@ export const OrderSearchColumnTable: GridColDef[] = [
         orderName={row.order_no}
         fromPage="ORDER_SEARCH"
       />,
+      <QuickCancelOrder row={row} />,
     ],
   },
   {

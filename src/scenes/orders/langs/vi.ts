@@ -157,7 +157,8 @@ const OrderLangs = {
     cancel: "Huỷ đơn",
   },
   orderSearch: {
-    title: "Tìm kiếm đơn hàng",
+    title: "Tên đơn hàng",
+    orderNo: "Mã đơn hàng",
     method: "Kích thước",
     file: "Tên file",
     paper: "Loại giấy",

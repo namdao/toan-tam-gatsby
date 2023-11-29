@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  createRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from "react";
 import Box from "@mui/material/Box";
 import {
   DataGridPro,
@@ -25,9 +32,13 @@ import {
   OrderFeature,
 } from "services/firebase/common";
 
+export type IMagicTableRef = {
+  refreshList: () => void;
+};
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
+export const magicTableSearchRef = createRef<IMagicTableRef>();
 
 const OrderTable: React.FC = () => {
   const {
@@ -46,14 +57,16 @@ const OrderTable: React.FC = () => {
     pageModel,
     setCustomer,
     onSearchOrder,
+    orderNo,
+    setOrderNo,
   } = useOrderSearch();
   useEffect(() => {
-    if (method || paperName?.id || orderName || customer?.id) {
+    if (method || paperName?.id || orderName || customer?.id || orderNo) {
       onSearchOrder();
     } else if (orderList.length > 0) {
       setOrderList([]);
     }
-  }, [method, paperName, orderName, customer]);
+  }, [method, paperName, orderName, customer, orderNo]);
 
   const [storedColumn, setStoredColumn] = useState<Record<string, boolean>>({});
   const currentUser = useAppSelector(AuthSelector.getProfile);
@@ -67,6 +80,10 @@ const OrderTable: React.FC = () => {
     };
     getColumn();
   }, []);
+
+  useImperativeHandle(magicTableSearchRef, () => ({
+    refreshList: onSearchOrder,
+  }));
   const paginationModel = pageModel;
   const getTreeDataPath: DataGridProProps["getTreeDataPath"] = useCallback(
     (row: IOrder & { group: string[] }) => row.group,
@@ -97,8 +114,6 @@ const OrderTable: React.FC = () => {
     setStoredColumn(listParamsStore);
   };
 
-  console.log(orderList);
-
   return (
     <Card>
       <BlockFilter
@@ -106,10 +121,12 @@ const OrderTable: React.FC = () => {
         setOrderName={setOrderName}
         setPaperName={setPaperName}
         setCustomer={setCustomer}
+        setOrderNo={setOrderNo}
         method={method}
         paperName={paperName}
         orderName={orderName}
         customer={customer}
+        orderNo={orderNo}
       />
       <Box sx={{ height: "100vh", width: "100%" }}>
         <DataGridPro

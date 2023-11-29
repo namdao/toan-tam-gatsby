@@ -25,6 +25,8 @@ type IProps = {
   method: string;
   paperName: ISelect | null;
   orderName: string;
+  orderNo: string;
+  setOrderNo: (val: string) => void;
 };
 
 export default function BlockFilter({
@@ -32,6 +34,8 @@ export default function BlockFilter({
   method,
   paperName,
   orderName,
+  orderNo,
+  setOrderNo,
   setCustomer,
   setMethod,
   setOrderName,
@@ -45,6 +49,7 @@ export default function BlockFilter({
     setPaperName(null);
     setOrderName("");
     setMethod("");
+    setOrderNo("");
   };
 
   const onCustomerChange = (_e: SyntheticEvent<any>, value: ISelect | null) => {
@@ -61,6 +66,9 @@ export default function BlockFilter({
   const onSetMethod = (e: ChangeEvent<HTMLInputElement>) => {
     setMethod(e.target.value);
   };
+  const onSetOrderNo = (e: ChangeEvent<HTMLInputElement>) => {
+    setOrderNo(e.target.value);
+  };
   const customerAutoComplete = customerList.map((e) => {
     return {
       id: e.id,
@@ -71,7 +79,7 @@ export default function BlockFilter({
   const paperAutoComplete = paperList.map((e) => {
     return { id: e.id, label: e.paper_name };
   });
-  const isFiltered = method || paperName || orderName || customer;
+  const isFiltered = method || paperName || orderName || customer || orderNo;
   return (
     <Stack
       spacing={2}
@@ -120,6 +128,23 @@ export default function BlockFilter({
           startAdornment: (
             <InputAdornment position="start">
               <Iconify icon="eva:search-fill" sx={{ color: "text.disabled" }} />
+            </InputAdornment>
+          ),
+        }}
+      />
+      <TextField
+        fullWidth
+        sx={{ width: "30%" }}
+        value={orderNo}
+        onChange={onSetOrderNo}
+        placeholder={translate("orders.orderSearch.orderNo")}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Iconify
+                icon="ic:round-content-paste-search"
+                sx={{ color: "text.disabled" }}
+              />
             </InputAdornment>
           ),
         }}

@@ -17,6 +17,7 @@ export const useOrderSearch = () => {
   const [customer, setCustomer] = useState<ISelect | null>(null);
   const [method, setMethod] = useState<string>("");
   const [orderName, setOrderName] = useState<string>("");
+  const [orderNo, setOrderNo] = useState<string>("");
   const [paperName, setPaperName] = useState<ISelect | null>(null);
   const [orderList, setOrderList] = useState<IGroupOrder[]>([]);
   const [total, setTotal] = useState<number>(0);
@@ -31,6 +32,7 @@ export const useOrderSearch = () => {
         customer_id: customer ? customer.id : undefined,
         method,
         order_name: orderName,
+        order_no: orderNo,
         paper: paperName?.label,
         page: page,
         per_page: pageSize,
@@ -100,6 +102,8 @@ export const useOrderSearch = () => {
     setCustomer,
     setOrderName,
     setPaperName,
+    setOrderNo,
+    orderNo,
     total,
     setOrderList,
     setMethod,
