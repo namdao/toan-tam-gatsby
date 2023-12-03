@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import {
   GROUP_ORDER_TYPE,
   STATUS_ORDER_GROUP,
@@ -64,6 +64,38 @@ const OrderBtnDoneGroup: FC<IOrderBtnAccept> = ({
       note: "",
     },
   });
+
+  const handleTransformDataTransferIntoFile = (
+    dataTransfer: DataTransfer
+  ): File | null => {
+    if (dataTransfer.items.length > 0) {
+      const fileClipBoard = dataTransfer.items[0].getAsFile();
+      return fileClipBoard;
+    }
+    return null;
+  };
+  useEffect(() => {
+    const handlePasteOnDocument = (e: ClipboardEvent) => {
+      console.log(e.clipboardData);
+      if (e.clipboardData) {
+        const fileClipBoard = handleTransformDataTransferIntoFile(
+          e.clipboardData
+        );
+        if (fileClipBoard) {
+          const newFile = Object.assign(fileClipBoard, {
+            preview: URL.createObjectURL(fileClipBoard),
+          });
+          setValue("filename", newFile, { shouldValidate: true });
+        }
+      }
+    };
+
+    document.addEventListener("paste", handlePasteOnDocument);
+
+    return () => {
+      document.removeEventListener("paste", handlePasteOnDocument);
+    };
+  }, []);
 
   const {
     setValue,
