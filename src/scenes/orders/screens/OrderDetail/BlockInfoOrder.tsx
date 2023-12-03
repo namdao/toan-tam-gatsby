@@ -215,9 +215,11 @@ const BlockInfoOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
             {renderFourthRow()}
           </Stack>
         </Card>
-        <BlockOutsourceWithImg data={data} />
       </Grid>
       <Grid item xs={12} md={6}>
+        <BlockOutsourceWithImg data={data} />
+      </Grid>
+      <Grid item xs={12} md={12}>
         <BlockTimeLine data={data} loading={loading} />
       </Grid>
     </Grid>

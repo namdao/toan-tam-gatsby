@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   CardHeader,
   Grid,
@@ -47,27 +48,49 @@ const BlockOutsourceWithImg: FC<IPropsInfoOrder> = ({ data }) => {
     });
   };
   return (
-    <Grid container spacing={3} sx={{ pt: 3 }}>
-      <Grid item xs={12} md={12}>
-        <Card>
-          <CardHeader
-            title={translate("orders.orderDetail.outsource.title")}
-            sx={{ color: theme.palette.primary.main }}
-          />
-          <Stack sx={{ p: 3 }}>
-            {data && data?.outsources && renderRowOutSource(data.outsources)}
-            {imgUrl && (
-              <ImagePopup
-                url={[imgUrl]}
-                width="50%"
-                height="50%"
-                sx={{ margin: "auto" }}
-              />
+    // <Grid container spacing={3} sx={{ pt: 3 }}>
+    //   <Grid item xs={12} md={12}>
+    <Card>
+      <CardHeader
+        title={translate("orders.orderDetail.outsource.title")}
+        sx={{ color: theme.palette.primary.main }}
+      />
+      <Stack sx={{ p: 3 }}>
+        <Grid container spacing={3}>
+          <Grid item xs={6} md={6}>
+            {data && data?.outsources.length > 0 ? (
+              renderRowOutSource(data.outsources)
+            ) : (
+              <Label>Không gia công</Label>
             )}
-          </Stack>
-        </Card>
-      </Grid>
-    </Grid>
+          </Grid>
+          <Grid item xs={6} md={6}>
+            {imgUrl && (
+              <Box
+                sx={{
+                  width: 220,
+                  height: 220,
+                  borderRadius: 3,
+                  borderWidth: 5,
+                  borderStyle: "solid",
+                  borderColor: theme.palette.primary.main,
+                  overflow: "hidden",
+                }}
+              >
+                <ImagePopup
+                  url={[imgUrl]}
+                  width="100%"
+                  height="100%"
+                  sx={{ margin: "auto" }}
+                />
+              </Box>
+            )}
+          </Grid>
+        </Grid>
+      </Stack>
+    </Card>
+    //   </Grid>
+    // </Grid>
   );
 };
 export default BlockOutsourceWithImg;

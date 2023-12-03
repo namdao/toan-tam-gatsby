@@ -110,9 +110,9 @@ export interface FormOrderValuesProps {
     | null;
   imageList: string[] | null;
   amount: number;
-  method_width: string;
-  method_height: string;
-  method_high: string;
+  method_width: string | number;
+  method_height: string | number;
+  method_high: string | number;
 }
 
 type Props = {
@@ -207,6 +207,37 @@ export default function OrderNewEditForm({
       parentValue: e?.category_parent?.category_name || "",
     };
   });
+
+  const handleTransformDataTransferIntoFile = (
+    dataTransfer: DataTransfer
+  ): File | null => {
+    if (dataTransfer.items.length > 0) {
+      const fileClipBoard = dataTransfer.items[0].getAsFile();
+      return fileClipBoard;
+    }
+    return null;
+  };
+  useEffect(() => {
+    const handlePasteOnDocument = (e: ClipboardEvent) => {
+      if (e.clipboardData) {
+        const fileClipBoard = handleTransformDataTransferIntoFile(
+          e.clipboardData
+        );
+        if (fileClipBoard) {
+          const newFile = Object.assign(fileClipBoard, {
+            preview: URL.createObjectURL(fileClipBoard),
+          });
+          setValue("image", newFile, { shouldValidate: true });
+        }
+      }
+    };
+
+    document.addEventListener("paste", handlePasteOnDocument);
+
+    return () => {
+      document.removeEventListener("paste", handlePasteOnDocument);
+    };
+  }, []);
 
   const customerAutoComplete = useMemo(
     () =>
@@ -407,6 +438,8 @@ export default function OrderNewEditForm({
       });
 
       if (file) {
+        console.log(file);
+        console.log(newFile);
         setValue("image", newFile, { shouldValidate: true });
       }
     },

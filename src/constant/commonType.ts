@@ -16,6 +16,7 @@ export type INotes = {
   created_time: string;
   note: string;
   status: ORDER_STATUS_NAME;
+  new_status?: ORDER_STATUS_NAME;
   user_change: string;
 };
 export type ICompany = {
