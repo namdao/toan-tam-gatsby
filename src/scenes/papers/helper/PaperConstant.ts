@@ -30,10 +30,10 @@ export const PAPER_TABS = [
     value: "Bristol-Couche",
     label: "Bristol - Couche",
   },
-  {
-    value: "Sticker",
-    label: "Sticker - Nhãn dán",
-  },
+  // {
+  //   value: "Sticker",
+  //   label: "Sticker - Nhãn dán",
+  // },
   {
     value: "Decal",
     label: "Decal (New)",
@@ -47,7 +47,7 @@ export const PAPER_TABS = [
     label: "Ivory - Duplex",
   },
   {
-    value: "Other",
-    label: "Giấy khác - Mỹ thuật",
+    value: "MT",
+    label: "Mỹ thuật",
   },
 ];

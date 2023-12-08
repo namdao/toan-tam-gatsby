@@ -140,7 +140,6 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
     setSelectionModel(ids);
   };
 
-  console.log("render");
   return (
     <>
       <Tabs

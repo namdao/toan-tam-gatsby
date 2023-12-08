@@ -29,16 +29,9 @@ export const useOrderWaitingPrint = (
   const listIdPaperOther = useAppSelector(
     PaperTypeSelector.getListIdPaperOther
   ).join(",");
-  const listIdPaperLikeName =
-    tabSelected.value !== PAPER_TABS[1].value ||
-    tabSelected.value !== PAPER_TABS[4].value
-      ? useAppSelector((state) =>
-          PaperTypeSelector.getListIdPaperLikeName(
-            state,
-            tabSelected.value
-          ).join(",")
-        )
-      : "";
+  const listIdPaperLikeName = useAppSelector((state) =>
+    PaperTypeSelector.getListIdPaperLikeName(state, tabSelected.value).join(",")
+  );
   // const categoriesByValue = getListCategoryId(dataCategory, categoryValue);
   const [orderList, setOrderList] = useState<IOrderDetail[]>([]);
 
@@ -49,15 +42,15 @@ export const useOrderWaitingPrint = (
   });
   const { translate } = useLocales();
   const isTabsCategory = tabSelected.value === "Sticker";
-  let listIdPaper = "";
-  if (tabSelected.value === PAPER_TABS[4].value) {
-    listIdPaper = listIdPaperOther;
-    // sticker là loại hàng hóa, không phải loại giấy
-  } else if (tabSelected.value === PAPER_TABS[1].value) {
-    listIdPaper = getListCategoryId(dataCategory, "Sticker");
-  } else {
-    listIdPaper = listIdPaperLikeName;
-  }
+  let listIdPaper = listIdPaperLikeName;
+  // if (tabSelected.value === PAPER_TABS[4].value) {
+  //   listIdPaper = listIdPaperOther;
+  //   // sticker là loại hàng hóa, không phải loại giấy
+  // } else if (tabSelected.value === PAPER_TABS[1].value) {
+  //   listIdPaper = getListCategoryId(dataCategory, "Sticker");
+  // } else {
+  //   listIdPaper = listIdPaperLikeName;
+  // }
 
   const onOrderWithCategories = async (pageReqModel: IPage = pageModel) => {
     try {
