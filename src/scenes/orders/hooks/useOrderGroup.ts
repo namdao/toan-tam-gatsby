@@ -131,13 +131,11 @@ const useOrderGroup = () => {
       const result = await apiGetOrderGroup(payload);
       if (result?.data) {
         if (isNumber(result.data.total) && isArray(result.data.items)) {
-          return {
+          const dataResult = {
             data: result?.data.items,
-            pageParam:
-              result.data?.items.length > 0 && result.data.items.length > 10
-                ? pageReq + 1
-                : -1,
+            pageParam: result.data.items.length >= 10 ? pageReq + 1 : -1,
           };
+          return dataResult;
         }
       }
       return {
