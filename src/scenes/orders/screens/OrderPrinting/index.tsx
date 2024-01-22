@@ -14,7 +14,7 @@ const queryClient = new QueryClient();
 const OrderPrinting = () => {
   const themeStretch = useAppSelector(SettingsSelector.getThemeStretch);
   const { translate } = useLocales();
-  const [tabsChange, setTabsChange] = useState(0);
+  const [tabsChange, setTabsChange] = useState(1);
   const [tabsChild, setTabsChild] = useState(0);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabsChange(newValue);
@@ -37,7 +37,7 @@ const OrderPrinting = () => {
               bgcolor: "background.neutral",
             }}
           >
-            <Tab key={0} value={0} label="Tổng đơn đang in" />
+            {/* <Tab key={0} value={0} label="Tổng đơn đang in" /> */}
             <Tab key={1} value={1} label="Danh sách chờ duyệt bình bài" />
             <Tab key={1} value={2} label="Danh sách bài đang bình" />
           </Tabs>
@@ -54,7 +54,7 @@ const OrderPrinting = () => {
               <Tab key={0} value={1} label="Ds đơn nhiều bài" />
             </Tabs>
           )}
-          {tabsChange === 0 && <OrderList />}
+          {/* {tabsChange === 0 && <OrderList />} */}
           <Container sx={{ maxWidth: "1920px!important", marginLeft: 0 }}>
             {tabsChange === 1 && tabsChild === 0 && (
               <QueryClientProvider client={queryClient}>
