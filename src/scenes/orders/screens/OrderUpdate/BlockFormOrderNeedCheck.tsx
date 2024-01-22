@@ -24,6 +24,7 @@ import {
   listPayment,
   LIST_MONEY_SOURCE,
   listPaymentTypeViaNeedCheck,
+  LIST_MONEY_SOURCE_NEW,
 } from "scenes/orders/helper/OrderConstant";
 import { getTotalAmount, getTotalFee } from "utils/utility";
 import { useOrderUpdate } from "scenes/orders/hooks/useOrderUpdate";
@@ -228,10 +229,10 @@ const BlockFormOrderNeedCheck: FC<IPropsForm> = ({
                 name="money_source"
                 label={translate("orders.orderUpdate.form.moneySource")}
               >
-                {Object.keys(LIST_MONEY_SOURCE).map((e) => (
+                {Object.keys(LIST_MONEY_SOURCE_NEW).map((e) => (
                   <MenuItem key={e} value={e}>
                     {/* @ts-ignore */}
-                    {LIST_MONEY_SOURCE[e]}
+                    {LIST_MONEY_SOURCE_NEW[e]}
                   </MenuItem>
                 ))}
               </RHFSelect>

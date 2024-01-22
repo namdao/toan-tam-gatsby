@@ -201,8 +201,21 @@ export const listConfirmMoney = [
 export const LIST_MONEY_SOURCE = {
   VIB_PERSON: "VIB cá nhân",
   VIB_COMPANY: "VIB công ty",
+  ACB_PERSON: "ACB cá nhân",
+  ACB_COMPANY: "ACB công ty",
   SACOMBANK_PERSON: "Sacombank cá nhân",
   SACOMBANK_COMPANY: "Sacombank công ty",
+  CASH: "Tiền mặt",
+  ZALO_PAY: "Zalo pay",
+  MOMO: "Momo",
+  NULL: "",
+};
+
+export const LIST_MONEY_SOURCE_NEW = {
+  VIB_PERSON: "VIB cá nhân",
+  VIB_COMPANY: "VIB công ty",
+  ACB_PERSON: "ACB cá nhân",
+  ACB_COMPANY: "ACB công ty",
   CASH: "Tiền mặt",
   ZALO_PAY: "Zalo pay",
   MOMO: "Momo",
