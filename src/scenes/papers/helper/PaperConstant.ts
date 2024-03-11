@@ -50,4 +50,8 @@ export const PAPER_TABS = [
     value: "MT",
     label: "Mỹ thuật",
   },
+  {
+    value: "other",
+    label: "Khác",
+  },
 ];

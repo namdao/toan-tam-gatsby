@@ -232,6 +232,10 @@ export type IReqOrderListConfirm = IPage & {
 export type IReqOrderPaperList = IPage & {
   paper_ids: string;
 };
+export type IReqOrderPaperSearch = IPage & {
+  search_by: "order_no" | "customer_name" | "company_name";
+  search: string;
+};
 
 export type IReqOrderSearch = IPage & {
   method?: string;

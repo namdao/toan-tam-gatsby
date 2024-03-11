@@ -14,6 +14,7 @@ import {
   IReqOrderListCollect,
   IReqOrderListConfirm,
   IReqOrderPaperList,
+  IReqOrderPaperSearch,
   IReqOrderSearch,
   IReqOrderStatus,
   IReqPrintDoneOrder,
@@ -142,7 +143,9 @@ export const apiGetOrderByCustomer = (
 export const apiGetCustomerByOrderStatus = (params: IReqCustomerByStatus) =>
   axios.get(API_URL.GET_CUSTOMER_BY_ORDER_STATUS, { params });
 
-export const apiOrderPaper = (params: IReqOrderPaperList) =>
+export const apiOrderPaper = (
+  params: IReqOrderPaperList | IReqOrderPaperSearch
+) =>
   axios.get(API_URL.ORDERS4, {
     params: {
       ...params,

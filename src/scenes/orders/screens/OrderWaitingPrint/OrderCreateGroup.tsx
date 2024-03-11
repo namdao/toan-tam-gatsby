@@ -2,6 +2,7 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  InputAdornment,
   Radio,
   RadioGroup,
   Stack,
@@ -15,8 +16,8 @@ import {
   STATUS_ORDER_GROUP,
 } from "scenes/orders/helper/OrderConstant";
 import { LoadingButton } from "@mui/lab";
-import { GridRowId } from "@mui/x-data-grid";
 import useOrderGroup from "scenes/orders/hooks/useOrderGroup";
+import Iconify from "components/iconify";
 
 export type IPropsGroup = {
   selectOrderGroup: (val: IOrderDetail[]) => void;
@@ -24,15 +25,17 @@ export type IPropsGroup = {
 };
 type IProps = {
   onRefreshList: () => void;
+  onSearching: (search: string) => void;
 };
 const OrderCreateGroup = React.forwardRef(
-  ({ onRefreshList }: IProps, ref: Ref<IPropsGroup>) => {
+  ({ onRefreshList, onSearching }: IProps, ref: Ref<IPropsGroup>) => {
     const { translate } = useLocales();
     const { loading, onCreateGroupDraftOrder } = useOrderGroup();
     const [orderList, setOrderList] = useState<IOrderDetail[]>([]);
     const [groupType, setGroupType] = useState<GROUP_ORDER_TYPE>();
     const [groupName, setGroupName] = useState<string>("");
     const [numberCreateOrder, setNumberCreateOrder] = useState(0);
+    const [search, setSearch] = useState("");
     const actionParent = () => ({
       selectOrderGroup: (val: IOrderDetail[]) => {
         setOrderList(val);
@@ -58,6 +61,10 @@ const OrderCreateGroup = React.forwardRef(
       const dataChange = (event.target as HTMLInputElement).value;
       setNumberCreateOrder(Number(dataChange));
     };
+    const handeChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const dataChange = (event.target as HTMLInputElement).value;
+      setSearch(dataChange);
+    };
 
     useEffect(() => {
       if (orderList.length > 1) {
@@ -68,6 +75,10 @@ const OrderCreateGroup = React.forwardRef(
         setGroupType(undefined);
       }
     }, [orderList]);
+
+    useEffect(() => {
+      onSearching(search);
+    }, [search]);
 
     const onSubmitCreateGroup = async () => {
       if (groupType !== undefined) {
@@ -138,6 +149,25 @@ const OrderCreateGroup = React.forwardRef(
             </Stack>
           </RadioGroup>
         </FormControl>
+        <Stack direction={"row"} flex={1}>
+          <TextField
+            fullWidth
+            sx={{ width: "30%" }}
+            value={search}
+            onChange={handeChangeSearch}
+            placeholder={translate("orders.orderSearch.orderNo")}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Iconify
+                    icon="ic:round-content-paste-search"
+                    sx={{ color: "text.disabled" }}
+                  />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Stack>
         <Stack direction={"row"} alignItems={"center"} spacing={3}>
           {groupType !== undefined && (
             <TextField

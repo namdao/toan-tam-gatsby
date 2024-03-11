@@ -4,7 +4,7 @@ import { persistReducer } from "redux-persist";
 import { RootState } from "store";
 import storage from "redux-persist/lib/storage";
 import { IPaperType } from "./types";
-import { PAPER_OTHERS } from "../helper/PaperConstant";
+import { PAPER_OTHERS, PAPER_TABS } from "../helper/PaperConstant";
 
 export type PaperState = {
   list: IPaperType[];
@@ -46,6 +46,30 @@ const getListIdPaperLikeName = (state: RootState, groupPaperName: string) => {
 
   return listIds;
 };
+
+const getListIdPaperOther2 = (state: RootState) => {
+  const listPaper = getListPaper(state);
+  const listPaperTabs = PAPER_TABS.filter((e) => e.value !== "other").map(
+    (e) => e.value
+  );
+  const listPaperSplit: string[] = [];
+  listPaperTabs.forEach((e) => {
+    const itemPaper = e.split("-");
+    if (itemPaper?.[0]) listPaperSplit.push(itemPaper?.[0]);
+    if (itemPaper?.[1]) listPaperSplit.push(itemPaper?.[1]);
+  });
+  const listIdPaperWithTab = listPaper
+    .map((e) => {
+      const hasPaperInTab = listPaperSplit.find((p) =>
+        e.paper_name.includes(p)
+      );
+      if (!hasPaperInTab) {
+        return e.id;
+      }
+    })
+    .filter((e) => e !== undefined);
+  return listIdPaperWithTab;
+};
 const getListIdPaperOther = (state: RootState) => {
   const listPaper = getListPaper(state);
   const listIds: number[] = [];
@@ -71,6 +95,7 @@ export const PaperTypeSelector = {
   getListPaper,
   getListIdPaperLikeName,
   getListIdPaperOther,
+  getListIdPaperOther2,
 };
 
 // Actions

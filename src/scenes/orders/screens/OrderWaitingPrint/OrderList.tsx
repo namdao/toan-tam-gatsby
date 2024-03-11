@@ -14,9 +14,16 @@ const OrderList = () => {
 
   const onRefreshList = () => magicTableWaitingRef.current?.refreshList();
 
+  const onSearching = (search: string) =>
+    magicTableWaitingRef.current?.onSearching(search);
+
   return (
     <Card>
-      <OrderCreateGroup ref={btnGroupRef} onRefreshList={onRefreshList} />
+      <OrderCreateGroup
+        ref={btnGroupRef}
+        onRefreshList={onRefreshList}
+        onSearching={onSearching}
+      />
       <OrderTable onSelectOrder={onSelectOrder} onTabChange={onTabChange} />
     </Card>
   );

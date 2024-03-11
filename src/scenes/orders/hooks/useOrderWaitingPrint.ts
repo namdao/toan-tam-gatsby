@@ -14,6 +14,7 @@ import {
   IOrderDetail,
   IReqOrderCategoryStatus,
   IReqOrderPaperList,
+  IReqOrderPaperSearch,
   IResOrderByCategory,
 } from "../redux/types";
 
@@ -24,10 +25,13 @@ export type IPage = {
 export const useOrderWaitingPrint = (
   tabSelected: IPaperTabs = PAPER_TABS[0]
 ) => {
-  const dataCategory = useAppSelector(CategoriesSelector.getListCategories);
+  // const dataCategory = useAppSelector(CategoriesSelector.getListCategories);
 
-  const listIdPaperOther = useAppSelector(
-    PaperTypeSelector.getListIdPaperOther
+  // const listIdPaperOther = useAppSelector(
+  //   PaperTypeSelector.getListIdPaperOther
+  // ).join(",");
+  const listIdOthers = useAppSelector(
+    PaperTypeSelector.getListIdPaperOther2
   ).join(",");
   const listIdPaperLikeName = useAppSelector((state) =>
     PaperTypeSelector.getListIdPaperLikeName(state, tabSelected.value).join(",")
@@ -41,8 +45,9 @@ export const useOrderWaitingPrint = (
     pageSize: 20,
   });
   const { translate } = useLocales();
-  const isTabsCategory = tabSelected.value === "Sticker";
-  let listIdPaper = listIdPaperLikeName;
+  // const isTabsCategory = tabSelected.value === "Sticker";
+  const isTabsOther = tabSelected.value === "other";
+  let listIdPaper = isTabsOther ? listIdOthers : listIdPaperLikeName;
   // if (tabSelected.value === PAPER_TABS[4].value) {
   //   listIdPaper = listIdPaperOther;
   //   // sticker là loại hàng hóa, không phải loại giấy
@@ -52,38 +57,51 @@ export const useOrderWaitingPrint = (
   //   listIdPaper = listIdPaperLikeName;
   // }
 
-  const onOrderWithCategories = async (pageReqModel: IPage = pageModel) => {
+  // const onOrderWithCategories = async (pageReqModel: IPage = pageModel) => {
+  //   try {
+  //     const payload: IReqOrderCategoryStatus = {
+  //       status: `${ORDER_STATUS_NAME.DESIGNED},1`,
+  //       order_by: "updated_time",
+  //       page: pageReqModel.page,
+  //       per_page: pageReqModel.pageSize,
+  //       sort_direction: "desc",
+  //       category: listIdPaper,
+  //     };
+  //     if (isTabsOther) {
+  //     }
+  //     const result: IResponseType<IResOrderByCategory> = await apiOrderCategory(
+  //       payload
+  //     );
+  //     if (result?.data) {
+  //       if (isNumber(result.data.total) && isArray(result.data.items)) {
+  //         setOrderList(result.data.items);
+  //         setTotal(result.data.total);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     enqueueSnackbar((error as Error)?.message || "onOrderWithStatus error", {
+  //       variant: "error",
+  //     });
+  //   }
+  // };
+  const onOrderWithPaperIds = async (
+    pageReqModel: IPage = pageModel,
+    search?: string
+  ) => {
     try {
-      const payload: IReqOrderCategoryStatus = {
-        status: `${ORDER_STATUS_NAME.DESIGNED},1`,
-        order_by: "updated_time",
-        page: pageReqModel.page,
-        per_page: pageReqModel.pageSize,
-        sort_direction: "desc",
-        category: listIdPaper,
-      };
-      const result: IResponseType<IResOrderByCategory> = await apiOrderCategory(
-        payload
-      );
-      if (result?.data) {
-        if (isNumber(result.data.total) && isArray(result.data.items)) {
-          setOrderList(result.data.items);
-          setTotal(result.data.total);
-        }
-      }
-    } catch (error) {
-      enqueueSnackbar((error as Error)?.message || "onOrderWithStatus error", {
-        variant: "error",
-      });
-    }
-  };
-  const onOrderWithPaperIds = async (pageReqModel: IPage = pageModel) => {
-    try {
-      const payload: IReqOrderPaperList = {
+      let payload: IReqOrderPaperList | IReqOrderPaperSearch = {
         paper_ids: listIdPaper,
         page: pageReqModel.page === 0 ? 1 : pageReqModel.page,
         per_page: pageReqModel.pageSize,
       };
+      if (search) {
+        payload = {
+          search_by: "order_no",
+          search,
+          page: 1,
+          per_page: 20,
+        };
+      }
       const result: IResponseType<IResOrderByCategory> = await apiOrderPaper(
         payload
       );
@@ -101,20 +119,20 @@ export const useOrderWaitingPrint = (
   };
 
   const onGetOrderPaperOrCategory = (pageReqModel: IPage = pageModel) => {
-    if (isTabsCategory) {
-      onOrderWithCategories(pageReqModel);
-    } else {
-      onOrderWithPaperIds(pageReqModel);
-    }
+    // if (isTabsCategory) {
+    //   onOrderWithCategories(pageReqModel);
+    // } else {
+    // }
+    onOrderWithPaperIds(pageReqModel);
   };
 
   const onNextPage = (page: number, pageSize: number) => {
     setPageModel({ page: page, pageSize });
-    if (isTabsCategory) {
-      onOrderWithCategories({ page: page + 1, pageSize });
-    } else {
-      onOrderWithPaperIds({ page: page + 1, pageSize });
-    }
+    // if (isTabsCategory) {
+    //   onOrderWithCategories({ page: page + 1, pageSize });
+    // } else {
+    // }
+    onOrderWithPaperIds({ page: page + 1, pageSize });
   };
 
   const onAcceptOrder = async (id: number, statusOrder: ORDER_STATUS_NAME) => {

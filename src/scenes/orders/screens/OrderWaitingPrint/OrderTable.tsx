@@ -46,6 +46,7 @@ const MemoizedRow = React.memo(GridRow);
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
 type IMagicTableRef = {
   refreshList: () => void;
+  onSearching: (search: string) => void;
 };
 
 export const magicTableWaitingRef = createRef<IMagicTableRef>();
@@ -63,6 +64,7 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
   const [selectionModel, setSelectionModel] = React.useState<GridRowId[]>([]);
   const {
     onGetOrderPaperOrCategory,
+    onOrderWithPaperIds,
     onNextPage,
     setPageModel,
     total,
@@ -113,6 +115,14 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
   };
   useImperativeHandle(magicTableWaitingRef, () => ({
     refreshList: onResetList,
+    onSearching: (search: string) =>
+      onOrderWithPaperIds(
+        {
+          page: 0,
+          pageSize: 20,
+        },
+        search
+      ),
   }));
 
   const setPagination = (model: GridPaginationModel) => {
@@ -135,7 +145,6 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
   const onRowSelect = (ids: GridRowSelectionModel) => {
     const selectedIDs = new Set(ids);
     const selectedRowData = orderList.filter((row) => selectedIDs.has(row.id));
-    console.log(selectedRowData);
     onSelectOrder(selectedRowData);
     setSelectionModel(ids);
   };
