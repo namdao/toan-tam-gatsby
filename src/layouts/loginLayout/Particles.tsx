@@ -41,7 +41,8 @@ const ParticlesBackground = () => {
           value: "#000000cc",
         },
       },
-      fpsLimit: 80,
+      fpsLimit: 120,
+      collisions: { enable: false },
       interactivity: {
         events: {
           onClick: {
@@ -81,7 +82,7 @@ const ParticlesBackground = () => {
             default: "bounce",
           },
           random: false,
-          speed: 6,
+          speed: 3,
           straight: false,
         },
         number: {
