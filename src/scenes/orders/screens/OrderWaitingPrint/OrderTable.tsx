@@ -14,7 +14,6 @@ import {
   GridPaginationModel,
   GridColumnVisibilityModel,
   GridRowSelectionModel,
-  useGridApiRef,
   GridRowId,
 } from "@mui/x-data-grid-pro";
 import {
@@ -23,10 +22,7 @@ import {
   fieldStored,
 } from "scenes/orders/helper/OrderWaitingTableColumns";
 import { IOrder, IOrderDetail } from "scenes/orders/redux/types";
-import {
-  IPage,
-  useOrderWaitingPrint,
-} from "scenes/orders/hooks/useOrderWaitingPrint";
+import { useOrderWaitingPrint } from "scenes/orders/hooks/useOrderWaitingPrint";
 import { useAppSelector } from "store";
 import { AuthSelector } from "scenes/auth/redux/slice";
 import {
@@ -34,12 +30,23 @@ import {
   getTableColumn,
   OrderFeature,
 } from "services/firebase/common";
-import { IPropsGroup } from "./OrderCreateGroup";
 import { IPaperTabs, PAPER_TABS } from "scenes/papers/helper/PaperConstant";
 import { Tab, Tabs } from "@mui/material";
+import Label from "components/label";
 
 const tabChild = (tab: IPaperTabs) => {
-  return <Tab key={tab.value} value={tab} label={tab.label} />;
+  const { onGetOrderPaperOrCategory, total } = useOrderWaitingPrint(tab);
+  useEffect(() => {
+    onGetOrderPaperOrCategory();
+  }, [tab]);
+  return (
+    <Tab
+      key={tab.value}
+      value={tab}
+      label={tab.label}
+      icon={<Label sx={{ mr: 1 }}>{total}</Label>}
+    />
+  );
 };
 const MemoizedRow = React.memo(GridRow);
 
