@@ -12,7 +12,7 @@ import {
 import Images from "utils/images";
 import { useAppSelector } from "store";
 import { SettingsSelector } from "services/settings/redux/slice";
-
+import Particles from "./Particles";
 type Props = {
   title?: string;
   illustration?: string;
@@ -24,6 +24,7 @@ export default function LoginLayout({ children }: Props) {
   return (
     <StyledRoot>
       <StyledSection>
+        <Particles />
         <Image
           disabledEffect
           visibleByDefault
@@ -36,7 +37,7 @@ export default function LoginLayout({ children }: Props) {
       </StyledSection>
 
       <StyledContent>
-        <Stack sx={{ width: 1 }}> {children} </Stack>
+        <Stack sx={{ width: 1 }}>{children} </Stack>
       </StyledContent>
     </StyledRoot>
   );
