@@ -137,6 +137,7 @@ export const apiGetOrderByCustomer = (
   axios.get(API_URL.ORDER_BY_CUSTOMERS_ID(customerId), {
     params: {
       status,
+      per_page: 50
     },
   });
 
