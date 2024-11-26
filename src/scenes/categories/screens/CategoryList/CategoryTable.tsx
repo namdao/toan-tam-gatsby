@@ -1,4 +1,9 @@
-import React, { useEffect, useMemo } from "react";
+import React, {
+  createRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+} from "react";
 import Box from "@mui/material/Box";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -42,6 +47,10 @@ const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
+export type IMagicCatRef = {
+  onRefresh: () => Promise<void>;
+};
+export const magicCategoryRef = createRef<IMagicCatRef>();
 export default function CategoryTable() {
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
@@ -56,6 +65,10 @@ export default function CategoryTable() {
     onUpdateCategory,
     onDeleteCategory,
   } = useCategory();
+
+  useImperativeHandle(magicCategoryRef, () => ({
+    onRefresh: () => onGetCategory("refresh"),
+  }));
 
   useEffect(() => {
     onGetCategory("idle");

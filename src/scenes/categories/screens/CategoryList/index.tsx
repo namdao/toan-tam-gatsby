@@ -7,12 +7,12 @@ import Header from "./BlockHeader";
 import Helmet from "react-helmet";
 import CategoryTable from "./CategoryTable";
 
-const PrintTypeList = () => {
+const CategoryList = () => {
   const themeStretch = useAppSelector(SettingsSelector.getThemeStretch);
   const { translate } = useLocales();
   return (
     <>
-      <Helmet title={translate("printtype.printTypeList.title")} />
+      <Helmet title={translate("category.categoryList.title")} />
       <Container maxWidth={themeStretch ? false : "lg"}>
         <Header />
         <CategoryTable />
@@ -20,4 +20,4 @@ const PrintTypeList = () => {
     </>
   );
 };
-export default PrintTypeList;
+export default CategoryList;

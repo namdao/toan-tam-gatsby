@@ -15,7 +15,7 @@ export type IDataTableCategory = {
 };
 
 export type IReqCategory = {
-  parent_id: number;
+  parent_id?: number;
   name: string;
 };
 
