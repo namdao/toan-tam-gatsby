@@ -20,6 +20,7 @@ export type INotes = {
   user_change: string;
 };
 export type ICompany = {
+  users?: any;
   accountant_email: string;
   address: string;
   city: string;
