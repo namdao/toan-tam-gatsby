@@ -18,6 +18,9 @@ import {
 import { LoadingButton } from "@mui/lab";
 import useOrderGroup from "scenes/orders/hooks/useOrderGroup";
 import Iconify from "components/iconify";
+import { useAppSelector } from "store";
+import { AuthSelector } from "scenes/auth/redux/slice";
+import appconstants from "constant/appConstant";
 
 export type IPropsGroup = {
   selectOrderGroup: (val: IOrderDetail[]) => void;
@@ -27,6 +30,8 @@ type IProps = {
   onRefreshList: () => void;
   onSearching: (search: string) => void;
 };
+const { ROLES } = appconstants;
+
 const OrderCreateGroup = React.forwardRef(
   ({ onRefreshList, onSearching }: IProps, ref: Ref<IPropsGroup>) => {
     const { translate } = useLocales();
@@ -36,6 +41,9 @@ const OrderCreateGroup = React.forwardRef(
     const [groupName, setGroupName] = useState<string>("");
     const [numberCreateOrder, setNumberCreateOrder] = useState(0);
     const [search, setSearch] = useState("");
+    const roleUser = useAppSelector(AuthSelector.getRolesUser);
+    const roleAdmin = roleUser[0].name === ROLES.ADMIN;
+    const roleDesigner = roleUser[0].name === ROLES.DESIGNER;
     const actionParent = () => ({
       selectOrderGroup: (val: IOrderDetail[]) => {
         setOrderList(val);
@@ -193,7 +201,7 @@ const OrderCreateGroup = React.forwardRef(
             sx={{ flex: 1 }}
             loading={loading}
             onClick={onSubmitCreateGroup}
-            disabled={orderList.length < 1}
+            disabled={!roleAdmin && !roleDesigner}
           >
             {translate("orders.orderWaitingPrintList.group.title")}
           </LoadingButton>

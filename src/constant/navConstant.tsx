@@ -202,7 +202,7 @@ const navConfig = [
         icon: iconify("mdi:archive-clock-outline"),
         component: OrderWaitingPrint,
         children: [],
-        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.PRINTER],
+        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.PRINTER, ROLES.MANAGER],
       },
       {
         title: "order.printing",
@@ -210,7 +210,7 @@ const navConfig = [
         icon: iconify("mi:print"),
         component: OrderPrinting,
         children: [],
-        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.PRINTER],
+        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.PRINTER, ROLES.MANAGER],
       },
       {
         title: "order.printed",
@@ -218,7 +218,7 @@ const navConfig = [
         icon: iconify("mi:print"),
         component: OrderPrinted,
         children: [],
-        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.STORE],
+        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.STORE, ROLES.MANAGER],
       },
     ],
   },
