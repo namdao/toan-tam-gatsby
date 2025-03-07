@@ -43,7 +43,7 @@ const OrderCreateGroup = React.forwardRef(
     const [search, setSearch] = useState("");
     const roleUser = useAppSelector(AuthSelector.getRolesUser);
     const roleAdmin = roleUser[0].name === ROLES.ADMIN;
-    const roleDesigner = roleUser[0].name === ROLES.DESIGNER;
+    const rolePrinter = roleUser[0].name === ROLES.PRINTER;
     const actionParent = () => ({
       selectOrderGroup: (val: IOrderDetail[]) => {
         setOrderList(val);
@@ -201,7 +201,7 @@ const OrderCreateGroup = React.forwardRef(
             sx={{ flex: 1 }}
             loading={loading}
             onClick={onSubmitCreateGroup}
-            disabled={!roleAdmin && !roleDesigner}
+            disabled={!roleAdmin && !rolePrinter}
           >
             {translate("orders.orderWaitingPrintList.group.title")}
           </LoadingButton>
