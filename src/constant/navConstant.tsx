@@ -132,7 +132,7 @@ const navConfig = [
         component: OrderCreate,
         hideMenu: true,
         children: [],
-        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.SALER],
+        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.SALER, ROLES.MANAGER],
       },
       {
         title: "order.update",
