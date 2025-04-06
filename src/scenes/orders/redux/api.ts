@@ -25,6 +25,7 @@ import {
   IResGetOrderGroup,
   IResGroupByOrder,
   IResOrderGroupComplete,
+  IResOrderListDetail,
   IResUrlUpload,
 } from "./types";
 
@@ -64,7 +65,7 @@ export const apiOrderListNeedCheck = (payload: IReqOrderListCollect) =>
       ...payload,
     },
   });
-export const apiOrderDetailList = (payload: { order_ids: number[] }) =>
+export const apiOrderDetailList = (payload: { order_ids: number[] }): Promise<IResponseType<IResOrderListDetail[]>>  =>
   axios.post(API_URL.ORDER_DETAILS_LIST, payload);
 
 export const apiSendEmailOrder = (payload: { order_ids: number[] }) =>

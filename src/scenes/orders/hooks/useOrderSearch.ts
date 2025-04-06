@@ -44,7 +44,12 @@ export const useOrderSearch = () => {
         if (isNumber(result.data.total) && isArray(result.data.items)) {
           // Filter order without status cancel and Convert timeStamp to date time
           const convertCreatedTime = result.data.items
-            .filter((f) => f.status !== ORDER_STATUS_NAME.CANCEL)
+            .filter((f) => {
+              if (process.env.IS_TEST_MODE === "false") {
+                return f.status !== ORDER_STATUS_NAME.CANCEL;
+              }
+              return f;
+            })
             .map((e) => {
               const parseTime = format(e.created_time * 1000, "dd/MM/yyyy");
               return {
