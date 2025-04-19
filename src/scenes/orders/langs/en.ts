@@ -126,6 +126,7 @@ const OrderLangs = {
     tabDelivery: "Đang giao hàng",
     btnBillDelivery: "Biên bản GH",
     btnBillDelivery2: "Biên bản GH V2",
+    btnRetailBill: "Hoá đơn bán hàng"
   },
   orderSearch: {
     title: "Tìm kiếm đơn hàng",

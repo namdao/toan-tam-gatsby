@@ -26,6 +26,26 @@ export const getTotalFee = (order: IOrder | IOrderDetail) => {
   return template_number * unit_price * quantity + shipping_fee + design_fee;
 };
 
+export const getTotalVatFee = (order: IOrder | IOrderDetail) => {
+  const { other_fee = 0, vat_fee = 0, discount = 0 } = order || {};
+  const totalAmountOrder = getTotalFee(order);
+  if (vat_fee > 0) {
+    return (totalAmountOrder + other_fee - discount) * vat_fee;
+  }
+  return 0;
+};
+
+export const getTotalDebit = (order: IOrder | IOrderDetail) => {
+  const { other_fee = 0, discount = 0, deposite } = order || {};
+  const totalAmountWithoutFee = getTotalAmount(order);
+  return (
+    totalAmountWithoutFee +
+    other_fee -
+    discount +
+    getTotalVatFee(order) -
+    deposite
+  );
+};
 export const compareIdDesc = (
   a: {
     id: number;
@@ -113,3 +133,76 @@ export const getDataOutsource = (outsources: IOutSource[]) => {
   const keyOutSource = Object.keys(dataGroupOutsources);
   return { keyOutSource, dataGroupOutsources };
 };
+export function convertNumberToVietnameseText(number: number) {
+  if (isNaN(number)) return "Không phải số hợp lệ";
+
+  const chuSo = [
+    "không",
+    "một",
+    "hai",
+    "ba",
+    "bốn",
+    "năm",
+    "sáu",
+    "bảy",
+    "tám",
+    "chín",
+  ];
+  const hangDonVi = [
+    "",
+    "nghìn",
+    "triệu",
+    "tỷ",
+    "nghìn tỷ",
+    "triệu tỷ",
+    "tỷ tỷ",
+  ];
+
+  function docBaSo(num: number) {
+    let tram = Math.floor(num / 100);
+    let chuc = Math.floor((num % 100) / 10);
+    let donVi = num % 10;
+    let result = "";
+
+    if (tram > 0 || chuc > 0 || donVi > 0) {
+      if (tram > 0) {
+        result += chuSo[tram] + " trăm";
+        if (chuc === 0 && donVi > 0) result += " lẻ";
+      }
+
+      if (chuc > 0) {
+        if (chuc === 1) result += " mười";
+        else result += " " + chuSo[chuc] + " mươi";
+      }
+
+      if (donVi > 0) {
+        if (chuc > 0) {
+          if (donVi === 1) result += " mốt";
+          else if (donVi === 5) result += " lăm";
+          else result += " " + chuSo[donVi];
+        } else {
+          result += " " + chuSo[donVi];
+        }
+      }
+    }
+
+    return result.trim();
+  }
+
+  let parts = [];
+  let i = 0;
+
+  while (number > 0) {
+    const threeDigits = number % 1000;
+    if (threeDigits !== 0) {
+      const text = docBaSo(threeDigits);
+      const suffix = hangDonVi[i];
+      parts.unshift(text + (suffix ? " " + suffix : ""));
+    }
+    number = Math.floor(number / 1000);
+    i++;
+  }
+
+  const finalText = parts.join(" ").replace(/\s+/g, " ").trim();
+  return finalText.charAt(0).toUpperCase() + finalText.slice(1) + " đồng chẵn";
+}

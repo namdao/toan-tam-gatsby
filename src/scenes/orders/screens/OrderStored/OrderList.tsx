@@ -26,7 +26,6 @@ import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import SkeletonCustomer from "./SkeletonCustomer";
 import Iconify from "components/iconify";
-import { ICON } from "constant/layoutConstant";
 
 const tabChild = (tab: IOrderTabProcessing) => {
   const { translate } = useLocales();
@@ -71,6 +70,7 @@ const OrderList = () => {
       if (filterStatus === ORDER_STATUS_NAME.DELIVER) {
         listButtonRef?.current?.[idCus]?.disableBtnDone();
       }
+      listButtonRef?.current?.[idCus]?.setListIds(listIds as number[]);
     } else {
       listButtonRef?.current?.[idCus]?.enablePrintDelivery();
       listButtonRef?.current?.[idCus]?.enablePrintDeliveryV2();

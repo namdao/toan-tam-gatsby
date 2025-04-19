@@ -107,6 +107,9 @@ export type IOrder = {
   vat_value: number;
   who_collect_money: string;
   images: string[];
+  other_fee?: number;
+  vat_fee?: number;
+  discount?: number;
 };
 export type IResOrder2Status = {
   items: IOrder[];
@@ -179,6 +182,9 @@ export type IOrderDetail = {
   who_collect_money: string;
   images: string[];
   order_detail_notes: string;
+  other_fee?: number;
+  vat_fee?: number;
+  discount?: number;
 };
 
 export type IRequestUpdateOrder = {

@@ -155,6 +155,7 @@ const OrderLangs = {
     cancelDelivery: "Huỷ giao",
     messageDone: "{{name}} đã giao hàng thành công",
     cancel: "Huỷ đơn",
+    btnRetailBill: "Hoá đơn bán hàng"
   },
   orderSearch: {
     title: "Tên đơn hàng",

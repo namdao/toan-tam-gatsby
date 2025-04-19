@@ -5,7 +5,7 @@ import React, { useEffect, useRef, FC } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useOrderDetailList } from "scenes/orders/hooks/useOrderDetail";
 import { IOrder } from "scenes/orders/redux/types";
-import RetailBill from "./Prints/RetailBill/RetailBill";
+import RetailBillV2 from "./Prints/RetailBill/RetailBillV2";
 
 export type IPropsRetailBill = {
   data: IOrder;
@@ -23,7 +23,7 @@ const ButonRetailBill: FC<IPropsRetailBill> = ({ data }) => {
 
   const handlePrint = useReactToPrint({
     content: () => retailBillRef.current,
-    documentTitle: "",
+    documentTitle: "Hóa đơn bán hàng",
     onBeforeGetContent: () => {
       return new Promise((resolve) => {
         if (promiseResolveRef) {
@@ -48,7 +48,7 @@ const ButonRetailBill: FC<IPropsRetailBill> = ({ data }) => {
           display: "none",
         }}
       >
-        <RetailBill ref={retailBillRef} data={orderListDetail} />
+        <RetailBillV2 ref={retailBillRef} data={orderListDetail} />
       </Box>
     </Stack>
   );

@@ -18,6 +18,7 @@ import DeliveryBill from "./Prints/DeliveryBill/DeliveryBill";
 import DeliveryBillV2 from "./Prints/DeliveryBillV2/DeliveryBillV2";
 import { AuthSelector } from "scenes/auth/redux/slice";
 import { LoadingButton } from "@mui/lab";
+import RetailBillV2 from "./Prints/RetailBill/RetailBillV2";
 
 export type IPropsDeliveryPrint = {
   disablePrintDelivery: () => void;
@@ -44,6 +45,7 @@ const BlockButtonAction = React.forwardRef(
     const profile = useAppSelector(AuthSelector.getProfile);
     const deliveryRef = useRef(null);
     const deliveryRefV2 = useRef(null);
+    const retailBillRef = useRef(null);
     const promiseResolveRef = useRef<{ triggerPrint: any }>({} as any);
     const [disablePrintDelivery, setDisablePrintDelivery] =
       useState<boolean>(true);
@@ -51,6 +53,7 @@ const BlockButtonAction = React.forwardRef(
       useState<boolean>(true);
     const [disableBtnGroupDelivery, setDisableBtnDelivery] =
       useState<boolean>(true);
+    const [disableRetailBill, setDisableRetailBill] = useState<boolean>(true);
     const [disableBtnGroupDone, setDisableBtnDone] = useState<boolean>(true);
     const [orderIds, setOrderIds] = useState<number[]>([]);
 
@@ -82,6 +85,26 @@ const BlockButtonAction = React.forwardRef(
         });
       },
     });
+    const handlePrintRetailBillV2 = useReactToPrint({
+      content: () => retailBillRef.current,
+      onBeforeGetContent: () => {
+        return new Promise((resolve) => {
+          if (promiseResolveRef) {
+            promiseResolveRef.current.triggerPrint = resolve;
+            onOrderListDetail(orderIds);
+          }
+        });
+      },
+    });
+
+    useEffect(() => {
+      console.log("useEffect", orderIds);
+      if (orderIds?.length > 1 || orderIds?.length === 0) {
+        setDisableRetailBill(true);
+      } else {
+        setDisableRetailBill(false);
+      }
+    }, [orderIds]);
 
     const callbackSubmit = ({ statusSuccess }: { statusSuccess: boolean }) => {
       if (statusSuccess) {
@@ -167,6 +190,14 @@ const BlockButtonAction = React.forwardRef(
         <Button
           variant="outlined"
           size="large"
+          disabled={disableRetailBill || loading}
+          onClick={handlePrintRetailBillV2}
+        >
+          {translate("orders.orderStore.btnRetailBill")}
+        </Button>
+        <Button
+          variant="outlined"
+          size="large"
           disabled={disablePrintDelivery || loading}
           onClick={handlePrintDelivery}
         >
@@ -191,6 +222,7 @@ const BlockButtonAction = React.forwardRef(
         >
           <DeliveryBill ref={deliveryRef} data={orderListDetail} />
           <DeliveryBillV2 ref={deliveryRefV2} data={orderListDetail} />
+          <RetailBillV2 ref={retailBillRef} data={orderListDetail} />
         </Box>
         <DiaLogDelivery onRefreshList={onRefreshList} status={status} />
       </Stack>
