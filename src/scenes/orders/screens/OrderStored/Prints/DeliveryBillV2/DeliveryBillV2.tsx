@@ -16,7 +16,7 @@ import { IResOrderListDetail } from "scenes/orders/redux/types";
 import { compareAsc, parseISO } from "date-fns";
 import { cloneDeep } from "lodash";
 import { fNumber } from "utils/formatNumber";
-import { getTotalFee } from "utils/utility";
+import { getTotalBasicFee } from "utils/utility";
 
 type IProps = {
   data: IResOrderListDetail[];
@@ -160,7 +160,7 @@ const DeliveryBillV2 = forwardRef(({ data }: IProps, ref) => {
           <TableBody sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}>
             {newOrder &&
               newOrder.map((order, index) => {
-                total += getTotalFee(order);
+                total += getTotalBasicFee(order);
                 return (
                   <TableRow key={order.id}>
                     <StyledCell>{index + 1}</StyledCell>
@@ -171,7 +171,7 @@ const DeliveryBillV2 = forwardRef(({ data }: IProps, ref) => {
                     <StyledCell>{fNumber(order.template_number)}</StyledCell>
                     <StyledCell>{fNumber(order.quantity)}</StyledCell>
                     <StyledCell>{fNumber(order.unit_price)}</StyledCell>
-                    <StyledCell>{fNumber(getTotalFee(order))}</StyledCell>
+                    <StyledCell>{fNumber(getTotalBasicFee(order))}</StyledCell>
                     <StyledCell>
                       {order.deposite ? fNumber(order.deposite) : "-"}
                     </StyledCell>

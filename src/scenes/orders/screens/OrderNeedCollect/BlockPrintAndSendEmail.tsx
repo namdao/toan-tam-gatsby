@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useOrderDetailList } from "scenes/orders/hooks/useOrderDetail";
-import PrintOrders from "./PrintOrders";
+import PrintOrdersV2 from "./PrintOrdersV2";
 
 export type IPropsPrint = {
   disablePrintPdf: () => void;
@@ -89,7 +89,7 @@ const BlockPrintAndSendEmail = React.forwardRef(
             display: "none",
           }}
         >
-          <PrintOrders ref={printRef} data={orderListDetail} />
+          <PrintOrdersV2 ref={printRef} data={orderListDetail} />
         </Box>
       </Stack>
     );

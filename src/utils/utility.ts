@@ -12,10 +12,10 @@ export const isBrowser = typeof window !== `undefined`;
 
 export const getTotalAmount = (order: IOrder | IOrderDetail) => {
   const { deposite = 0 } = order || {};
-  return getTotalFee(order) - deposite;
+  return getTotalBasicFee(order) - deposite;
 };
 
-export const getTotalFee = (order: IOrder | IOrderDetail) => {
+export const getTotalBasicFee = (order: IOrder | IOrderDetail) => {
   const {
     template_number = 0,
     unit_price = 0,
@@ -28,7 +28,7 @@ export const getTotalFee = (order: IOrder | IOrderDetail) => {
 
 export const getTotalVatFee = (order: IOrder | IOrderDetail) => {
   const { other_fee = 0, vat_fee = 0, discount = 0 } = order || {};
-  const totalAmountOrder = getTotalFee(order);
+  const totalAmountOrder = getTotalBasicFee(order);
   if (vat_fee > 0) {
     return (totalAmountOrder + other_fee - discount) * vat_fee;
   }
@@ -36,14 +36,13 @@ export const getTotalVatFee = (order: IOrder | IOrderDetail) => {
 };
 
 export const getTotalDebit = (order: IOrder | IOrderDetail) => {
-  const { other_fee = 0, discount = 0, deposite } = order || {};
+  const { other_fee = 0, discount = 0 } = order || {};
   const totalAmountWithoutFee = getTotalAmount(order);
   return (
     totalAmountWithoutFee +
     other_fee -
     discount +
-    getTotalVatFee(order) -
-    deposite
+    getTotalVatFee(order)
   );
 };
 export const compareIdDesc = (

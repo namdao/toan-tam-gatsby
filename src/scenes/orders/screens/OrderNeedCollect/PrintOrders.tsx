@@ -33,56 +33,31 @@ const TypoPrint = styled(Typography)(() => ({
 }));
 const PrintOrders = forwardRef(({ data }: IProps, ref) => {
   const sectionHeader = () => (
-    <Stack flexDirection="row" justifyContent="space-between">
+    <Stack flexDirection="row" alignItems="center">
       <img src={Images.logoPrint} width="30%" height="50%" />
-      <Box>
-        <TypoPrint variant="body1" gutterBottom textAlign="right" sx={{ m: 0 }}>
-          <b>CÔNG TY TNHH TM - DV - IN ẤN TOÀN TÂM</b>
+      <Stack alignItems="center" sx={{ flex: 1 }}>
+        <TypoPrint variant="h6" gutterBottom>
+          <b>CÔNG TY TNHH SẢN XUẤT THƯƠNG MẠI DỊCH VỤ IN ẤN TOÀN TÂM</b>
         </TypoPrint>
-        <Stack flexDirection="row">
-          <Iconify icon="material-symbols:home-outline" width={22} />
-          <TypoPrint
-            variant="body1"
-            gutterBottom
-            textAlign="right"
-            sx={{ m: 0, pl: 1 }}
-          >
-            265B Trịnh Đình Trọng, P.Hòa Thạnh, Q. Tân Phú, TP. HCM
-          </TypoPrint>
-        </Stack>
-
         <Stack flexDirection="row" justifyContent="flex-end">
-          <Iconify icon="ic:outline-email" width={22} />
           <TypoPrint
             variant="body1"
             gutterBottom
             textAlign="right"
             sx={{ m: 0, px: 1 }}
           >
-            toantam.ketoan@gmail.com
+            Email: toantam.ketoan@gmail.com
           </TypoPrint>
-          <Iconify icon="mdi:web" width={22} />
           <TypoPrint
             variant="body1"
             gutterBottom
             textAlign="right"
             sx={{ m: 0, pl: 1 }}
           >
-            intoantam.com
+            Điện thoại: 0931 87 87 18
           </TypoPrint>
         </Stack>
-        <Stack flexDirection="row" justifyContent="flex-end">
-          <Iconify icon="material-symbols:phone-enabled-outline" width={22} />
-          <TypoPrint
-            variant="body1"
-            gutterBottom
-            textAlign="right"
-            sx={{ m: 0, pl: 1 }}
-          >
-            0931 87 87 18 - <span>MST:</span> 031338242
-          </TypoPrint>
-        </Stack>
-      </Box>
+      </Stack>
     </Stack>
   );
 

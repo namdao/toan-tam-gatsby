@@ -16,7 +16,7 @@ import { IResOrderListDetail } from "scenes/orders/redux/types";
 import { format } from "date-fns";
 import { cloneDeep } from "lodash";
 import { fNumber } from "utils/formatNumber";
-import { getTotalAmount, getTotalFee } from "utils/utility";
+import { getTotalAmount, getTotalBasicFee } from "utils/utility";
 
 type IProps = {
   data: IResOrderListDetail[];
@@ -160,7 +160,7 @@ const RetailBill = forwardRef(({ data }: IProps, ref) => {
                 {fNumber(newOrder.shipping_fee)}
               </StyledCell>
               <StyledCell size="small">
-                {fNumber(getTotalFee(newOrder))}
+                {fNumber(getTotalBasicFee(newOrder))}
               </StyledCell>
             </TableRow>
             <TableRow>

@@ -5,9 +5,8 @@ import { BlockInfoOrderSkelekton } from "scenes/orders/components/BlockOrderDeta
 import { IOrderDetail } from "scenes/orders/redux/types";
 import { useLocales } from "locales";
 import { StyleTitleTypo } from "./style";
-import appConstant from "constant/appConstant";
 import { fNumber } from "utils/formatNumber";
-import { getTotalAmount, getTotalFee } from "utils/utility";
+import { getTotalAmount, getTotalBasicFee } from "utils/utility";
 import BlockTimeLine from "./BlockTimeline";
 import BlockOutsourceWithImg from "./BlockOutsourceWithImg";
 type IPropsInfoOrder = {
@@ -111,7 +110,7 @@ const BlockInfoOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
               {translate("orders.orderDetail.price.amount")}
             </StyleTitleTypo>
             <Typography variant="subtitle2">
-              {data ? fNumber(getTotalFee(data)) : "0"}
+              {data ? fNumber(getTotalBasicFee(data)) : "0"}
             </Typography>
           </Stack>
           <Stack justifyContent="space-between">

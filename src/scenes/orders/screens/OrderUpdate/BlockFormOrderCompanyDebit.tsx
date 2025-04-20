@@ -26,7 +26,7 @@ import {
   listPaymentTypeViaCompanyDebit,
   LIST_MONEY_SOURCE_NEW,
 } from "scenes/orders/helper/OrderConstant";
-import { getTotalAmount, getTotalFee } from "utils/utility";
+import { getTotalAmount, getTotalBasicFee } from "utils/utility";
 import { useOrderUpdate } from "scenes/orders/hooks/useOrderUpdate";
 import RHFDatePicker from "components/hook-form/RHFDatePicker";
 import { format, parseISO } from "date-fns";
@@ -90,7 +90,7 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
     deposite: orderDetail?.deposite.toString(),
     cod: orderDetail && getTotalAmount(orderDetail).toString(),
     note: "",
-    totalAmount: orderDetail && getTotalFee(orderDetail),
+    totalAmount: orderDetail && getTotalBasicFee(orderDetail),
     paymentType: "",
     // date collect money trả về là getTime
     date_collect_money: orderDetail?.date_collect_money

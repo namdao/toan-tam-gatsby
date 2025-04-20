@@ -17,7 +17,7 @@ import { cloneDeep } from "lodash";
 import { fNumber } from "utils/formatNumber";
 import {
   getTotalDebit,
-  getTotalFee,
+  getTotalBasicFee,
   convertNumberToVietnameseText,
   getDataOutsource,
   getTotalVatFee,
@@ -529,7 +529,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
                 {fNumber(newOrder.unit_price)}
               </TableCell>
               <TableCell className="custom-table-cell body">
-                {fNumber(getTotalFee(newOrder))}
+                {fNumber(getTotalBasicFee(newOrder))}
               </TableCell>
             </TableRow>
             <TableRow sx={{ backgroundColor: "#f3f3f3" }}>

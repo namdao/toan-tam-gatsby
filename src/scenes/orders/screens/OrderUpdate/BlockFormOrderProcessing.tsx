@@ -20,7 +20,7 @@ import FormProvider, {
 import { parseToNumber } from "utils/formatNumber";
 import { LoadingButton } from "@mui/lab";
 import { listPayment } from "scenes/orders/helper/OrderConstant";
-import { getTotalAmount, getTotalFee } from "utils/utility";
+import { getTotalAmount, getTotalBasicFee } from "utils/utility";
 import { useOrderUpdate } from "scenes/orders/hooks/useOrderUpdate";
 
 type IPropsForm = {
@@ -59,7 +59,7 @@ const BlockFormOrderProcessing: FC<IPropsForm> = ({
     deposite: orderDetail?.deposite.toString(),
     cod: orderDetail && getTotalAmount(orderDetail).toString(),
     note: "",
-    totalAmount: orderDetail && getTotalFee(orderDetail),
+    totalAmount: orderDetail && getTotalBasicFee(orderDetail),
   };
 
   const methods = useForm<FormValuesProps>({
@@ -79,7 +79,7 @@ const BlockFormOrderProcessing: FC<IPropsForm> = ({
 
   useEffect(() => {
     if (orderDetail && watchDeposite) {
-      const restCod = getTotalFee(orderDetail) - parseToNumber(watchDeposite);
+      const restCod = getTotalBasicFee(orderDetail) - parseToNumber(watchDeposite);
       setValue("cod", restCod.toString());
     }
   }, [watchDeposite]);
