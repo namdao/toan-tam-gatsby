@@ -37,13 +37,14 @@ export const getTotalVatFee = (order: IOrder | IOrderDetail) => {
 
 // Tính tổng đơn hàng đã bao gồm trừ tạm ứng và khuyến mãi
 export const getTotalDebit = (order: IOrder | IOrderDetail) => {
-  const { other_fee = 0, discount = 0 } = order || {};
+  const { other_fee = 0, discount = 0, cash = 0 } = order || {};
   const totalAmountWithoutFee = getTotalAmount(order);
   return (
     totalAmountWithoutFee +
     other_fee -
     discount +
     getTotalVatFee(order)
+    - cash
   );
 };
 
