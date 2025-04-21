@@ -35,6 +35,7 @@ export const getTotalVatFee = (order: IOrder | IOrderDetail) => {
   return 0;
 };
 
+// Tính tổng đơn hàng đã bao gồm trừ tạm ứng và khuyến mãi
 export const getTotalDebit = (order: IOrder | IOrderDetail) => {
   const { other_fee = 0, discount = 0 } = order || {};
   const totalAmountWithoutFee = getTotalAmount(order);
@@ -44,6 +45,14 @@ export const getTotalDebit = (order: IOrder | IOrderDetail) => {
     discount +
     getTotalVatFee(order)
   );
+};
+
+export const getTotalDebitWithNoDeposite = (order: IOrder | IOrderDetail) => {
+  const { discount = 0, other_fee = 0 } = order || {};
+  const totalBasicFee = getTotalBasicFee(order);
+  const totalVatFee = getTotalVatFee(order);
+
+  return totalBasicFee + totalVatFee + other_fee - discount;
 };
 export const compareIdDesc = (
   a: {

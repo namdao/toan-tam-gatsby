@@ -8,6 +8,7 @@ import {
   TableCell,
   TableHead,
   styled,
+  TableFooter,
 } from "@mui/material";
 import React, { forwardRef } from "react";
 import Images from "utils/images";
@@ -16,7 +17,7 @@ import { compareAsc, format, parseISO } from "date-fns";
 import { cloneDeep } from "lodash";
 import { fNumber } from "utils/formatNumber";
 import { getImageToAws } from "utils/imageHandler";
-import { getTotalBasicFee, getTotalDebit, getTotalVatFee } from "utils/utility";
+import { getTotalBasicFee, getTotalDebit, getTotalDebitWithNoDeposite, getTotalVatFee } from "utils/utility";
 
 type IProps = {
   data: IResOrderListDetail[];
@@ -537,14 +538,18 @@ const PrintOrdersV2 = forwardRef(({ data: dataOrder }: IProps, ref) => {
   };
 
   const sectionBody = () => {
+    let total = 0;
+    let totalDebit = 0;
+    let totalCash = 0;
     return (
       <Table sx={{ mt: 3 }}>
-        <TableHead>
-          <TableRow sx={{ backgroundColor: "#4b4b4b" }}>
+        <TableBody>
+        <TableRow sx={{ backgroundColor: "#4b4b4b" }}>
             <TableCell
               sx={{
                 textAlign: "center",
                 color: "white",
+                fontWeight: 600,
               }}
             >
               STT
@@ -554,6 +559,7 @@ const PrintOrdersV2 = forwardRef(({ data: dataOrder }: IProps, ref) => {
               sx={{
                 textAlign: "center",
                 color: "white",
+                fontWeight: 600,
               }}
             >
               THÔNG TIN SẢN PHẨM
@@ -562,6 +568,7 @@ const PrintOrdersV2 = forwardRef(({ data: dataOrder }: IProps, ref) => {
               sx={{
                 textAlign: "center",
                 color: "white",
+                fontWeight: 600,
               }}
             >
               THÀNH TIỀN
@@ -570,18 +577,24 @@ const PrintOrdersV2 = forwardRef(({ data: dataOrder }: IProps, ref) => {
               sx={{
                 textAlign: "center",
                 color: "white",
+                fontWeight: 600,
               }}
             >
               GHI CHÚ KHÁCH HÀNG
             </TableCell>
           </TableRow>
-        </TableHead>
-        {newOrder.map((order, index) => {
-          const imgUrl = getImageToAws(order.images[0]);
-          const isOdd = index % 2 === 0;
-          const backgroundColor = isOdd ? "#e9e9e9" : "#d9d9d9";
-          return (
-            <TableBody>
+          {newOrder.map((order, index) => {
+            const imgUrl = getImageToAws(order.images[0]);
+            const isOdd = index % 2 === 0;
+            const backgroundColor = isOdd ? "#e9e9e9" : "#d9d9d9";
+            total += getTotalDebitWithNoDeposite(order);
+            if (order.deposite) {
+              totalDebit += order.deposite;
+            }
+            if (order.cash) {
+              totalCash += order.cash;
+            }
+            return (
               <TableRow sx={{ backgroundColor }}>
                 <StyledCell>
                   <Typography variant="h3" sx={{ textAlign: "center" }}>
@@ -650,7 +663,7 @@ const PrintOrdersV2 = forwardRef(({ data: dataOrder }: IProps, ref) => {
                 <StyledCell>
                   <Typography variant="body2">
                     Thành tiền:{" "}
-                    <TypoSxBold>{fNumber(getTotalBasicFee(order))}</TypoSxBold>
+                    <TypoSxBold>{fNumber(getTotalDebitWithNoDeposite(order))}</TypoSxBold>
                   </Typography>
                   {order.other_fee ? (
                     <Typography variant="body2">
@@ -682,9 +695,33 @@ const PrintOrdersV2 = forwardRef(({ data: dataOrder }: IProps, ref) => {
                 </StyledCell>
                 <StyledCell></StyledCell>
               </TableRow>
-            </TableBody>
-          );
-        })}
+            );
+          })}
+          <TableRow sx={{ backgroundColor: "#c2c2c2" }}>
+            <TableCell colSpan={4}>
+              <Typography variant="h4" textAlign="right">Tổng cộng:</Typography>
+            </TableCell>
+            <TableCell >
+              <Typography variant="h4" textAlign="center">{fNumber(total)}</Typography>
+            </TableCell>
+          </TableRow>
+          <TableRow sx={{ backgroundColor: "#c2c2c2" }}>
+            <TableCell colSpan={4}>
+              <Typography variant="h4" textAlign="right">Đã thanh toán:</Typography>
+            </TableCell>
+            <TableCell >
+              <Typography variant="h4" textAlign="center">{fNumber(totalDebit + totalCash)}</Typography>
+            </TableCell>
+          </TableRow>
+          <TableRow sx={{ backgroundColor: "#c2c2c2" }}>
+            <TableCell colSpan={4}>
+              <Typography variant="h4" textAlign="right">Còn lại phải thu:</Typography>
+            </TableCell>
+            <TableCell >
+              <Typography variant="h4" textAlign="center">{fNumber(total - (totalDebit + totalCash))}</Typography>
+            </TableCell>
+          </TableRow>
+        </TableBody>
       </Table>
     );
   };
