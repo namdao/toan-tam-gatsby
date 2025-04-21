@@ -21,6 +21,7 @@ import {
   convertNumberToVietnameseText,
   getDataOutsource,
   getTotalVatFee,
+  getTotalDebitWithNoDeposite,
 } from "utils/utility";
 import { getImageToAws } from "utils/imageHandler";
 type IProps = {
@@ -29,7 +30,7 @@ type IProps = {
 
 const TypoPrint = styled(Typography)(() => ({
   color: "#000",
-  fontSize: "12px",
+  // fontSize: "12px",
 }));
 
 const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
@@ -46,7 +47,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
         </TypoPrint>
         <Stack flexDirection="row" justifyContent="flex-end">
           <TypoPrint
-            variant="body1"
+            variant="body2"
             gutterBottom
             textAlign="right"
             sx={{ m: 0, pl: 1 }}
@@ -56,7 +57,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
         </Stack>
         <Stack flexDirection="row" justifyContent="flex-end">
           <TypoPrint
-            variant="body1"
+            variant="body2"
             gutterBottom
             textAlign="right"
             sx={{ m: 0, pl: 1 }}
@@ -66,7 +67,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
         </Stack>
         <Stack flexDirection="row" justifyContent="flex-end">
           <TypoPrint
-            variant="body1"
+            variant="body2"
             gutterBottom
             textAlign="right"
             sx={{ m: 0, pl: 1 }}
@@ -76,7 +77,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
         </Stack>
         <Stack flexDirection="row" justifyContent="flex-end">
           <TypoPrint
-            variant="body1"
+            variant="body2"
             gutterBottom
             textAlign="right"
             sx={{ m: 0, pl: 1 }}
@@ -97,13 +98,13 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
         sx={{ my: 1 }}
       >
         <Box>
-          <TypoPrint variant="h6">HOÁ ĐƠN BÁN HÀNG</TypoPrint>
+          <TypoPrint variant="h2">HOÁ ĐƠN BÁN HÀNG</TypoPrint>
           <TypoPrint variant="h6">
             Ngày: {format(new Date(), "dd/MM/yyyy")}
           </TypoPrint>
         </Box>
         <TypoPrint
-          variant="h6"
+          variant="h3"
           textAlign="center"
           sx={{
             border: "2px solid rgba(0,0,0, 1)",
@@ -148,23 +149,37 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
         <Table sx={{ tableLayout: "fixed", border: "0px" }}>
           <TableBody>
             <TableRow sx={{ backgroundColor: "#d9d9d9" }}>
-              <TableCell className="custom-table-cell left">
-                Tên Khách hàng
+              <TableCell
+                sx={{ width: "100px", padding: 1 }}
+                className="custom-table-cell left"
+              >
+                Tên KH:
               </TableCell>
-              <TableCell className="custom-table-cell left">
+              <TableCell className="custom-table-cell left" sx={{ padding: 1 }}>
                 <TypoPrint>{customer.name}</TypoPrint>
               </TableCell>
-              <TableCell className="custom-table-cell">Điện thoại</TableCell>
+              <TableCell className="custom-table-cell left" sx={{ padding: 1 }}>
+                Điện thoại:
+              </TableCell>
               <TableCell
                 className="custom-table-cell left"
-                sx={{ fontWeight: "normal" }}
+                sx={{ fontWeight: "normal", padding: 1 }}
               >
                 <TypoPrint>{customer.phone}</TypoPrint>
               </TableCell>
             </TableRow>
             <TableRow sx={{ backgroundColor: "#d9d9d9" }}>
-              <TableCell className="custom-table-cell left">Địa chỉ</TableCell>
-              <TableCell className="custom-table-cell left" colSpan={3}>
+              <TableCell
+                sx={{ width: "100px", padding: 1 }}
+                className="custom-table-cell left"
+              >
+                Địa chỉ:
+              </TableCell>
+              <TableCell
+                className="custom-table-cell left"
+                colSpan={3}
+                sx={{ padding: 1 }}
+              >
                 <TypoPrint>
                   {customer.address}, {customer.ward}, {customer.district},{" "}
                   {customer.city}
@@ -172,8 +187,17 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
               </TableCell>
             </TableRow>
             <TableRow sx={{ backgroundColor: "#d9d9d9" }}>
-              <TableCell className="custom-table-cell left">Tên công ty</TableCell>
-              <TableCell className="custom-table-cell left" colSpan={3}>
+              <TableCell
+                sx={{ width: "100px", padding: 1 }}
+                className="custom-table-cell left"
+              >
+                Tên Cty:
+              </TableCell>
+              <TableCell
+                className="custom-table-cell left"
+                colSpan={3}
+                sx={{ padding: 1 }}
+              >
                 <TypoPrint>{customer.company?.company_name}</TypoPrint>
               </TableCell>
             </TableRow>
@@ -405,72 +429,90 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
     const { dataGroupOutsources } = getDataOutsource(newOrder.outsources);
     const findValueTrangPhu = dataGroupOutsources["Tráng phủ"];
     const findValueAfterOutsource = dataGroupOutsources["Gia Công Sau In"];
-
+    const imgUrl = getImageToAws(newOrder?.images?.[0]);
     return (
       <Table sx={{ backgroundColor: "#f3f3f3", width: "100%" }}>
-        <TableHead>
+        <TableBody>
           <TableRow sx={{ backgroundColor: "#d9d9d9" }}>
-            <TableCell colSpan={2} className="custom-table-cell">
+            <TableCell colSpan={2} className="custom-table-cell" width={"50%"}>
               Thông tin sản xuất
             </TableCell>
+            <TableCell
+              rowSpan={7}
+              className="custom-table-cell"
+              sx={{ backgroundColor: "#f3f3f3" }}
+            >
+              <Box
+                sx={{
+                  borderRadius: 3,
+                  borderWidth: 2,
+                  borderStyle: "solid",
+                  borderColor: "#f3f3f3",
+                  overflow: "hidden",
+                  justifyContent: "center",
+                  display: "flex",
+                }}
+              >
+                <img alt="imageOrder" src={imgUrl} width={400} height={200} />
+              </Box>
+            </TableCell>
           </TableRow>
-        </TableHead>
-        <TableBody>
           <TableRow>
-            <TableCell className="custom-table-cell">Kích thước TP</TableCell>
-            <TableCell className="custom-table-cell">
+            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
+              Kích thước TP
+            </TableCell>
+            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
               {newOrder.method}
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell className="custom-table-cell">Loại hàng</TableCell>
-            <TableCell className="custom-table-cell">
+            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
+              Loại hàng
+            </TableCell>
+            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
               {newOrder?.category?.category_name}
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell className="custom-table-cell">Loại giấy</TableCell>
-            <TableCell className="custom-table-cell">
+            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
+              Loại giấy
+            </TableCell>
+            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
               {newOrder?.paper?.paper_name}
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell className="custom-table-cell">Kiểu in</TableCell>
-            <TableCell className="custom-table-cell">
+            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
+              Kiểu in
+            </TableCell>
+            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
               {newOrder?.print_types.map((e) => e.print_type_name)}
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell className="custom-table-cell">Tráng phủ</TableCell>
-            <TableCell className="custom-table-cell">
+            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
+              Tráng phủ
+            </TableCell>
+            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
               {findValueTrangPhu?.map((e) => e.name).join(", ")}
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell colSpan={2} className="custom-table-cell">
+            <TableCell
+              colSpan={2}
+              sx={{ padding: 0 }}
+              className="custom-table-cell left"
+            >
               Gia công sau in:{" "}
               {findValueAfterOutsource?.map((e) => e.name).join(", ")}
             </TableCell>
           </TableRow>
-        </TableBody>
-      </Table>
-    );
-  };
-
-  const sectionNoteAndImg = () => {
-    const imgUrl = getImageToAws(newOrder.images[0]);
-    return (
-      <Table sx={{ tableLayout: "fixed", border: "0px" }}>
-        <TableHead>
-          <TableRow sx={{ backgroundColor: "#f3f3f3" }}>
-            <TableCell className="custom-table-cell body">
+          <TableRow>
+            <TableCell colSpan={3} className="custom-table-cell left">
               {newOrder.order_detail_notes}
             </TableCell>
-            <TableCell className="custom-table-cell body">
-              <img alt="imageOrder" src={imgUrl} width={400} height={200} />
-            </TableCell>
           </TableRow>
-        </TableHead>
+        </TableBody>
       </Table>
     );
   };
@@ -483,26 +525,26 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
             <TableRow>
               <TableCell
                 className="custom-table-cell header"
-                sx={{ width: "231px" }}
+                sx={{ width: "260px" }}
               >
                 Tên sản phẩm
               </TableCell>
               <TableCell
                 className="custom-table-cell header"
-                sx={{ width: "115px" }}
+                sx={{ width: "88px" }}
               >
                 SL mẫu
               </TableCell>
               <TableCell
                 className="custom-table-cell header"
-                sx={{ width: "58px", p: "5px !important" }}
+                sx={{ width: "115px", p: "5px !important" }}
               >
                 SL in
               </TableCell>
               <TableCell
                 colSpan={2}
                 className="custom-table-cell header"
-                sx={{ width: "115px" }}
+                sx={{ width: "170px" }}
               >
                 Đơn giá
               </TableCell>
@@ -520,10 +562,10 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
                 {newOrder.name}
               </TableCell>
               <TableCell className="custom-table-cell body">
-                {fNumber(newOrder.quantity)}
+                {fNumber(newOrder.template_number)}
               </TableCell>
               <TableCell className="custom-table-cell body">
-                {fNumber(newOrder.template_number)}
+                {fNumber(newOrder.quantity)}
               </TableCell>
               <TableCell colSpan={2} className="custom-table-cell body">
                 {fNumber(newOrder.unit_price)}
@@ -533,24 +575,15 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
               </TableCell>
             </TableRow>
             <TableRow sx={{ backgroundColor: "#f3f3f3" }}>
-              <TableCell
-                rowSpan={6}
-                colSpan={3}
-                className="custom-table-cell background-cell"
-              >
-                {sectionChildOutsource()}
+              <TableCell className="custom-table-cell background-cell">
+                Chi phí khác
               </TableCell>
               <TableCell
                 colSpan={2}
                 className="custom-table-cell background-cell"
               >
-                Chi phí khác
-              </TableCell>
-              <TableCell className="custom-table-cell background-cell">
                 {newOrder.other_fee || 0}
               </TableCell>
-            </TableRow>
-            <TableRow>
               <TableCell
                 colSpan={2}
                 className="custom-table-cell background-cell"
@@ -566,19 +599,14 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
                 className="custom-table-cell background-cell"
                 sx={{ fontWeight: "bold" }}
               >
-                VAT
+                VAT: {newOrder.vat_fee}
               </TableCell>
               <TableCell
+                colSpan={2}
                 className="custom-table-cell background-cell"
-                sx={{ fontWeight: "bold" }}
               >
-                {newOrder.vat_fee}
-              </TableCell>
-              <TableCell className="custom-table-cell background-cell">
                 {getTotalVatFee(newOrder)}
               </TableCell>
-            </TableRow>
-            <TableRow>
               <TableCell
                 colSpan={2}
                 className="custom-table-cell background-cell"
@@ -586,10 +614,19 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
                 Tạm ứng
               </TableCell>
               <TableCell className="custom-table-cell background-cell">
-                {newOrder.deposite}
+                {fNumber(newOrder.deposite)}
               </TableCell>
             </TableRow>
             <TableRow>
+              <TableCell className="custom-table-cell background-cell">
+                TỔNG:
+              </TableCell>
+              <TableCell
+                colSpan={2}
+                className="custom-table-cell background-cell"
+              >
+                {fNumber(getTotalDebitWithNoDeposite(newOrder))}
+              </TableCell>
               <TableCell
                 colSpan={2}
                 className="custom-table-cell background-cell"
@@ -602,7 +639,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
             </TableRow>
             <TableRow>
               <TableCell
-                colSpan={3}
+                colSpan={6}
                 className="custom-table-cell background-cell"
               >
                 <Typography>
@@ -623,7 +660,8 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
         {sectionChildTitle()}
         {sectionChildCustomer()}
         <BillTable />
-        {sectionNoteAndImg()}
+        {/* {sectionNoteAndImg()} */}
+        {sectionChildOutsource()}
       </Box>
     );
   };
@@ -631,9 +669,9 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
   return (
     <Box ref={ref}>
       <style type="text/css" media="print">
-      {` 
+        {` 
           @page { size: portrait; margin: 5mm; } 
-          body {zoom: 65%;}
+          body {zoom: 70%;}
           @media print {
           table, th, td {
             border: 1px solid white !important;
@@ -650,7 +688,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
           }
           .custom-table-cell {
             text-align: center;
-            margin: 5px;
+            padding-left: 10px;
             font-weight: bold;
             color: #000;
           }
