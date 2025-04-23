@@ -20,6 +20,7 @@ import FullScreenDialogs from "../screens/OrderProcessing/DialogOrderSelected";
 import DialogOrderUpdate from "../screens/OrderUpdate";
 import { getImageToAws } from "utils/imageHandler";
 import ImagePopup from "../components/ImagePopup";
+import ButonRetailBill from "../screens/OrderStored/ButtonRetailBill";
 
 export const PaperType = ({ paperId }: { paperId: number }) => {
   const listPaper = useAppSelector(PaperTypeSelector.getListPaper);
@@ -75,7 +76,7 @@ export const OrderColumnTable: GridColDef<IOrder>[] = [
     field: "actions",
     type: "actions",
     headerName: "Hành động",
-    minWidth: 100,
+    minWidth: 150,
     getActions: ({ row }: GridRowParams<IOrder>) => {
       return [
         <FullScreenDialogs orderId={row.id} orderName={row.order_no} />,
@@ -84,6 +85,7 @@ export const OrderColumnTable: GridColDef<IOrder>[] = [
           orderName={row.order_no}
           fromPage="ORDER_PROCESSING"
         />,
+        <ButonRetailBill data={row} />,
       ];
     },
   },
