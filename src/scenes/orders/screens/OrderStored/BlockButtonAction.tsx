@@ -98,7 +98,6 @@ const BlockButtonAction = React.forwardRef(
     });
 
     useEffect(() => {
-      console.log("useEffect", orderIds);
       if (orderIds?.length > 1 || orderIds?.length === 0) {
         setDisableRetailBill(true);
       } else {

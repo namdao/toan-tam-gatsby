@@ -141,7 +141,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
               </TableCell>
               <TableCell
                 className="custom-table-cell left"
-                sx={{ fontWeight: "normal", padding: 1 }}
+                sx={{ padding: 1 }}
               >
                 <TypoPrint sx={{ fontWeight: "bold" }}>
                   {customer.phone}
@@ -198,7 +198,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
       <Table sx={{ backgroundColor: "#f3f3f3", width: "100%" }}>
         <TableBody>
           <TableRow sx={{ backgroundColor: "#d9d9d9" }}>
-            <TableCell colSpan={2} className="custom-table-cell" width={"50%"}>
+            <TableCell colSpan={2} className="custom-table-cell" width={"50%"} sx={{ fontWeight: "bold" }}>
               Thông tin sản xuất
             </TableCell>
             <TableCell
@@ -222,7 +222,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
+            <TableCell sx={{ padding: 0, fontWeight: "bold"  }} className="custom-table-cell left">
               Kích thước TP
             </TableCell>
             <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
@@ -230,7 +230,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
+            <TableCell sx={{ padding: 0, fontWeight: "bold"  }} className="custom-table-cell left">
               Loại hàng
             </TableCell>
             <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
@@ -238,7 +238,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
+            <TableCell sx={{ padding: 0,fontWeight: "bold"  }} className="custom-table-cell left">
               Loại giấy
             </TableCell>
             <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
@@ -246,7 +246,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
+            <TableCell sx={{ padding: 0,fontWeight: "bold"  }} className="custom-table-cell left">
               Kiểu in
             </TableCell>
             <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
@@ -254,7 +254,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
+            <TableCell sx={{ padding: 0, fontWeight: "bold"  }} className="custom-table-cell left">
               Tráng phủ
             </TableCell>
             <TableCell sx={{ padding: 0 }} className="custom-table-cell left">
@@ -267,12 +267,12 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
               sx={{ padding: 0 }}
               className="custom-table-cell left"
             >
-              Gia công sau in:{" "}
+              <b>Gia công sau in:{" "}</b>
               {findValueAfterOutsource?.map((e) => e.name).join(", ")}
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell colSpan={3} className="custom-table-cell left">
+            <TableCell colSpan={3} className="custom-table-cell left" sx={{ fontWeight: "bold"  }}>
               {newOrder.order_detail_notes}
             </TableCell>
           </TableRow>
@@ -334,12 +334,12 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
               <TableCell colSpan={2} className="custom-table-cell body">
                 {fNumber(newOrder.unit_price)}
               </TableCell>
-              <TableCell className="custom-table-cell body">
+              <TableCell className="custom-table-cell body" sx={{ fontWeight: "bold" }}>
                 {fNumber(getTotalBasicFee(newOrder))}
               </TableCell>
             </TableRow>
             <TableRow sx={{ backgroundColor: "#f3f3f3" }}>
-              <TableCell className="custom-table-cell background-cell right">
+              <TableCell className="custom-table-cell background-cell right" sx={{ fontWeight: "bold" }}>
                 Chi phí khác
               </TableCell>
               <TableCell
@@ -351,6 +351,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
               <TableCell
                 colSpan={2}
                 className="custom-table-cell background-cell right"
+                sx={{ fontWeight: "bold" }}
               >
                 Giảm giá
               </TableCell>
@@ -374,6 +375,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
               <TableCell
                 colSpan={2}
                 className="custom-table-cell background-cell right"
+                sx={{ fontWeight: "bold" }}
               >
                 Tạm ứng
               </TableCell>
@@ -382,7 +384,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className="custom-table-cell background-cell right">
+              <TableCell className="custom-table-cell background-cell right" sx={{ fontWeight: "bold" }}>
                 TỔNG:
               </TableCell>
               <TableCell
@@ -394,10 +396,11 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
               <TableCell
                 colSpan={2}
                 className="custom-table-cell background-cell right"
+                sx={{ fontWeight: "bold" }}
               >
                 Còn lại phải thu
               </TableCell>
-              <TableCell className="custom-table-cell background-cell">
+              <TableCell className="custom-table-cell background-cell" sx={{ fontWeight: "bold" }}>
                 {fNumber(getTotalDebit(newOrder))}
               </TableCell>
             </TableRow>
@@ -432,43 +435,11 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
 
   return (
     <Box ref={ref}>
-      <link href="https://fonts.cdnfonts.com/css/utm-avo" rel="stylesheet" />
+      {/* <link href="https://fonts.cdnfonts.com/css/utm-avo" rel="stylesheet" /> */}
       <style type="text/css" media="print">
         {` 
           @page { size: portrait; margin: 5mm; } 
           body {zoom: 70%;}
-          // table, th, td {
-          //     border: 1px solid white !important;
-          //     border-collapse: collapse !important;
-          //     font-family: "UTM Avo", sans-serif !important;
-          //   }
-          //   tr:last-child td {
-          //     border-bottom: 1px solid white !important;
-          //   }
-          //   td {
-          //     font-weight: bold;
-          //     font-family: "UTM Avo", sans-serif !important;
-          //   }
-          //   .background-cell {
-          //     background-color: #f3f3f3;
-          //   }
-          //   .custom-table-cell {
-          //     text-align: center;
-          //     padding-left: 10px;
-          //     font-weight: bold;
-          //     color: #000;
-          //     font-family: "UTM Avo", sans-serif !important;
-          //   }
-          //   .left {
-          //     text-align: left;
-          //   }
-          //   .custom-table-cell.header {
-          //     background-color: #d9d9d9;
-          //   }
-          //   .custom-table-cell.body {
-          //     border-top: none;
-          //     border-bottom: none;
-          //   }
           @media print {
             table, th, td {
               border: 1px solid white !important;
@@ -479,7 +450,6 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
               border-bottom: 1px solid white !important;
             }
             td {
-              font-weight: bold;
               font-family: "UTM Avo", sans-serif !important;
             }
             .background-cell {
@@ -488,7 +458,6 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
             .custom-table-cell {
               text-align: center;
               padding-left: 10px;
-              font-weight: bold;
               color: #000;
               font-family: "UTM Avo", sans-serif !important;
             }

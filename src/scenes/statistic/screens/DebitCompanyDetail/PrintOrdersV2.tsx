@@ -378,7 +378,6 @@ const PrintOrdersV2 = forwardRef(({ data: dataOrder }: IProps, ref) => {
   return (
     // @ts-ignore
     <Stack ref={ref}>
-      <link href="https://fonts.cdnfonts.com/css/utm-avo" rel="stylesheet"/>
       <style type="text/css">
         {` 
           table, th, td {
