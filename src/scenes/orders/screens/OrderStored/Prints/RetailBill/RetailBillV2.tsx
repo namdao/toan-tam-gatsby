@@ -272,7 +272,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell colSpan={3} className="custom-table-cell left" sx={{ fontWeight: "bold"  }}>
+            <TableCell colSpan={3} className="custom-table-cell left">
               {newOrder.order_detail_notes}
             </TableCell>
           </TableRow>
