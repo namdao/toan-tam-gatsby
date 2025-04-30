@@ -93,7 +93,7 @@ const PrintOrdersV2 = forwardRef(({ data: dataOrder }: IProps, ref) => {
           <TypoPrint variant="h2">
             CÔNG NỢ PHẢI THU
           </TypoPrint>
-          <TypoPrint variant="h3">
+          <TypoPrint sx={{fontSize: "1.5rem"}}>
             Từ {format(parseISO(newOrder[0].real_delivery_date), "dd/MM/yyyy")}{" "}
             đến{" "}
             {format(
@@ -179,7 +179,7 @@ const PrintOrdersV2 = forwardRef(({ data: dataOrder }: IProps, ref) => {
                 fontWeight: 600,
               }}
             >
-              GHI CHÚ KHÁCH HÀNG
+              GHI CHÚ
             </TableCell>
           </TableRow>
         </TableHead>
@@ -343,30 +343,30 @@ const PrintOrdersV2 = forwardRef(({ data: dataOrder }: IProps, ref) => {
         <TableRow sx={{ backgroundColor: "#4b4b4b" }}>
           <TableCell></TableCell>
           <TableCell></TableCell>
-          <TableCell sx={{ color: "white", fontWeight: 600, width: 100 }}>
+          <TableCell sx={{ color: "white", width: 100 }}>
             Tổng cộng:
           </TableCell>
           <TableCell
             className="right"
-            sx={{ color: "white", fontWeight: 600, width: 150 }}
+            sx={{ color: "white", fontWeight: 600, width: 150, fontSize: "1.2rem" }}
           >
             {fNumber(total)}
           </TableCell>
-          <TableCell sx={{ color: "white", fontWeight: 600, width: 150 }}>
+          <TableCell sx={{ color: "white", width: 150 }}>
             Đã thanh toán:
           </TableCell>
           <TableCell
             className="right"
-            sx={{ color: "white", fontWeight: 600, width: 150 }}
+            sx={{ color: "white", fontWeight: 600, width: 150,fontSize: "1.2rem" }}
           >
             {fNumber(totalDebit + totalCash)}
           </TableCell>
-          <TableCell sx={{ color: "white", fontWeight: 600, width: 150 }}>
+          <TableCell sx={{ color: "white",width: 150 }}>
             Còn lại phải thu:
           </TableCell>
           <TableCell
             className="right"
-            sx={{ color: "white", fontWeight: 600, width: 150 }}
+            sx={{ color: "white", fontWeight: 600, width: 150,fontSize: "1.2rem" }}
           >
             {fNumber(total - (totalDebit + totalCash))}
           </TableCell>
@@ -403,7 +403,6 @@ const PrintOrdersV2 = forwardRef(({ data: dataOrder }: IProps, ref) => {
             font-family: "UTM Avo", sans-serif !important;
           }
           td {
-            font-weight: bold;
             font-family: "UTM Avo", sans-serif !important;
           }
           .right {
