@@ -5,8 +5,6 @@ import Helmet from "react-helmet";
 import BlockInfoCustomer from "./BlockInfoCustomer";
 import { useOrderDetail } from "scenes/orders/hooks/useOrderDetail";
 import BlockInfoOrder from "./BlockInfoOrder";
-import BlockOutsourceWithImg from "./BlockOutsourceWithImg";
-// import BlockTimeLine from "./BlockTimeline";
 type IProps = {
   orderId: number;
 };

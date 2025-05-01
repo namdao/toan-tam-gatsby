@@ -3,23 +3,24 @@ import {
   CardHeader,
   Grid,
   Stack,
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
   Typography,
   useTheme,
 } from "@mui/material";
-import Iconify from "components/iconify";
-import { ICON } from "constant/layoutConstant";
 import { useLocales } from "locales";
 import React, { FC, memo } from "react";
 import { IOrderDetail } from "scenes/orders/redux/types";
-import { format, parseISO } from "date-fns";
 import {
   BlockInfoCustomerSkeleton,
   BlockInfoDeliverySekelton,
 } from "scenes/orders/components/BlockOrderDetailSkeleton";
-import { StyledIcon, StyleTitleTypo } from "./style";
-import appConstants from "constant/appConstant";
+import { StyledIcon, StyleTableCell, StyleTitleTypo } from "./style";
+import { fNumber } from "utils/formatNumber";
+import { getTotalDebit, getTotalDebitWithNoDeposite } from "utils/utility";
 
-const { ROLES } = appConstants;
 
 type IPropsCustomer = {
   data: IOrderDetail | undefined;
@@ -73,7 +74,7 @@ const BlockInfoCustomer: FC<IPropsCustomer> = ({ data, loading }) => {
     </Grid>
   );
 
-  const renderReiveInfo = () => (
+  const renderReceiveInfo = () => (
     <Grid item xs={12} md={3}>
       <Card sx={{ height: 250 }}>
         <CardHeader
@@ -81,23 +82,19 @@ const BlockInfoCustomer: FC<IPropsCustomer> = ({ data, loading }) => {
           sx={{ color: theme.palette.primary.main }}
         />
         <Stack spacing={2} sx={{ p: 2 }}>
-          <Stack direction="row" justifyContent="space-between">
-            <Stack direction="row">
-              <StyledIcon icon="mdi:user" />
-              {/* <StyleTitleTypo variant="body2">
+          <Stack direction="row">
+            <StyledIcon icon="mdi:user" />
+            {/* <StyleTitleTypo variant="body2">
               {translate("orders.orderDetail.delivery.name")}
             </StyleTitleTypo> */}
-              <Typography variant="subtitle2">{data?.receiver_info}</Typography>
-            </Stack>
-            <Stack direction="row">
-              <StyledIcon icon="material-symbols:phone-enabled-outline" />
-              {/* <StyleTitleTypo variant="body2">
+            <Typography variant="subtitle2">{data?.receiver_info}</Typography>
+          </Stack>
+          <Stack direction="row">
+            <StyledIcon icon="material-symbols:phone-enabled-outline" />
+            {/* <StyleTitleTypo variant="body2">
               {translate("orders.orderDetail.delivery.phone")}
             </StyleTitleTypo> */}
-              <Typography variant="subtitle2">
-                {data?.customer?.phone}
-              </Typography>
-            </Stack>
+            <Typography variant="subtitle2">{data?.customer?.phone}</Typography>
           </Stack>
           <Stack direction="row">
             <StyledIcon icon="la:address-card" />
@@ -108,7 +105,7 @@ const BlockInfoCustomer: FC<IPropsCustomer> = ({ data, loading }) => {
               {data?.delivery_address}
             </Typography>
           </Stack>
-          <Stack direction="row">
+          {/* <Stack direction="row">
             <StyledIcon icon="ic:baseline-date-range" />
             <StyleTitleTypo variant="body2">
               {translate("orders.orderDetail.delivery.receiveDay")}
@@ -117,8 +114,8 @@ const BlockInfoCustomer: FC<IPropsCustomer> = ({ data, loading }) => {
               data?.created_time &&
               format(parseISO(data?.created_time), "dd/MM/yyyy HH:mm")
             }`}</Typography>
-          </Stack>
-          <Stack direction="row">
+          </Stack> */}
+          {/* <Stack direction="row">
             <StyledIcon icon="ic:baseline-date-range" />
             <StyleTitleTypo variant="body2">
               {translate("orders.orderDetail.delivery.deliveryDay")}
@@ -128,97 +125,108 @@ const BlockInfoCustomer: FC<IPropsCustomer> = ({ data, loading }) => {
                 ? format(parseISO(data?.delivery_date), "dd/MM/yyyy HH:mm")
                 : "-"
             }`}</Typography>
-          </Stack>
+          </Stack> */}
         </Stack>
       </Card>
     </Grid>
   );
 
-  const renderEmployeeInfo = () => {
-    const { saler, user } = data || {};
+  const renderBillInfo = () => {
     return (
       <Grid item xs={12} md={6}>
-        <Card sx={{ height: 250 }}>
+        <Card sx={{ height: 270 }}>
           <CardHeader
-            title={translate("orders.orderDetail.employee.title")}
+            title={translate("orders.orderDetail.billInfo.title")}
             sx={{ color: theme.palette.primary.main }}
           />
           <Stack direction="row" justifyContent="flex-start">
-            <Stack spacing={2} sx={{ p: 3, flex: 1 }}>
-              <Stack direction="row">
-                <StyledIcon icon="mdi:user-edit" />
-                <StyleTitleTypo variant="body2">
-                  {translate("orders.orderDetail.employee.creator")}
-                </StyleTitleTypo>
-                <Typography variant="subtitle2">
-                  {saler && saler.username}
-                </Typography>
-              </Stack>
-              <Stack direction="row">
-                <StyledIcon icon="mdi:user-clock-outline" />
-                <StyleTitleTypo variant="body2">
-                  {translate("orders.orderDetail.employee.handler")}
-                </StyleTitleTypo>
-                <Typography variant="subtitle2">
-                  {user
-                    ? user.username
-                    : translate("orders.orderDetail.employee.noHandler")}
-                </Typography>
-              </Stack>
-
-              <Stack direction="row">
-                <StyledIcon icon="mdi:user-check-outline" />
-                <StyleTitleTypo variant="body2">
-                  {translate("orders.orderDetail.employee.warehouseStaff")}
-                </StyleTitleTypo>
-                <Typography variant="subtitle2">
-                  {user && user.roles[0].name === ROLES.STORE
-                    ? user.username
-                    : translate("orders.orderDetail.employee.noHandler")}
-                </Typography>
-              </Stack>
-            </Stack>
-            <Stack spacing={2} sx={{ p: 3, flex: 1 }}>
-              <Stack direction="row">
-                <StyledIcon icon="material-symbols:date-range-outline" />
-                <StyleTitleTypo variant="body2">
-                  {translate("orders.orderDetail.employee.dateCreatePO")}
-                </StyleTitleTypo>
-                <Typography variant="subtitle2">
-                  {`${
-                    data?.created_time &&
-                    format(parseISO(data?.created_time), "dd/MM/yyyy HH:mm")
-                  }`}
-                </Typography>
-              </Stack>
-              <Stack direction="row">
-                <StyledIcon icon="material-symbols:date-range-outline" />
-                <StyleTitleTypo variant="body2">
-                  {translate("orders.orderDetail.employee.dateHandlerPO")}
-                </StyleTitleTypo>
-                <Typography variant="subtitle2">
-                  {`${
-                    data?.updated_time &&
-                    format(parseISO(data?.updated_time), "dd/MM/yyyy HH:mm")
-                  }`}
-                </Typography>
-              </Stack>
-              <Stack direction="row">
-                <StyledIcon icon="material-symbols:date-range-outline" />
-                <StyleTitleTypo variant="body2">
-                  {translate("orders.orderDetail.employee.dateStorePO")}
-                </StyleTitleTypo>
-                <Typography variant="subtitle2">
-                  {`${
-                    data?.outsource_date
-                      ? format(
-                          parseISO(data?.outsource_date),
-                          "dd/MM/yyyy HH:mm"
-                        )
-                      : "-"
-                  }`}
-                </Typography>
-              </Stack>
+            <Stack sx={{ p: 1, flex: 1 }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <StyleTableCell>
+                      {translate("orders.orderDetail.billInfo.template")}{" "}
+                      {data?.template_number
+                        ? fNumber(data.template_number.toString())
+                        : "-"}
+                    </StyleTableCell>
+                    <StyleTableCell rowSpan={2} sx={{ textAlign: "center" }}>
+                      {translate("orders.orderDetail.billInfo.unitPrice")}
+                      <br />
+                      {data?.unit_price ? fNumber(data.unit_price.toString()) : "-"}
+                    </StyleTableCell>
+                    <StyleTableCell>
+                      {translate("orders.orderDetail.billInfo.designFee")}{" "}
+                      {data?.design_fee
+                        ? fNumber(data.design_fee.toString())
+                        : "-"}
+                    </StyleTableCell>
+                    <StyleTableCell>
+                      {translate("orders.orderDetail.billInfo.otherFee")}{" "}
+                      {data?.other_fee
+                        ? fNumber(data.other_fee.toString())
+                        : "-"}
+                    </StyleTableCell>
+                  </TableRow>
+                  <TableRow>
+                    <StyleTableCell>
+                      {translate("orders.orderDetail.billInfo.quantity")}{" "}
+                      {data?.quantity ? fNumber(data.quantity.toString()) : "-"}
+                    </StyleTableCell>
+                    <StyleTableCell>
+                      {translate("orders.orderDetail.billInfo.shippingFee")}{" "}
+                      {data?.shipping_fee
+                        ? fNumber(data.shipping_fee.toString())
+                        : "-"}
+                    </StyleTableCell>
+                    <StyleTableCell>
+                      {translate("orders.orderDetail.billInfo.vatFee")}{" "}
+                      {data?.vat_fee ? fNumber(data.vat_fee.toString()) : "-"}
+                    </StyleTableCell>
+                  </TableRow>
+                  <TableRow>
+                    <StyleTableCell colSpan={2}>
+                      {translate("orders.orderDetail.billInfo.deposite")}{" "}
+                      {data?.deposite ? fNumber(data.deposite.toString()) : "-"}
+                    </StyleTableCell>
+                    <StyleTableCell colSpan={2}>
+                      <Stack direction="row" spacing={2} alignItems="center">
+                        <Typography>
+                          {translate("orders.orderDetail.billInfo.amount")}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontWeight: "bold",
+                            fontSize: 18,
+                          }}
+                        >
+                          {data ? fNumber(getTotalDebitWithNoDeposite(data)) : "-"}
+                        </Typography>
+                      </Stack>
+                    </StyleTableCell>
+                  </TableRow>
+                  <TableRow>
+                    <StyleTableCell colSpan={4}>
+                      <Stack direction="row" spacing={2} alignItems="center">
+                        <Typography>
+                          {translate(
+                            "orders.orderDetail.billInfo.remainingAmount"
+                          )}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontWeight: "bold",
+                            color: "red",
+                            fontSize: 20,
+                          }}
+                        >
+                          {data ? fNumber(getTotalDebit(data)) : "-"}
+                        </Typography>
+                      </Stack>
+                    </StyleTableCell>
+                  </TableRow>
+                </TableHead>
+              </Table>
             </Stack>
           </Stack>
         </Card>
@@ -237,8 +245,8 @@ const BlockInfoCustomer: FC<IPropsCustomer> = ({ data, loading }) => {
   return (
     <Grid container spacing={3}>
       {renderCustomerInfo()}
-      {renderReiveInfo()}
-      {renderEmployeeInfo()}
+      {renderReceiveInfo()}
+      {renderBillInfo()}
     </Grid>
   );
 };

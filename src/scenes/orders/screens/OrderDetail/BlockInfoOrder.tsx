@@ -1,14 +1,30 @@
-import { Card, CardHeader, Grid, Stack, Typography } from "@mui/material";
+import {
+  Card,
+  CardHeader,
+  Grid,
+  Stack,
+  TableCell,
+  TableRow,
+  TableHead,
+  Table,
+  Typography,
+} from "@mui/material";
 import Label from "components/label";
 import React, { FC, useMemo } from "react";
 import { BlockInfoOrderSkelekton } from "scenes/orders/components/BlockOrderDetailSkeleton";
 import { IOrderDetail } from "scenes/orders/redux/types";
 import { useLocales } from "locales";
-import { StyleTitleTypo } from "./style";
+import { StyleTitleTypo, StyleTableCell } from "./style";
 import { fNumber } from "utils/formatNumber";
-import { getTotalAmount, getTotalBasicFee } from "utils/utility";
+import {
+  getDataOutsource,
+  getTotalAmount,
+  getTotalBasicFee,
+} from "utils/utility";
 import BlockTimeLine from "./BlockTimeline";
-import BlockOutsourceWithImg from "./BlockOutsourceWithImg";
+import BlockWithImg from "./BlockWithImg";
+import { parseISO, format } from "date-fns";
+import { IOurSources } from "constant/commonType";
 type IPropsInfoOrder = {
   data: IOrderDetail | undefined;
   loading: boolean;
@@ -24,15 +40,6 @@ const BlockInfoOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
     );
   }
 
-  const blockPriceInfo = () => {
-    return (
-      <Grid container xs={12} md={12} spacing={2}>
-        {renderPriceBasicCol()}
-        {renderPriceFeeCol()}
-        {renderTotalCol()}
-      </Grid>
-    );
-  };
   const renderPriceBasicCol = () => {
     return (
       <Grid item xs={12} md={4}>
@@ -136,87 +143,154 @@ const BlockInfoOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
     </Stack>
   );
 
-  const renderSecondRow = () => (
-    <Grid container>
-      <Grid item xs={12} md={6}>
+  const renderNoteBlock = () => (
+    <Card sx={{ height: 390 }}>
+      <CardHeader
+        title={translate("orders.orderDetail.info.notePrint")}
+        sx={{ color: (theme) => theme.palette.primary.main }}
+      />
+      <Stack sx={{ p: 3 }}>
         <Stack direction="row" spacing={1}>
-          <StyleTitleTypo variant="body2">
-            {translate("orders.orderDetail.info.category")}
-          </StyleTitleTypo>
-          <Typography variant="subtitle2" textAlign="right">
-            {data?.category?.category_name} - {data?.paper?.paper_name}
-          </Typography>
-        </Stack>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Stack direction="row" spacing={1}>
-          <StyleTitleTypo variant="body2">
-            {translate("orders.orderDetail.info.printType")}
-          </StyleTitleTypo>
-          <Typography variant="subtitle2">
-            {data?.print_types.map((e) => e.print_type_name)}
-          </Typography>
-        </Stack>
-      </Grid>
-    </Grid>
-  );
-
-  const renderThirdRow = () => (
-    <Grid container>
-      <Grid item xs={12} md={6}>
-        <Stack direction="row" spacing={1}>
-          <StyleTitleTypo variant="body2">
-            {translate("orders.orderDetail.info.paper")}
-          </StyleTitleTypo>
-          <Typography variant="subtitle2">{data?.paper?.paper_name}</Typography>
-        </Stack>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Stack direction="row" spacing={1}>
-          <StyleTitleTypo variant="body2">
-            {translate("orders.orderDetail.info.method")}
-          </StyleTitleTypo>
-          <Typography variant="subtitle2">{data?.method} mm</Typography>
-        </Stack>
-      </Grid>
-    </Grid>
-  );
-  const renderFourthRow = () => (
-    <Grid container>
-      <Grid item xs={12} md={12}>
-        <Stack direction="row" spacing={1}>
-          <StyleTitleTypo variant="body2">
-            {translate("orders.orderDetail.info.notePrint")}
-          </StyleTitleTypo>
           <Typography variant="subtitle2">
             {data?.order_detail_notes}
           </Typography>
         </Stack>
-      </Grid>
-    </Grid>
+      </Stack>
+    </Card>
   );
+
+  const renderBlockProductInfo = () => {
+    return (
+      <Table>
+        <TableHead>
+          <TableRow>
+            <StyleTableCell colSpan={3}>{renderFristRow()}</StyleTableCell>
+          </TableRow>
+          <TableRow>
+            <StyleTableCell colSpan={3}>
+              <Stack direction="row" spacing={1}>
+                <StyleTitleTypo variant="body2">
+                  {translate("orders.orderDetail.info.category")}
+                </StyleTitleTypo>
+                <Typography variant="subtitle2" textAlign="right">
+                  {data?.category?.category_name} - {data?.paper?.paper_name}
+                </Typography>
+              </Stack>
+            </StyleTableCell>
+          </TableRow>
+          <TableRow>
+            <StyleTableCell>
+              <Stack direction="row" spacing={1}>
+                <StyleTitleTypo variant="body2">
+                  {translate("orders.orderDetail.info.method")}
+                </StyleTitleTypo>
+                <Typography variant="subtitle2">{data?.method}</Typography>
+              </Stack>
+            </StyleTableCell>
+            <StyleTableCell>
+              <Stack direction="row" spacing={1}>
+                <StyleTitleTypo variant="body2">
+                  {translate("orders.orderDetail.info.paper")}
+                </StyleTitleTypo>
+                <Typography variant="subtitle2">
+                  {data?.paper?.paper_name}
+                </Typography>
+              </Stack>
+            </StyleTableCell>
+            <StyleTableCell>
+              <Stack direction="row">
+                <StyleTitleTypo variant="body2">
+                  {translate("orders.orderDetail.employee.dateCreatePO")}
+                </StyleTitleTypo>
+                <Typography variant="subtitle2">
+                  {`${
+                    data?.created_time &&
+                    format(parseISO(data?.created_time), "dd/MM/yyyy HH:mm")
+                  }`}
+                </Typography>
+              </Stack>
+            </StyleTableCell>
+          </TableRow>
+          <TableRow>
+            <StyleTableCell>
+              {translate("orders.orderDetail.billInfo.template")}{" "}
+              {data?.template_number
+                ? fNumber(data.template_number.toString())
+                : "-"}
+            </StyleTableCell>
+            <StyleTableCell rowSpan={2}>
+              <Stack direction="row" spacing={1}>
+                <StyleTitleTypo variant="body2">
+                  {translate("orders.orderDetail.info.printType")}
+                </StyleTitleTypo>
+                <Typography variant="subtitle2">
+                  {data?.print_types.map((e) => e.print_type_name)}
+                </Typography>
+              </Stack>
+            </StyleTableCell>
+            <StyleTableCell rowSpan={2}>
+              <Stack direction="row">
+                <StyleTitleTypo variant="body2">
+                  {translate("orders.orderDetail.delivery.deliveryDay")}
+                </StyleTitleTypo>
+                <Typography variant="subtitle2">{`${
+                  data?.delivery_date && data.delivery_date !== "None"
+                    ? format(parseISO(data?.delivery_date), "dd/MM/yyyy HH:mm")
+                    : "-"
+                }`}</Typography>
+              </Stack>
+            </StyleTableCell>
+          </TableRow>
+          <TableRow>
+            <StyleTableCell>
+              {translate("orders.orderDetail.billInfo.quantity")}{" "}
+              {data?.quantity ? fNumber(data.quantity.toString()) : "-"}
+            </StyleTableCell>
+          </TableRow>
+        </TableHead>
+      </Table>
+    );
+  };
+  const renderRowOutSource = (outsources: IOurSources[]) => {
+    const { dataGroupOutsources, keyOutSource } = getDataOutsource(outsources);
+    return keyOutSource.map((nameKey) => {
+      const listChildByKey = dataGroupOutsources[nameKey];
+      return (
+        <Stack direction="row" sx={{ pb: 2 }}>
+          <Typography variant="body2">{nameKey}</Typography>
+          <Stack direction="row" flexWrap="wrap" sx={{ flex: 1 }}>
+            {listChildByKey.map((child) => {
+              return <Label sx={{ mx: 1, mb: 1 }}>{child.name}</Label>;
+            })}
+          </Stack>
+        </Stack>
+      );
+    });
+  };
 
   return (
     <Grid container spacing={3} sx={{ pt: 3 }}>
       <Grid item xs={12} md={6}>
         <Card>
           <CardHeader
-            title={
-              translate("orders.orderDetail.info.title") + " " + data?.order_no
-            }
+            title={translate("orders.orderDetail.info.title")}
             sx={{ color: (theme) => theme.palette.primary.main }}
           />
           <Stack spacing={2} sx={{ p: 3 }}>
-            {blockPriceInfo()}
-            {renderFristRow()}
-            {renderSecondRow()}
-            {renderThirdRow()}
-            {renderFourthRow()}
+            {renderBlockProductInfo()}
+            {data && data?.outsources.length > 0 ? (
+              renderRowOutSource(data.outsources)
+            ) : (
+              <Label>Không gia công</Label>
+            )}
           </Stack>
         </Card>
       </Grid>
-      <Grid item xs={12} md={6}>
-        <BlockOutsourceWithImg data={data} />
+      <Grid item xs={12} md={3}>
+        {renderNoteBlock()}
+      </Grid>
+      <Grid item xs={12} md={3}>
+        <BlockWithImg data={data} />
       </Grid>
       <Grid item xs={12} md={12}>
         <BlockTimeLine data={data} loading={loading} />
