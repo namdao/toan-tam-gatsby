@@ -1,27 +1,18 @@
 import {
   Box,
   Card,
-  CardHeader,
-  Grid,
   Stack,
-  Typography,
   useTheme,
 } from "@mui/material";
-import Label from "components/label";
-import { useLocales } from "locales";
-import { groupBy } from "lodash";
-import React, { FC, useMemo } from "react";
+import React, { FC } from "react";
 import { IOrderDetail } from "scenes/orders/redux/types";
 import ImagePopup from "scenes/orders/components/ImagePopup";
 import { getImageToAws } from "utils/imageHandler";
-import { getDataOutsource } from "utils/utility";
-import { IOurSources } from "constant/commonType";
 
 type IPropsInfoOrder = {
   data: IOrderDetail | undefined;
 };
 const BlockWithImg: FC<IPropsInfoOrder> = ({ data }) => {
-  const { translate } = useLocales();
   const theme = useTheme();
 
   const imgUrl =
@@ -29,31 +20,13 @@ const BlockWithImg: FC<IPropsInfoOrder> = ({ data }) => {
       ? getImageToAws(data.images[0])
       : null;
 
-  const renderRowOutSource = (outsources: IOurSources[]) => {
-    const { dataGroupOutsources, keyOutSource } = getDataOutsource(outsources);
-    return keyOutSource.map((nameKey) => {
-      const listChildByKey = dataGroupOutsources[nameKey];
-      return (
-        <Stack direction="row" sx={{ pb: 2 }}>
-          <Typography variant="body2" sx={{ flex: 0.2 }}>
-            {nameKey}
-          </Typography>
-          <Stack direction="row" flexWrap="wrap" sx={{ flex: 1 }}>
-            {listChildByKey.map((child) => {
-              return <Label sx={{ mx: 1, mb: 1 }}>{child.name}</Label>;
-            })}
-          </Stack>
-        </Stack>
-      );
-    });
-  };
   return (
     <Card sx={{ height: 390 }}>
       <Stack sx={{ p: 3 }} alignItems="center">
         {imgUrl && (
           <Box
             sx={{
-              width: 350,
+              width: "100%",
               height: 350,
               borderRadius: 3,
               borderWidth: 5,
@@ -66,7 +39,6 @@ const BlockWithImg: FC<IPropsInfoOrder> = ({ data }) => {
               url={[imgUrl]}
               width="100%"
               height="100%"
-              sx={{ margin: "auto" }}
             />
           </Box>
         )}
