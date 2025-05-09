@@ -346,7 +346,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
                 colSpan={2}
                 className="custom-table-cell background-cell"
               >
-                {newOrder.other_fee || 0}
+                {fNumber(newOrder.other_fee || 0)}
               </TableCell>
               <TableCell
                 colSpan={2}
@@ -356,7 +356,7 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
                 Giảm giá
               </TableCell>
               <TableCell className="custom-table-cell background-cell">
-                {newOrder.discount || 0}
+                {fNumber(newOrder.discount || 0)}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -364,13 +364,13 @@ const RetailBillV2 = forwardRef(({ data = [] }: IProps, ref) => {
                 className="custom-table-cell background-cell right"
                 sx={{ fontWeight: "bold" }}
               >
-                VAT: {newOrder.vat_fee}
+                VAT: {newOrder.vat_fee} %
               </TableCell>
               <TableCell
                 colSpan={2}
                 className="custom-table-cell background-cell"
               >
-                {getTotalVatFee(newOrder)}
+                {fNumber(getTotalVatFee(newOrder))}
               </TableCell>
               <TableCell
                 colSpan={2}

@@ -20,6 +20,7 @@ import BlockFormOrderCompanyDebit from "./BlockFormOrderCompanyDebit";
 import OrderNewEditForm from "scenes/orders/components/OrderNewEditForm";
 import { ORDER_STATUS_NAME } from "scenes/orders/helper/OrderConstant";
 import OrderConfirmDesign from "scenes/orders/components/OrderConfirmDesign";
+import BlockFormOrderProcessingAdmin from "./BlockFormOrderProcessingAdmin";
 const { ROLES } = appConstants;
 const Transition = forwardRef(
   (
@@ -131,13 +132,22 @@ const DialogOrderUpdate = ({
 
   const onShowFormOrder = () => {
     switch (fromPage) {
-      case "ORDER_PROCESSING":
+      case "ORDER_PROCESSING": {
+        if (roleUser[0].name === ROLES.ADMIN) {
+          return (
+            <BlockFormOrderProcessingAdmin
+              handleClose={handleClose}
+              orderDetail={orderDetail}
+            />
+          );
+        }
         return (
           <BlockFormOrderProcessing
             handleClose={handleClose}
             orderDetail={orderDetail}
           />
         );
+      }
       case "ORDER_NEED_COLLECT":
         return (
           <BlockFormOrderNeedCollect

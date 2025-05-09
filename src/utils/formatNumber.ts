@@ -59,3 +59,18 @@ function result(format: string, key = ".00") {
 
   return isInteger ? format.replace(key, "") : format;
 }
+
+export function normalizeToNumber(input: string) {
+  if (typeof input === 'number') return input;
+
+  if (typeof input !== 'string') return NaN;
+
+  const cleaned = input
+    .trim()
+    .replace(/,/g, '')              // Xoá dấu phân cách hàng nghìn
+    .replace(/[^\d.]/g, '')         // Chỉ giữ chữ số và dấu chấm
+    .replace(/(\..*)\./g, '$1');    // Nếu có nhiều dấu chấm, chỉ giữ cái đầu tiên
+
+  const result = parseFloat(cleaned);
+  return isNaN(result) ? 0 : result;
+}

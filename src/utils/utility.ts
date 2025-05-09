@@ -30,7 +30,7 @@ export const getTotalVatFee = (order: IOrder | IOrderDetail) => {
   const { other_fee = 0, vat_fee = 0, discount = 0 } = order || {};
   const totalAmountOrder = getTotalBasicFee(order);
   if (vat_fee > 0) {
-    return (totalAmountOrder + other_fee - discount) * vat_fee;
+    return (totalAmountOrder + other_fee - discount) * vat_fee / 100;
   }
   return 0;
 };

@@ -19,7 +19,7 @@ import {
 } from "scenes/orders/components/BlockOrderDetailSkeleton";
 import { StyledIcon, StyleTableCell, StyleTitleTypo } from "./style";
 import { fNumber } from "utils/formatNumber";
-import { getTotalDebit, getTotalDebitWithNoDeposite } from "utils/utility";
+import { getTotalDebit, getTotalDebitWithNoDeposite, getTotalVatFee } from "utils/utility";
 
 
 type IPropsCustomer = {
@@ -180,8 +180,9 @@ const BlockInfoCustomer: FC<IPropsCustomer> = ({ data, loading }) => {
                         : "-"}
                     </StyleTableCell>
                     <StyleTableCell>
-                      {translate("orders.orderDetail.billInfo.vatFee")}{" "}
-                      {data?.vat_fee ? fNumber(data.vat_fee.toString()) : "-"}
+                      {translate("orders.orderDetail.billInfo.vatFee")}
+                      {data?.vat_fee ? 
+                      (`(${fNumber(data.vat_fee.toString())}%)`) + ": " + fNumber(getTotalVatFee(data)) : ": -"}
                     </StyleTableCell>
                   </TableRow>
                   <TableRow>
