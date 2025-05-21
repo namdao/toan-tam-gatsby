@@ -19,8 +19,11 @@ import {
 } from "scenes/orders/components/BlockOrderDetailSkeleton";
 import { StyledIcon, StyleTableCell, StyleTitleTypo } from "./style";
 import { fNumber } from "utils/formatNumber";
-import { getTotalDebit, getTotalDebitWithNoDeposite, getTotalVatFee } from "utils/utility";
-
+import {
+  getTotalDebit,
+  getTotalDebitWithNoDeposite,
+  getTotalVatFee,
+} from "utils/utility";
 
 type IPropsCustomer = {
   data: IOrderDetail | undefined;
@@ -31,7 +34,7 @@ const BlockInfoCustomer: FC<IPropsCustomer> = ({ data, loading }) => {
   const theme = useTheme();
   const renderCustomerInfo = () => (
     <Grid item xs={12} md={3}>
-      <Card sx={{ height: 250 }}>
+      <Card sx={{ height: 220 }}>
         <CardHeader
           title={translate("orders.orderDetail.customer.title")}
           sx={{ color: theme.palette.primary.main }}
@@ -76,7 +79,7 @@ const BlockInfoCustomer: FC<IPropsCustomer> = ({ data, loading }) => {
 
   const renderReceiveInfo = () => (
     <Grid item xs={12} md={3}>
-      <Card sx={{ height: 250 }}>
+      <Card sx={{ height: 220 }}>
         <CardHeader
           title={translate("orders.orderDetail.delivery.title")}
           sx={{ color: theme.palette.primary.main }}
@@ -134,7 +137,7 @@ const BlockInfoCustomer: FC<IPropsCustomer> = ({ data, loading }) => {
   const renderBillInfo = () => {
     return (
       <Grid item xs={12} md={6}>
-        <Card sx={{ height: 270 }}>
+        <Card>
           <CardHeader
             title={translate("orders.orderDetail.billInfo.title")}
             sx={{ color: theme.palette.primary.main }}
@@ -145,71 +148,168 @@ const BlockInfoCustomer: FC<IPropsCustomer> = ({ data, loading }) => {
                 <TableHead>
                   <TableRow>
                     <StyleTableCell>
-                      {translate("orders.orderDetail.billInfo.template")}{" "}
-                      {data?.template_number
-                        ? fNumber(data.template_number.toString())
-                        : "-"}
-                    </StyleTableCell>
-                    <StyleTableCell rowSpan={2} sx={{ textAlign: "center" }}>
-                      {translate("orders.orderDetail.billInfo.unitPrice")}
-                      <br />
-                      {data?.unit_price ? fNumber(data.unit_price.toString()) : "-"}
-                    </StyleTableCell>
-                    <StyleTableCell>
-                      {translate("orders.orderDetail.billInfo.designFee")}{" "}
-                      {data?.design_fee
-                        ? fNumber(data.design_fee.toString())
-                        : "-"}
-                    </StyleTableCell>
-                    <StyleTableCell>
-                      {translate("orders.orderDetail.billInfo.otherFee")}{" "}
-                      {data?.other_fee
-                        ? fNumber(data.other_fee.toString())
-                        : "-"}
-                    </StyleTableCell>
-                  </TableRow>
-                  <TableRow>
-                    <StyleTableCell>
-                      {translate("orders.orderDetail.billInfo.quantity")}{" "}
-                      {data?.quantity ? fNumber(data.quantity.toString()) : "-"}
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                      >
+                        <Typography variant="body2">
+                          {translate("orders.orderDetail.billInfo.template")}
+                        </Typography>
+                        <Typography variant="h5">
+                          {data?.template_number
+                            ? fNumber(data.template_number.toString())
+                            : "-"}
+                        </Typography>
+                      </Stack>
                     </StyleTableCell>
                     <StyleTableCell>
-                      {translate("orders.orderDetail.billInfo.shippingFee")}{" "}
-                      {data?.shipping_fee
-                        ? fNumber(data.shipping_fee.toString())
-                        : "-"}
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                      >
+                        <Typography variant="body2">
+                          {translate("orders.orderDetail.billInfo.designFee")}
+                        </Typography>
+                        <Typography variant="h5">
+                          {data?.design_fee
+                            ? fNumber(data.design_fee.toString())
+                            : "-"}
+                        </Typography>
+                      </Stack>
                     </StyleTableCell>
                     <StyleTableCell>
-                      {translate("orders.orderDetail.billInfo.vatFee")}
-                      {data?.vat_fee ? 
-                      (`(${fNumber(data.vat_fee.toString())}%)`) + ": " + fNumber(getTotalVatFee(data)) : ": -"}
-                    </StyleTableCell>
-                  </TableRow>
-                  <TableRow>
-                    <StyleTableCell colSpan={2}>
-                      {translate("orders.orderDetail.billInfo.deposite")}{" "}
-                      {data?.deposite ? fNumber(data.deposite.toString()) : "-"}
-                    </StyleTableCell>
-                    <StyleTableCell colSpan={2}>
-                      <Stack direction="row" spacing={2} alignItems="center">
-                        <Typography>
-                          {translate("orders.orderDetail.billInfo.amount")}
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                      >
+                        <Typography variant="body2">
+                          {translate("orders.orderDetail.billInfo.deposite")}
                         </Typography>
                         <Typography
                           sx={{
                             fontWeight: "bold",
-                            fontSize: 18,
+                            fontSize: 20,
                           }}
                         >
-                          {data ? fNumber(getTotalDebitWithNoDeposite(data)) : "-"}
+                          {data?.deposite
+                            ? fNumber(data.deposite.toString())
+                            : "-"}
                         </Typography>
                       </Stack>
                     </StyleTableCell>
                   </TableRow>
                   <TableRow>
-                    <StyleTableCell colSpan={4}>
-                      <Stack direction="row" spacing={2} alignItems="center">
-                        <Typography>
+                    <StyleTableCell>
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                      >
+                        <Typography variant="body2">
+                          {translate("orders.orderDetail.billInfo.quantity")}
+                        </Typography>
+                        <Typography variant="h5">
+                          {data?.quantity
+                            ? fNumber(data.quantity.toString())
+                            : "-"}
+                        </Typography>
+                      </Stack>
+                    </StyleTableCell>
+                    <StyleTableCell>
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                      >
+                        <Typography variant="body2">
+                          {translate("orders.orderDetail.billInfo.otherFee")}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontWeight: "bold",
+                            fontSize: 20,
+                          }}
+                        >
+                          {data?.other_fee
+                            ? fNumber(data.other_fee.toString())
+                            : "-"}
+                        </Typography>
+                      </Stack>
+                    </StyleTableCell>
+                    <StyleTableCell colSpan={2}>
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems="center"
+                        justifyContent={"space-between"}
+                      >
+                        <Typography variant="body2">
+                          {translate("orders.orderDetail.billInfo.amount")}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontWeight: "bold",
+                            fontSize: 20,
+                          }}
+                        >
+                          {data
+                            ? fNumber(getTotalDebitWithNoDeposite(data))
+                            : "-"}
+                        </Typography>
+                      </Stack>
+                    </StyleTableCell>
+                  </TableRow>
+                  <TableRow>
+                    <StyleTableCell rowSpan={2} sx={{ textAlign: "center" }}>
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                      >
+                        <Typography variant="body2">
+                          {translate("orders.orderDetail.billInfo.unitPrice")}
+                        </Typography>
+                        <Typography variant="h5">
+                          {data?.unit_price
+                            ? fNumber(data.unit_price.toString())
+                            : "-"}
+                        </Typography>
+                      </Stack>
+                    </StyleTableCell>
+                    <StyleTableCell>
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                      >
+                        <Typography variant="body2">
+                          {translate("orders.orderDetail.billInfo.shippingFee")}
+                        </Typography>
+                        <Typography variant="h5">
+                          {data?.shipping_fee
+                            ? fNumber(data.shipping_fee.toString())
+                            : "-"}
+                        </Typography>
+                      </Stack>
+                    </StyleTableCell>
+                    <StyleTableCell rowSpan={2} sx={{ textAlign: "center" }}>
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                      >
+                        <Typography variant="body2">
                           {translate(
                             "orders.orderDetail.billInfo.remainingAmount"
                           )}
@@ -218,10 +318,30 @@ const BlockInfoCustomer: FC<IPropsCustomer> = ({ data, loading }) => {
                           sx={{
                             fontWeight: "bold",
                             color: "red",
-                            fontSize: 20,
+                            fontSize: 30,
                           }}
                         >
                           {data ? fNumber(getTotalDebit(data)) : "-"}
+                        </Typography>
+                      </Stack>
+                    </StyleTableCell>
+                  </TableRow>
+                  <TableRow>
+                    <StyleTableCell>
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                      >
+                        <Typography variant="body2">
+                          {translate("orders.orderDetail.billInfo.vatFee")}
+                        </Typography>
+                        <Typography variant="h5">
+                          {data?.vat_fee
+                            ? `(${fNumber(data.vat_fee.toString())}%)` +
+                              fNumber(getTotalVatFee(data))
+                            : " -"}
                         </Typography>
                       </Stack>
                     </StyleTableCell>
@@ -244,7 +364,7 @@ const BlockInfoCustomer: FC<IPropsCustomer> = ({ data, loading }) => {
     );
   }
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={2} sx={{ mt: 1 }}>
       {renderCustomerInfo()}
       {renderReceiveInfo()}
       {renderBillInfo()}

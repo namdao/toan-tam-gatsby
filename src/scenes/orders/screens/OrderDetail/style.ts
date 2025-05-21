@@ -13,6 +13,9 @@ export const StyleTitleTypo = styled(Typography)(() => ({
   paddingRight: 2,
 }));
 export const StyleTableCell = styled(TableCell)(({ theme }) => ({
-  border: `2px solid ${theme.palette.grey[700]}`,
-  padding: 10,
+  border: `3px solid ${theme.palette.common.white}`,
+  paddingLeft: 8,
+  paddingRight: 8,
+  paddingTop: 1,
+  paddingBottom: 1,
 }));

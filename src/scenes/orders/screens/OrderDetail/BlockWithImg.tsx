@@ -21,13 +21,13 @@ const BlockWithImg: FC<IPropsInfoOrder> = ({ data }) => {
       : null;
 
   return (
-    <Card sx={{ height: 390 }}>
+    <Card >
       <Stack sx={{ p: 3 }} alignItems="center">
         {imgUrl && (
           <Box
             sx={{
               width: "100%",
-              height: 350,
+              height: 240,
               borderRadius: 3,
               borderWidth: 5,
               borderStyle: "solid",

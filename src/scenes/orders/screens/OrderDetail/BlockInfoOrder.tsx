@@ -144,12 +144,12 @@ const BlockInfoOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
   );
 
   const renderNoteBlock = () => (
-    <Card sx={{ height: 390 }}>
+    <Card sx={{mt:1}}>
       <CardHeader
         title={translate("orders.orderDetail.info.notePrint")}
         sx={{ color: (theme) => theme.palette.primary.main }}
       />
-      <Stack sx={{ p: 3 }}>
+      <Stack sx={{ px: 3 , py: 1}}>
         <Stack direction="row" spacing={1}>
           <Typography variant="subtitle2">
             {data?.order_detail_notes}
@@ -180,29 +180,31 @@ const BlockInfoOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
           </TableRow>
           <TableRow>
             <StyleTableCell>
-              <Stack direction="row" spacing={1}>
+              <Stack direction="column" spacing={1} alignItems={"center"}>
                 <StyleTitleTypo variant="body2">
                   {translate("orders.orderDetail.info.method")}
                 </StyleTitleTypo>
-                <Typography variant="subtitle2">{data?.method}</Typography>
+                <Typography variant="h5" sx={{ color: "red" }}>
+                  {data?.method}
+                </Typography>
               </Stack>
             </StyleTableCell>
             <StyleTableCell>
-              <Stack direction="row" spacing={1}>
+              <Stack direction="column" spacing={1} alignItems={"center"}>
                 <StyleTitleTypo variant="body2">
                   {translate("orders.orderDetail.info.paper")}
                 </StyleTitleTypo>
-                <Typography variant="subtitle2">
+                <Typography variant="subtitle1" sx={{ color: "red" }}>
                   {data?.paper?.paper_name}
                 </Typography>
               </Stack>
             </StyleTableCell>
             <StyleTableCell>
-              <Stack direction="row">
+              <Stack direction="column" spacing={1} alignItems={"center"}>
                 <StyleTitleTypo variant="body2">
                   {translate("orders.orderDetail.employee.dateCreatePO")}
                 </StyleTitleTypo>
-                <Typography variant="subtitle2">
+                <Typography variant="subtitle1">
                   {`${
                     data?.created_time &&
                     format(parseISO(data?.created_time), "dd/MM/yyyy HH:mm")
@@ -213,27 +215,35 @@ const BlockInfoOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
           </TableRow>
           <TableRow>
             <StyleTableCell>
-              {translate("orders.orderDetail.billInfo.template")}{" "}
-              {data?.template_number
-                ? fNumber(data.template_number.toString())
-                : "-"}
+              <Stack
+                direction="row"
+                spacing={1}
+                justifyContent={"space-between"}
+              >
+                {translate("orders.orderDetail.billInfo.template")}
+                <Typography variant="h5" sx={{ color: "red" }}>
+                  {data?.template_number
+                    ? fNumber(data.template_number.toString())
+                    : "-"}
+                </Typography>
+              </Stack>
             </StyleTableCell>
             <StyleTableCell rowSpan={2}>
-              <Stack direction="row" spacing={1}>
+              <Stack direction="column" spacing={1} alignItems={"center"}>
                 <StyleTitleTypo variant="body2">
                   {translate("orders.orderDetail.info.printType")}
                 </StyleTitleTypo>
-                <Typography variant="subtitle2">
+                <Typography variant="subtitle2" sx={{ color: "red" }}>
                   {data?.print_types.map((e) => e.print_type_name)}
                 </Typography>
               </Stack>
             </StyleTableCell>
             <StyleTableCell rowSpan={2}>
-              <Stack direction="row">
+              <Stack direction="column" spacing={1} alignItems={"center"}>
                 <StyleTitleTypo variant="body2">
                   {translate("orders.orderDetail.delivery.deliveryDay")}
                 </StyleTitleTypo>
-                <Typography variant="subtitle2">{`${
+                <Typography variant="subtitle1"  sx={{ color: "red" }}>{`${
                   data?.delivery_date && data.delivery_date !== "None"
                     ? format(parseISO(data?.delivery_date), "dd/MM/yyyy HH:mm")
                     : "-"
@@ -243,8 +253,16 @@ const BlockInfoOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
           </TableRow>
           <TableRow>
             <StyleTableCell>
-              {translate("orders.orderDetail.billInfo.quantity")}{" "}
-              {data?.quantity ? fNumber(data.quantity.toString()) : "-"}
+              <Stack
+                direction="row"
+                spacing={1}
+                justifyContent={"space-between"}
+              >
+                {translate("orders.orderDetail.billInfo.quantity")}
+                <Typography variant="h5" sx={{ color: "red" }}>
+                  {data?.quantity ? fNumber(data.quantity.toString()) : "-"}
+                </Typography>
+              </Stack>
             </StyleTableCell>
           </TableRow>
         </TableHead>
@@ -256,11 +274,11 @@ const BlockInfoOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
     return keyOutSource.map((nameKey) => {
       const listChildByKey = dataGroupOutsources[nameKey];
       return (
-        <Stack direction="row" sx={{ pb: 2 }}>
+        <Stack direction="row" sx={{ pb: 1 }}>
           <Typography variant="body2">{nameKey}</Typography>
           <Stack direction="row" flexWrap="wrap" sx={{ flex: 1 }}>
             {listChildByKey.map((child) => {
-              return <Label sx={{ mx: 1, mb: 1 }}>{child.name}</Label>;
+              return <Label sx={{ mx: 1 }}>{child.name}</Label>;
             })}
           </Stack>
         </Stack>
@@ -269,14 +287,14 @@ const BlockInfoOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
   };
 
   return (
-    <Grid container spacing={3} sx={{ pt: 3 }}>
+    <Grid container spacing={3} sx={{ pt: 1 }}>
       <Grid item xs={12} md={6}>
-        <Card>
+        <Card sx={{ height: 390 }}>
           <CardHeader
             title={translate("orders.orderDetail.info.title")}
             sx={{ color: (theme) => theme.palette.primary.main }}
           />
-          <Stack spacing={2} sx={{ p: 3 }}>
+          <Stack spacing={1} sx={{ px: 3, py: 1 }}>
             {renderBlockProductInfo()}
             {data && data?.outsources.length > 0 ? (
               renderRowOutSource(data.outsources)
@@ -286,11 +304,9 @@ const BlockInfoOrder: FC<IPropsInfoOrder> = ({ data, loading }) => {
           </Stack>
         </Card>
       </Grid>
-      <Grid item xs={12} md={3}>
-        {renderNoteBlock()}
-      </Grid>
-      <Grid item xs={12} md={3}>
+      <Grid item xs={12} md={6}>
         <BlockWithImg data={data} />
+        {renderNoteBlock()}
       </Grid>
       <Grid item xs={12} md={12}>
         <BlockTimeLine data={data} loading={loading} />
