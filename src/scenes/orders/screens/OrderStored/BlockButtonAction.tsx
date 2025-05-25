@@ -14,8 +14,7 @@ import { useOrderDetailList } from "scenes/orders/hooks/useOrderDetail";
 import { IReqUpdateMultiOrder } from "scenes/orders/redux/types";
 import { useAppSelector } from "store";
 import DiaLogDelivery, { magicOrderDeliveryRef } from "./DialogDelivery";
-import DeliveryBill from "./Prints/DeliveryBill/DeliveryBill";
-import DeliveryBillV2 from "./Prints/DeliveryBillV2/DeliveryBillV2";
+import DeliveryBillV3 from "./Prints/DeliveryBillV3/DeliveryBillV3";
 import { AuthSelector } from "scenes/auth/redux/slice";
 import { LoadingButton } from "@mui/lab";
 import RetailBillV2 from "./Prints/RetailBill/RetailBillV2";
@@ -202,14 +201,14 @@ const BlockButtonAction = React.forwardRef(
         >
           {translate("orders.orderStore.btnBillDelivery")}
         </Button>
-        <Button
+        {/* <Button
           size="large"
           variant="outlined"
           disabled={disablePrintDeliveryV2 || loading}
           onClick={handlePrintDeliveryV2}
         >
           {translate("orders.orderStore.btnBillDelivery2")}
-        </Button>
+        </Button> */}
         <Box
           sx={{
             display: "none",
@@ -219,8 +218,7 @@ const BlockButtonAction = React.forwardRef(
             zIndex: 999,
           }}
         >
-          <DeliveryBill ref={deliveryRef} data={orderListDetail} />
-          <DeliveryBillV2 ref={deliveryRefV2} data={orderListDetail} />
+          <DeliveryBillV3 ref={deliveryRef} data={orderListDetail} />
           <RetailBillV2 ref={retailBillRef} data={orderListDetail} />
         </Box>
         <DiaLogDelivery onRefreshList={onRefreshList} status={status} />
