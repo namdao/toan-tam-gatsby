@@ -6,6 +6,7 @@ import {
   DialogContentText,
   MenuItem,
   Stack,
+  Typography,
 } from "@mui/material";
 import { useLocales } from "locales";
 import React, { FC, useEffect } from "react";
@@ -18,7 +19,7 @@ import FormProvider, {
   RHFNumberFormat,
   RHFRadioGroup,
 } from "components/hook-form";
-import { parseToNumber } from "utils/formatNumber";
+import { fNumber, parseToNumber } from "utils/formatNumber";
 import { LoadingButton } from "@mui/lab";
 import {
   listPayment,
@@ -33,6 +34,7 @@ import { format, parseISO } from "date-fns";
 import { useAppSelector } from "store";
 import { AuthSelector } from "scenes/auth/redux/slice";
 import { magicTableNeedCollectRef } from "../OrderNeedCollect/OrderList";
+import Label from "components/label";
 
 type IPropsForm = {
   handleClose: (open: boolean) => void;
@@ -205,12 +207,30 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
             />
             <RHFNumberFormat
               name="cod"
+              disabled
               label={translate("orders.orderUpdate.form.cod")}
             />
+            {orderDetail?.cash && (
+              <Stack flexDirection="row" alignItems="center">
+                <Label variant="soft" color="warning" sx={{ fontSize: 10 }}>
+                  Số tiền đã thu được:
+                </Label>
+                <Typography sx={{ ml: 2 }}>
+                  {fNumber(orderDetail?.cash)}
+                </Typography>
+              </Stack>
+            )}
             <RHFNumberFormat
               name="cash"
               label={translate("orders.orderUpdate.form.cash")}
+              helperText={
+                <Typography variant="caption" color="red">
+                  Lưu ý: khi nhập số tiền mới, hệ thống sẽ cập nhật lại số tiền
+                  cũ thành mới
+                </Typography>
+              }
             />
+
             <RHFRadioGroup
               row
               name="paymentType"

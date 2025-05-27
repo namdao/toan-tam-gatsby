@@ -213,6 +213,7 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
             />
             <RHFNumberFormat
               name="cod"
+              disabled
               label={translate("orders.orderUpdate.form.cod")}
             />
             <RHFNumberFormat
