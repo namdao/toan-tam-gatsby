@@ -287,3 +287,20 @@ export enum STATUS_ORDER_GROUP {
   DELETE_GROUP = -1,
   DONE_GROUP = 3,
 }
+// Data payload cho đơn hàng công nợ
+export type IDataAutoConfirmToDebt = {
+  done: boolean;
+  debt: boolean;
+  need_check: boolean;
+  note: string;
+  payment_method: string;
+  money_source: string;
+};
+export const payloadAutoConfirmToDebt:IDataAutoConfirmToDebt = {
+  done: false,
+  debt: true,
+  need_check: false,
+  note: "Hệ thống tự động xác nhận thu chưa đủ",
+  payment_method: listPayment[0],
+  money_source: LIST_MONEY_SOURCE.VIB_PERSON,
+};

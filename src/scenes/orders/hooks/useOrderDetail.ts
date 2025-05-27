@@ -96,10 +96,19 @@ export const useOrderDetailList = () => {
       setLoading(false);
     }
   };
+
+  const getOrdersDetailSimple = async (orderId: number[]) => {
+    const result: IResponseType<IResOrderListDetail[]> =
+      await apiOrderDetailList({
+        order_ids: orderId,
+      });
+    return result.data;
+  };
   return {
     onOrderListDetail,
     onSendEmailWithOrderList,
     loading,
     orderListDetail,
+    getOrdersDetailSimple,
   };
 };

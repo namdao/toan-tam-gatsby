@@ -8,7 +8,7 @@ import React, {
   useState,
 } from "react";
 import { useReactToPrint } from "react-to-print";
-import { ORDER_STATUS_NAME } from "scenes/orders/helper/OrderConstant";
+import { IDataAutoConfirmToDebt, listPayment, ORDER_STATUS_NAME, payloadAutoConfirmToDebt } from "scenes/orders/helper/OrderConstant";
 import { useOrderDelivery } from "scenes/orders/hooks/useOrderDelivery";
 import { useOrderDetailList } from "scenes/orders/hooks/useOrderDetail";
 import { IReqUpdateMultiOrder } from "scenes/orders/redux/types";
@@ -18,6 +18,7 @@ import DeliveryBillV3 from "./Prints/DeliveryBillV3/DeliveryBillV3";
 import { AuthSelector } from "scenes/auth/redux/slice";
 import { LoadingButton } from "@mui/lab";
 import RetailBillV2 from "./Prints/RetailBill/RetailBillV2";
+import { apiOrderUpdate } from "scenes/orders/redux/api";
 
 export type IPropsDeliveryPrint = {
   disablePrintDelivery: () => void;
@@ -37,7 +38,7 @@ type IProps = {
 const BlockButtonAction = React.forwardRef(
   ({ status, onRefreshList }: IProps, ref: Ref<IPropsDeliveryPrint>) => {
     const { translate } = useLocales();
-    const { loading, orderListDetail, onOrderListDetail } =
+    const { loading, orderListDetail, onOrderListDetail, getOrdersDetailSimple } =
       useOrderDetailList();
     const { onUpdateMultiOrderGeneral, loading: loadingOrderDone } =
       useOrderDelivery();
@@ -104,13 +105,23 @@ const BlockButtonAction = React.forwardRef(
       }
     }, [orderIds]);
 
-    const callbackSubmit = ({ statusSuccess }: { statusSuccess: boolean }) => {
+    const callbackSubmit = async ({ statusSuccess }: { statusSuccess: boolean }) => {
       if (statusSuccess) {
+        const listOrders = await getOrdersDetailSimple(orderIds);
+        listOrders?.forEach(async (order) => {
+          if (order.payment_method === listPayment[0]) {
+            await apiOrderUpdate(
+              order.id,
+              payloadAutoConfirmToDebt
+            );
+          }
+        });
         onRefreshList();
       }
     };
 
-    const onDoneOrder = () => {
+    const onDoneOrder = async () => {
+     
       const data: IReqUpdateMultiOrder = {
         notes: translate("orders.orderStore.messageDone", {
           name: profile.userName,

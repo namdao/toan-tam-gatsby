@@ -19,7 +19,7 @@ const Image = forwardRef<HTMLSpanElement, ImageProps>(
             ? Images.background.bgTransparent
             : Svg.background.bgPlaceholder
         }
-        sx={{ width: 1, height: 1, objectFit: "cover" }}
+        sx={{ width: 1, height: 1, objectFit: "contain" }}
         {...other}
       />
     );
