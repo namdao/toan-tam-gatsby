@@ -133,7 +133,10 @@ const DialogOrderUpdate = ({
   const onShowFormOrder = () => {
     switch (fromPage) {
       case "ORDER_PROCESSING": {
-        if (roleUser[0].name === ROLES.ADMIN) {
+        if (
+          roleUser[0].name === ROLES.ADMIN ||
+          roleUser[0].name === ROLES.ACCOUNTANT
+        ) {
           return (
             <BlockFormOrderProcessingAdmin
               handleClose={handleClose}
