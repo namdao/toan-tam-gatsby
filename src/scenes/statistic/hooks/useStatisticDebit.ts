@@ -6,6 +6,7 @@ import {
   IResTotalDebit,
   IResCustomerDebit,
   ICustomerDebit,
+  IReqTotalDebit,
 } from "../redux/type";
 
 export const useStatisticDebit = () => {
@@ -29,10 +30,10 @@ export const useStatisticDebit = () => {
       });
     }
   };
-  const getListCustomerDebit = async () => {
+  const getListCustomerDebit = async (params?: IReqTotalDebit) => {
     try {
       const result: IResponseType<IResCustomerDebit> =
-        await apiGetListCustomerDebit();
+        await apiGetListCustomerDebit(params);
       if (result.data) {
         setListCustomerDebit(result.data.items);
       }

@@ -4,13 +4,14 @@ import {
   IReqCompanyDebitDetail,
   IReqReportRevenue,
   IReqReportRevenueDetail,
+  IReqTotalDebit,
 } from "./type";
 
 const { API_URL } = appConstant;
 
 export const apiGetTotalDebit = () => axios.get(API_URL.TOTAL_DEBIT);
-export const apiGetListCustomerDebit = () =>
-  axios.get(`${API_URL.CUSTOMER_DEBIT}?per_page=500`);
+export const apiGetListCustomerDebit = (params?: IReqTotalDebit) =>
+  axios.get(`${API_URL.CUSTOMER_DEBIT}?per_page=500`, { params });
 export const apiOrderLisDetailCompanyDebit = (params: IReqCompanyDebitDetail) =>
   axios.get(API_URL.ORDERS3, {
     params,

@@ -52,3 +52,7 @@ export type IReqReportRevenueDetail = {
   date_from: string;
   date_to: string;
 };
+
+export type IReqTotalDebit = {
+  company_id: string;
+};

@@ -33,6 +33,7 @@ import {
 } from "services/firebase/common";
 import { useAppSelector } from "store";
 import { AuthSelector } from "scenes/auth/redux/slice";
+import { useStatisticDebit } from "scenes/statistic/hooks/useStatisticDebit";
 
 const MemoizedRow = React.memo(GridRow);
 
@@ -53,10 +54,12 @@ const ButtonMoney = ({ money, title }: { money: number; title: string }) => (
 
 const TableListDebitDetail: React.FC<{
   companyId: number;
-  totalDebit: number;
-  totalPaid: number;
-  delta: number;
-}> = ({ companyId, totalDebit, totalPaid, delta }) => {
+  // totalDebit: number;
+  // totalPaid: number;
+  // delta: number;
+}> = ({ companyId, 
+  // totalDebit, totalPaid, delta 
+}) => {
   const {
     onNextPage,
     orderList,
@@ -64,10 +67,14 @@ const TableListDebitDetail: React.FC<{
     pageModel,
     onGetOrdetListDebitByCompany,
   } = useStatisticDebitCompany(companyId);
+  const { getListCustomerDebit, listCustomerDebit } = useStatisticDebit();
   const buttonRef = useRef<IPropsPrint>(null);
   useEffect(() => {
     onGetOrdetListDebitByCompany();
   }, []);
+  useEffect(() => {
+    getListCustomerDebit({ company_id: companyId.toString() });
+  }, [companyId]);
   const currentUser = useAppSelector(AuthSelector.getProfile);
   useImperativeHandle(magicTableNeedCollectRef, () => ({
     onRefreshOrderList: onGetOrdetListDebitByCompany,
@@ -129,9 +136,9 @@ const TableListDebitDetail: React.FC<{
       >
         <BlockPrintAndSendEmail ref={buttonRef} />
         <Stack direction="row" spacing={2}>
-          <ButtonMoney money={totalDebit} title="Tổng nợ" />
-          <ButtonMoney money={totalPaid} title="Tổng thu" />
-          <ButtonMoney money={delta} title="Còn lại" />
+          <ButtonMoney money={listCustomerDebit[0]?.total_debit || 0} title="Tổng nợ" />
+          <ButtonMoney money={listCustomerDebit[0]?.total_paid || 0} title="Tổng thu" />
+          <ButtonMoney money={listCustomerDebit[0]?.delta || 0} title="Còn lại" />
         </Stack>
       </Stack>
       <Box sx={{ height: "100vh", width: "100%" }}>
