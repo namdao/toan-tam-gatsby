@@ -19,7 +19,7 @@ import FormProvider, {
   RHFNumberFormat,
   RHFRadioGroup,
 } from "components/hook-form";
-import { fNumber, parseToNumber } from "utils/formatNumber";
+import { fNumber, normalizeToNumber, parseToNumber } from "utils/formatNumber";
 import { LoadingButton } from "@mui/lab";
 import {
   listPayment,
@@ -27,7 +27,7 @@ import {
   listPaymentTypeViaCompanyDebit,
   LIST_MONEY_SOURCE_NEW,
 } from "scenes/orders/helper/OrderConstant";
-import { getTotalAmount, getTotalBasicFee } from "utils/utility";
+import { getTotalAmount, getTotalBasicFee, getTotalVatFee } from "utils/utility";
 import { useOrderUpdate } from "scenes/orders/hooks/useOrderUpdate";
 import RHFDatePicker from "components/hook-form/RHFDatePicker";
 import { format, parseISO } from "date-fns";
@@ -53,6 +53,10 @@ type FormValuesProps = {
   done: boolean;
   debt: boolean;
   need_check: boolean;
+  otherFee: string;
+  vatFee: string;
+  discount: string;
+  vatFeeNumber: string;
 };
 const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
   handleClose,
@@ -81,6 +85,15 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
       translate("orders.orderUpdate.error.moneySource")
     ),
     note: Yup.string().required(translate("orders.orderUpdate.error.notes")),
+    otherFee: Yup.string().typeError(
+      translate("orders.orderUpdate.error.number")
+    ),
+    vatFee: Yup.string().typeError(
+      translate("orders.orderUpdate.error.number")
+    ),
+    discount: Yup.string().typeError(
+      translate("orders.orderUpdate.error.number")
+    ),
   });
 
   const defaultValues = {
@@ -103,6 +116,10 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
     done: orderDetail?.done,
     debt: orderDetail?.debt,
     need_check: orderDetail?.need_check,
+    otherFee: orderDetail?.other_fee?.toString() || "",
+    vatFee: orderDetail?.vat_fee?.toString() || "",
+    vatFeeNumber: getTotalVatFee(orderDetail || ({} as IOrderDetail)).toString() || "",
+    discount: orderDetail?.discount?.toString() || "",
   };
 
   const methods = useForm<FormValuesProps>({
@@ -119,6 +136,11 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
   } = methods;
 
   const [paymentType, money_source] = watch(["paymentType", "money_source"]);
+  const watchDeposite = watch("deposite");
+  const watchOtherFee = watch("otherFee");
+  const watchDiscount = watch("discount");
+  const watchVatFee = watch("vatFee");
+
   useEffect(() => {
     if (orderDetail && paymentType) {
       // Đơn đã thu đủ
@@ -135,6 +157,25 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
       }
     }
   }, [paymentType]);
+
+  useEffect(() => {
+    if (orderDetail && (watchDeposite || watchOtherFee || watchDiscount || watchVatFee)) {
+      const vatFee =
+        (getTotalBasicFee(orderDetail) +
+        normalizeToNumber(watchOtherFee) -
+        normalizeToNumber(watchDiscount)) *
+        normalizeToNumber(watchVatFee)/ 100;
+      setValue("vatFeeNumber", vatFee.toString());
+      const restCod =
+        getTotalBasicFee(orderDetail) +
+        normalizeToNumber(watchOtherFee) +
+        vatFee -
+        normalizeToNumber(watchDeposite) -
+        normalizeToNumber(watchDiscount);
+
+      setValue("cod", restCod.toString());
+    }
+  }, [watchDeposite, watchOtherFee, watchDiscount, watchVatFee]);
 
   useEffect(() => {
     if (
@@ -174,6 +215,9 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
         LIST_MONEY_SOURCE.CASH
           ? data.who_collect_money
           : "",
+      other_fee: parseToNumber(data?.otherFee?.replaceAll(",", "")),
+      vat_fee: parseToNumber(data?.vatFee?.replaceAll(",", "")),
+      discount: parseToNumber(data?.discount?.replaceAll(",", "")),
     };
     onUpdateOrder(payload, onCallbackSuccess);
   };
@@ -205,6 +249,34 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
               disabled
               label={translate("orders.orderUpdate.form.deposite")}
             />
+             <RHFNumberFormat
+              name="otherFee"
+              label={translate("orders.orderUpdate.form.otherFee")}
+            />
+            <RHFNumberFormat
+              name="discount"
+              label={translate("orders.orderUpdate.form.discount")}
+            />
+            <Stack flexDirection="row">
+              <RHFTextField
+                name="vatFee"
+                type="number"
+                InputProps={{
+                  inputProps: {
+                    max: 30,
+                    min: 0,
+                  },
+                }}
+                sx={{ width: "20%" }}
+                label={translate("orders.orderUpdate.form.vatFee")}
+              />
+              <RHFNumberFormat
+                name="vatFeeNumber"
+                disabled
+                sx={{ ml: 3, width: "50%" }}
+                label={translate("orders.orderUpdate.form.vatFeeNumber")}
+              />
+            </Stack>
             <RHFNumberFormat
               name="cod"
               disabled
