@@ -21,6 +21,7 @@ import { normalizeToNumber, parseToNumber } from "utils/formatNumber";
 import { LoadingButton } from "@mui/lab";
 import { listPayment } from "scenes/orders/helper/OrderConstant";
 import {
+  getResCod,
   getTotalAmount,
   getTotalBasicFee,
   getTotalVatFee,
@@ -109,13 +110,14 @@ const BlockFormOrderProcessing: FC<IPropsForm> = ({
         normalizeToNumber(watchDiscount)) *
         normalizeToNumber(watchVatFee)/ 100;
       setValue("vatFeeNumber", vatFee.toString());
-      const restCod =
-        getTotalBasicFee(orderDetail) +
-        normalizeToNumber(watchOtherFee) +
-        vatFee -
-        normalizeToNumber(watchDeposite) -
-        normalizeToNumber(watchDiscount);
-
+      const restCod = getResCod(
+          orderDetail,
+          normalizeToNumber(watchOtherFee), 
+          normalizeToNumber(watchDeposite), 
+          normalizeToNumber(watchDiscount), 
+          vatFee,
+          normalizeToNumber(orderDetail?.cash.toString())
+       );
       setValue("cod", restCod.toString());
     }
   }, [watchDeposite, watchOtherFee, watchDiscount, watchVatFee]);

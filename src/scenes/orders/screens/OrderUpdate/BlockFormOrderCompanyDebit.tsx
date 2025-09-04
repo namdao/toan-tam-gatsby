@@ -27,7 +27,7 @@ import {
   listPaymentTypeViaCompanyDebit,
   LIST_MONEY_SOURCE_NEW,
 } from "scenes/orders/helper/OrderConstant";
-import { getTotalAmount, getTotalBasicFee, getTotalVatFee } from "utils/utility";
+import { getResCod, getTotalAmount, getTotalBasicFee, getTotalVatFee } from "utils/utility";
 import { useOrderUpdate } from "scenes/orders/hooks/useOrderUpdate";
 import RHFDatePicker from "components/hook-form/RHFDatePicker";
 import { format, parseISO } from "date-fns";
@@ -133,6 +133,7 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
     setValue,
     watch,
     formState: { isSubmitting },
+    getValues
   } = methods;
 
   const [paymentType, money_source] = watch(["paymentType", "money_source"]);
@@ -145,7 +146,8 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
     if (orderDetail && paymentType) {
       // Đơn đã thu đủ
       if (paymentType === "done") {
-        setValue("cash", getTotalAmount(orderDetail).toString());
+        const codeNeedCollect = parseToNumber(getValues("cod")) - parseToNumber(orderDetail?.cash.toString())
+        setValue("cash", codeNeedCollect.toString());
         setValue("done", true);
         setValue("debt", false);
         setValue("need_check", false);
@@ -166,13 +168,14 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
         normalizeToNumber(watchDiscount)) *
         normalizeToNumber(watchVatFee)/ 100;
       setValue("vatFeeNumber", vatFee.toString());
-      const restCod =
-        getTotalBasicFee(orderDetail) +
-        normalizeToNumber(watchOtherFee) +
-        vatFee -
-        normalizeToNumber(watchDeposite) -
-        normalizeToNumber(watchDiscount);
-
+      const restCod = getResCod(
+         orderDetail,
+         normalizeToNumber(watchOtherFee), 
+         normalizeToNumber(watchDeposite), 
+         normalizeToNumber(watchDiscount), 
+         vatFee,
+         normalizeToNumber(orderDetail?.cash.toString())
+      );
       setValue("cod", restCod.toString());
     }
   }, [watchDeposite, watchOtherFee, watchDiscount, watchVatFee]);
@@ -282,16 +285,14 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
               disabled
               label={translate("orders.orderUpdate.form.cod")}
             />
-            {orderDetail?.cash && (
-              <Stack flexDirection="row" alignItems="center">
-                <Label variant="soft" color="warning" sx={{ fontSize: 10 }}>
-                  Số tiền đã thu được:
-                </Label>
-                <Typography sx={{ ml: 2 }}>
-                  {fNumber(orderDetail?.cash)}
-                </Typography>
-              </Stack>
-            )}
+            <Stack flexDirection="row" alignItems="center">
+              <Label variant="soft" color="warning" sx={{ fontSize: 10 }}>
+                Số tiền đã thu được:
+              </Label>
+              <Typography sx={{ ml: 2 }}>
+                {fNumber(orderDetail?.cash || 0)}
+              </Typography>
+            </Stack>
             <RHFNumberFormat
               name="cash"
               label={translate("orders.orderUpdate.form.cash")}

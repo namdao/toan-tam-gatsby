@@ -215,3 +215,8 @@ export function convertNumberToVietnameseText(number: number) {
   const finalText = parts.join(" ").replace(/\s+/g, " ").trim();
   return finalText.charAt(0).toUpperCase() + finalText.slice(1) + " đồng chẵn";
 }
+
+export const getResCod = (order: IOrder | IOrderDetail,otherFee: number, deposite: number, discount: number, vatFee: number, cash: number) => {
+  const totalAmountWithoutFee = getTotalBasicFee(order);
+  return totalAmountWithoutFee + otherFee + vatFee - discount - deposite - cash;
+};
