@@ -146,8 +146,7 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
     if (orderDetail && paymentType) {
       // Đơn đã thu đủ
       if (paymentType === "done") {
-        const codeNeedCollect = parseToNumber(getValues("cod")) - parseToNumber(orderDetail?.cash.toString())
-        setValue("cash", codeNeedCollect.toString());
+        setValue("cash", getValues("cod"));
         setValue("done", true);
         setValue("debt", false);
         setValue("need_check", false);
