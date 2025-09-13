@@ -20,6 +20,7 @@ import { useOrderUpdate } from "../hooks/useOrderUpdate";
 import { getImageToAws } from "utils/imageHandler";
 import ImagePopup from "../components/ImagePopup";
 import { LIST_MONEY_SOURCE } from "./OrderConstant";
+import { OrderBaseColumns } from "./OrderBaseColumns";
 
 const QuickUpdateConfirm = ({ row }: { row: IOrder }) => {
   const { onUpdateOrder, loading } = useOrderUpdate(row.id);
@@ -53,180 +54,38 @@ const QuickUpdateConfirm = ({ row }: { row: IOrder }) => {
   );
 };
 export const OrderNeedConfirmTableColumns: GridColDef[] = [
-  {
-    field: "order_no",
-    headerName: "Mã đơn hàng",
-    minWidth: 120,
-    renderCell: ({ value }: GridRenderCellParams<IOrder>) => {
-      return <Label color="primary">{value}</Label>;
+  ...OrderBaseColumns([
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Hành động",
+      minWidth: 150,
+      getActions: ({ row }: GridRowParams<IOrder>) => [
+        <FullScreenDialogs orderId={row.id} orderName={row.order_no} />,
+        <DialogOrderUpdate
+          orderId={row.id}
+          orderName={row.order_no}
+          fromPage="ORDER_NEED_CONFIRM"
+        />,
+        <QuickUpdateConfirm row={row} />,
+      ],
     },
-  },
-  {
-    field: "actions",
-    type: "actions",
-    headerName: "Hành động",
-    minWidth: 150,
-    getActions: ({ row }: GridRowParams<IOrder>) => [
-      <FullScreenDialogs orderId={row.id} orderName={row.order_no} />,
-      <DialogOrderUpdate
-        orderId={row.id}
-        orderName={row.order_no}
-        fromPage="ORDER_NEED_CONFIRM"
-      />,
-      <QuickUpdateConfirm row={row} />,
-    ],
-  },
-  {
-    field: "money_source",
-    headerName: "Nguồn thu",
-    minWidth: 200,
-    valueGetter: ({ value }: { value: keyof typeof LIST_MONEY_SOURCE }) =>
-      value ? LIST_MONEY_SOURCE[value] : "-",
-  },
-  {
-    field: "customer_name",
-    headerName: "Tên khách hàng",
-    minWidth: 200,
-  },
-  {
-    field: "customer_phone",
-    headerName: "ĐT khách hàng",
-    minWidth: 150,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "name",
-    headerName: "Tên file",
-    minWidth: 300,
-  },
-  {
-    field: "images",
-    headerName: "Ảnh đơn hàng",
-    minWidth: 200,
-    headerAlign: "center",
-    align: "center",
-    renderCell: ({ value = [] }: GridRenderCellParams<IOrder>) => {
-      if (!value || value?.length < 0)
-        return <Iconify width={ICON.NAV_ITEM} icon="mdi:image-off-outline" />;
-      const imgUrl = getImageToAws(value[0]);
-      return <ImagePopup url={[imgUrl]} />;
+    {
+      field: "money_source",
+      headerName: "Nguồn thu",
+      minWidth: 100,
+      valueGetter: ({ value }: { value: keyof typeof LIST_MONEY_SOURCE }) =>
+        value ? LIST_MONEY_SOURCE[value] : "-",
     },
-  },
-  {
-    field: "order_detail_notes",
-    headerName: "Ghi chú sản xuất",
-    minWidth: 200,
-    valueGetter: ({ value }) => (value ? value : "-"),
-  },
-  {
-    field: "category_name",
-    headerName: "Loại hàng",
-    minWidth: 200,
-  },
-  {
-    field: "template_number",
-    headerName: "SL mẫu",
-    minWidth: 100,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "quantity",
-    headerName: "SL in",
-    minWidth: 100,
-    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
-  },
-  {
-    field: "unit_price",
-    headerName: "Đơn giá",
-    minWidth: 100,
-    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
-  },
-  {
-    field: "design_fee",
-    headerName: "Phí thiết kế",
-    minWidth: 100,
-    headerAlign: "center",
-    align: "center",
-    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
-  },
-  {
-    field: "shipping_fee",
-    headerName: "Phí ship",
-    minWidth: 100,
-    headerAlign: "center",
-    align: "center",
-    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
-  },
-  {
-    field: "deposite",
-    headerName: "Tạm ứng",
-    headerAlign: "center",
-    align: "center",
-    minWidth: 100,
-    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
-  },
-  {
-    field: "amount",
-    headerName: "Thành tiền",
-    minWidth: 150,
-    renderCell: ({ row }: GridRenderCellParams<IOrder>) => {
-      const formatAmount = fNumber(getTotalAmount(row));
-      return (
-        <Label color="primary" variant="outlined">
-          {formatAmount}
-        </Label>
-      );
+    {
+      field: "company_debit",
+      headerName: "Công ty bù",
+      minWidth: 100,
+      headerAlign: "center",
+      align: "center",
+      valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
     },
-  },
-  {
-    field: "vat",
-    headerName: "VAT",
-    minWidth: 50,
-    renderCell: ({ row }: GridRenderCellParams<IOrder>) => {
-      const theme = useTheme();
-      const iconVat = row.vat ? "ic:outline-info" : "healthicons:yes-outline";
-      const colorVat = row.vat ? theme.palette.primary : theme.palette.error;
-      return (
-        <Iconify width={ICON.NAV_ITEM} icon={iconVat} color={colorVat.main} />
-      );
-    },
-  },
-  {
-    field: "cod",
-    headerName: "Còn lại",
-    minWidth: 100,
-    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
-  },
-  {
-    field: "cash",
-    headerName: "Đã thu",
-    minWidth: 100,
-    headerAlign: "center",
-    align: "center",
-    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
-  },
-  {
-    field: "company_debit",
-    headerName: "Công ty bù",
-    minWidth: 100,
-    headerAlign: "center",
-    align: "center",
-    valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
-  },
-  {
-    field: "deliver_provider",
-    headerName: "Đơn vị GH",
-    minWidth: 100,
-  },
-  {
-    field: "updated_time",
-    headerName: "Ngày cập nhật",
-    minWidth: 150,
-    valueGetter: ({ value }: { value: number }) =>
-      format(value * 1000, "dd/MM/yyyy"),
-  },
+  ]),
 ];
 
 export const pinOrderLeft = OrderNeedConfirmTableColumns.filter(
