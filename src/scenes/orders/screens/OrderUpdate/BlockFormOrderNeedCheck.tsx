@@ -26,7 +26,7 @@ import {
   listPaymentTypeViaNeedCheck,
   LIST_MONEY_SOURCE_NEW,
 } from "scenes/orders/helper/OrderConstant";
-import { getTotalAmount, getTotalBasicFee } from "utils/utility";
+import { getTotalAmount, getTotalBasicFee, getTotalVatFee } from "utils/utility";
 import { useOrderUpdate } from "scenes/orders/hooks/useOrderUpdate";
 import RHFDatePicker from "components/hook-form/RHFDatePicker";
 import { format, parseISO } from "date-fns";
@@ -86,7 +86,7 @@ const BlockFormOrderNeedCheck: FC<IPropsForm> = ({
         ? listPayment[2]
         : orderDetail?.payment_method,
     deposite: orderDetail?.deposite.toString(),
-    cod: orderDetail && getTotalAmount(orderDetail).toString(),
+    cod: orderDetail?.cod.toString(),
     cash: orderDetail && orderDetail.cash,
     note: "",
     totalAmount: orderDetail && getTotalBasicFee(orderDetail),
@@ -101,6 +101,10 @@ const BlockFormOrderNeedCheck: FC<IPropsForm> = ({
     debt: orderDetail?.debt,
     need_check: orderDetail?.need_check,
     company_debit: orderDetail?.company_debit,
+    otherFee: orderDetail?.other_fee?.toString() || "",
+    vatFee: orderDetail?.vat_fee?.toString() || "",
+    vatFeeNumber: getTotalVatFee(orderDetail || ({} as IOrderDetail)).toString() || "",
+    discount: orderDetail?.discount?.toString() || "",
   };
 
   const methods = useForm<FormValuesProps>({
@@ -199,15 +203,41 @@ const BlockFormOrderNeedCheck: FC<IPropsForm> = ({
               disabled
               label={translate("orders.orderUpdate.form.deposite")}
             />
+             <Stack flexDirection="row">
+              <RHFTextField
+                name="vatFee"
+                type="number"
+                InputProps={{
+                  inputProps: {
+                    max: 30,
+                    min: 0,
+                  },
+                }}
+                disabled
+                sx={{ width: "20%" }}
+                label={translate("orders.orderUpdate.form.vatFee")}
+              />
+              <RHFNumberFormat
+                name="vatFeeNumber"
+                disabled
+                sx={{ ml: 3, width: "50%" }}
+                label={translate("orders.orderUpdate.form.vatFeeNumber")}
+              />
+            </Stack>
+            <RHFNumberFormat
+              name="otherFee"
+              disabled
+              label={translate("orders.orderUpdate.form.otherFee")}
+            />
+            <RHFNumberFormat
+              name="discount"
+              disabled
+              label={translate("orders.orderUpdate.form.discount")}
+            />
             <RHFNumberFormat
               name="cod"
               disabled
               label={translate("orders.orderUpdate.form.cod")}
-            />
-            <RHFNumberFormat
-              name="cash"
-              disabled
-              label={translate("orders.orderUpdate.form.cash")}
             />
             <RHFNumberFormat
               name="company_debit"

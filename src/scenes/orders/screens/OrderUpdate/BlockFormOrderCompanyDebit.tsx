@@ -35,6 +35,7 @@ import { useAppSelector } from "store";
 import { AuthSelector } from "scenes/auth/redux/slice";
 import { magicTableNeedCollectRef } from "../OrderNeedCollect/OrderList";
 import Label from "components/label";
+import { magicTableDebitCompanyDetailRef } from "scenes/statistic/screens/DebitCompanyDetail/TableListDebitDetail";
 
 type IPropsForm = {
   handleClose: (open: boolean) => void;
@@ -103,7 +104,7 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
         ? listPayment[2]
         : orderDetail?.payment_method,
     deposite: orderDetail?.deposite.toString(),
-    cod: orderDetail && getTotalAmount(orderDetail).toString(),
+    cod: orderDetail?.cod.toString(),
     note: "",
     totalAmount: orderDetail && getTotalBasicFee(orderDetail),
     paymentType: "",
@@ -191,7 +192,7 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
   const onCallbackSuccess = () => {
     reset();
     handleClose(false);
-    magicTableNeedCollectRef.current?.onRefreshOrderList();
+    magicTableDebitCompanyDetailRef.current?.onRefreshOrderList();
   };
 
   const onSubmit = async (data: FormValuesProps) => {
@@ -201,12 +202,21 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
     } else if (data.debt) {
       note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaCompanyDebit[1].label}`;
     }
+    const orderDetailCash = orderDetail?.cash || 0
+    const dataCash = data?.cash ? parseToNumber(data.cash?.replaceAll(",", "")) : 0
+    // tổng tiền đã thu + tiền mới nhập
+    const currentCash = dataCash + orderDetailCash
+    // số tiền đã được tính toán lại ra giá trị cuối cùng
+    const currentCod = parseToNumber(data.cod.replaceAll(",", ""))
+    // tổng tiền còn lại
+    // chỉ trừ lại cod nếu có nhập cash > 0, ngược lại giữ nguyên cod cũ
+    const totalCod = dataCash > 0 ? currentCod - dataCash : currentCod
     const payload = {
-      cod: parseToNumber(data.cod.replaceAll(",", "")),
+      cod: totalCod,
       note,
       deposite: parseToNumber(data.deposite.replaceAll(",", "")),
       payment_method: data.payment_method,
-      cash: parseToNumber(data.cash.replaceAll(",", "")),
+      cash: currentCash,
       done: data.done,
       debt: data.debt,
       need_check: data.need_check,
@@ -251,7 +261,7 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
               disabled
               label={translate("orders.orderUpdate.form.deposite")}
             />
-             <RHFNumberFormat
+            <RHFNumberFormat
               name="otherFee"
               label={translate("orders.orderUpdate.form.otherFee")}
             />
@@ -297,8 +307,9 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
               label={translate("orders.orderUpdate.form.cash")}
               helperText={
                 <Typography variant="caption" color="red">
-                  Lưu ý: khi nhập số tiền mới, hệ thống sẽ cập nhật lại số tiền
-                  cũ thành mới
+                  Lưuý: khi nhập số tiền mới, hệ thống sẽ 
+                  <span style={{ fontWeight: "bold", fontSize: 14 }}> CỘNG DỒN </span>
+                  số tiền hiện có và số tiền nhập vào thành số tiền mới
                 </Typography>
               }
             />

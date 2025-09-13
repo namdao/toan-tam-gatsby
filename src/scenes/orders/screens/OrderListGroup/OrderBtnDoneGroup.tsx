@@ -105,6 +105,23 @@ const OrderBtnDoneGroup: FC<IOrderBtnAccept> = ({
   } = methods;
 
   const handleAcceptOrder = async (data: FormValuesGroupProps) => {
+    // const payload: IReqUpdateOrderPrinted = {
+    //   notes: data.note,
+    //   outsource_date: format(
+    //     new Date(data?.outsource_date || ""),
+    //     "yyyy-MM-dd hh:mm:ss"
+    //   ),
+    //   status: STATUS_ORDER_GROUP.PRINTED_GROUP,
+    //   printed_orders: idsOrder,
+    //   group_type: groupType,
+    // };
+    // const status = await onUpdateOrderGroup(idGroup, payload);
+    // if (status) {
+    //   handleClose();
+    //   magicTablePrintingRef.current?.refreshList();
+    //   reset();
+    //   refetch();
+    // }
     const isUploadSuccess = await onCompleteOrderGroup(idGroup, data);
     if (isUploadSuccess) {
       const payload: IReqUpdateOrderPrinted = {

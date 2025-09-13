@@ -114,6 +114,7 @@ const OrderLangs = {
       note: "Ghi chú",
       cod: "Còn lại phải thu",
       cash: "Nhập số tiền thu",
+      casheNumber: "Số tiền đã thu",
       dayCollectMoney: "Ngày thu",
       moneySource: "Nguồn thu",
       whoCollectionMoney: "Người thu tiền",

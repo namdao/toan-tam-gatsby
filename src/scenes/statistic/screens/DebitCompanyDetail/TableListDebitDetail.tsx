@@ -41,7 +41,7 @@ const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
 export type IMagicTableNeedCollectRef = {
   onRefreshOrderList: () => void;
 };
-export const magicTableNeedCollectRef = createRef<IMagicTableNeedCollectRef>();
+export const magicTableDebitCompanyDetailRef = createRef<IMagicTableNeedCollectRef>();
 
 const ButtonMoney = ({ money, title }: { money: number; title: string }) => (
   <Button variant="outlined" size="large">
@@ -76,8 +76,11 @@ const TableListDebitDetail: React.FC<{
     getListCustomerDebit({ company_id: companyId.toString() });
   }, [companyId]);
   const currentUser = useAppSelector(AuthSelector.getProfile);
-  useImperativeHandle(magicTableNeedCollectRef, () => ({
-    onRefreshOrderList: onGetOrdetListDebitByCompany,
+  useImperativeHandle(magicTableDebitCompanyDetailRef, () => ({
+    onRefreshOrderList: () => {
+      onGetOrdetListDebitByCompany()
+      getListCustomerDebit({ company_id: companyId.toString() })
+    }
   }));
   const paginationModel = pageModel;
   const pinOrderLeft = useMemo(
