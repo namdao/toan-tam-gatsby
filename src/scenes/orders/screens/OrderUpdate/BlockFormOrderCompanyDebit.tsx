@@ -298,7 +298,7 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
               <Label variant="soft" color="warning" sx={{ fontSize: 10 }}>
                 Số tiền đã thu được:
               </Label>
-              <Typography sx={{ ml: 2 }}>
+              <Typography variant="h6" sx={{ ml: 2 }}>
                 {fNumber(orderDetail?.cash || 0)}
               </Typography>
             </Stack>
