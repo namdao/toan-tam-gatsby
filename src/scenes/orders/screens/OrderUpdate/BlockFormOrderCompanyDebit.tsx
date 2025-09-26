@@ -203,18 +203,18 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
       note = `${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaCompanyDebit[1].label}`;
     }
     const orderDetailCash = orderDetail?.cash || 0
-    const dataCash = data?.cash ? parseToNumber(data.cash?.replaceAll(",", "")) : 0
+    const dataCash = data?.cash ? normalizeToNumber(data.cash) : 0
     // tổng tiền đã thu + tiền mới nhập
     const currentCash = dataCash + orderDetailCash
     // số tiền đã được tính toán lại ra giá trị cuối cùng
-    const currentCod = parseToNumber(data.cod.replaceAll(",", ""))
+    const currentCod = normalizeToNumber(data.cod)
     // tổng tiền còn lại
     // chỉ trừ lại cod nếu có nhập cash > 0, ngược lại giữ nguyên cod cũ
     const totalCod = dataCash > 0 ? currentCod - dataCash : currentCod
     const payload = {
       cod: totalCod,
       note,
-      deposite: parseToNumber(data.deposite.replaceAll(",", "")),
+      deposite: normalizeToNumber(data.deposite),
       payment_method: data.payment_method,
       cash: currentCash,
       done: data.done,
@@ -227,10 +227,11 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
         LIST_MONEY_SOURCE.CASH
           ? data.who_collect_money
           : "",
-      other_fee: parseToNumber(data?.otherFee?.replaceAll(",", "")),
-      vat_fee: parseToNumber(data?.vatFee?.replaceAll(",", "")),
-      discount: parseToNumber(data?.discount?.replaceAll(",", "")),
+      other_fee: normalizeToNumber(data?.otherFee),
+      vat_fee: normalizeToNumber(data?.vatFee),
+      discount: normalizeToNumber(data?.discount),
     };
+    console.log(payload)
     onUpdateOrder(payload, onCallbackSuccess);
   };
   const isShowWhoCollect =

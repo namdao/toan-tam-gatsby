@@ -1,5 +1,5 @@
 import { useSnackbar } from "notistack";
-import { parseToNumber } from "utils/formatNumber";
+import { parseToNumber, normalizeToNumber } from "utils/formatNumber";
 import { FormOrderValuesProps } from "../components/OrderNewEditForm";
 import {
   apiCreateOrder,
@@ -30,7 +30,7 @@ const parseToOrderRequest = (data: FormOrderValuesProps) => {
     paper_id: data.paper_id?.id || 0,
     template_number:
       typeof data.template_number === "string"
-        ? parseToNumber(data?.template_number?.replaceAll(",", "") || "0")
+        ? normalizeToNumber(data?.template_number || "0")
         : data.template_number || 0,
     method: data.method_high
       ? `${data.method_width}x${data.method_height}x${data.method_high}`
@@ -39,23 +39,23 @@ const parseToOrderRequest = (data: FormOrderValuesProps) => {
     outsource_ids: data.outsource_ids?.map((e) => e.id),
     quantity:
       typeof data.quantity === "string"
-        ? parseToNumber(data?.quantity?.replaceAll(",", "") || "0")
+        ? normalizeToNumber(data?.quantity || "0")
         : data.quantity || 0,
     unit_price:
       typeof data.unit_price === "string"
-        ? parseToNumber(data.unit_price?.replaceAll(",", "") || "0")
+        ? normalizeToNumber(data.unit_price || "0")
         : data.unit_price || 0,
     design_fee:
       typeof data.design_fee === "string"
-        ? parseToNumber(data?.design_fee?.replaceAll(",", "") || "0")
+        ? normalizeToNumber(data?.design_fee || "0")
         : data.design_fee || 0,
     deposite:
       typeof data.deposite === "string"
-        ? parseToNumber(data?.deposite?.replaceAll(",", "") || "0")
+        ? normalizeToNumber(data?.deposite || "0")
         : data.deposite || 0,
     shipping_fee:
       typeof data.shipping_fee === "string"
-        ? parseToNumber(data?.shipping_fee?.replaceAll(",", "") || "0")
+        ? normalizeToNumber(data?.shipping_fee || "0")
         : data.shipping_fee || 0,
   };
 };

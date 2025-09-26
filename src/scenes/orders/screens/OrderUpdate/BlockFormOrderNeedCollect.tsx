@@ -18,7 +18,7 @@ import FormProvider, {
   RHFNumberFormat,
   RHFRadioGroup,
 } from "components/hook-form";
-import { parseToNumber } from "utils/formatNumber";
+import { normalizeToNumber } from "utils/formatNumber";
 import { LoadingButton } from "@mui/lab";
 import {
   listPayment,
@@ -169,11 +169,11 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
       note += ` (${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[2].label})`;
     }
     const payload = {
-      cod: parseToNumber(data?.cod?.replaceAll(",", "")),
+      cod: normalizeToNumber(data?.cod),
       note,
-      deposite: parseToNumber(data?.deposite?.replaceAll(",", "")),
+      deposite: normalizeToNumber(data?.deposite),
       payment_method: data.payment_method,
-      cash: parseToNumber((data?.cash?.toString() || "0")?.replaceAll(",", "")),
+      cash: normalizeToNumber(data?.cash?.toString() || "0"),
       done: data.done,
       debt: data.debt,
       need_check: data.need_check,

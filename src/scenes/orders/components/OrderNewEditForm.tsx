@@ -42,7 +42,7 @@ import { sortBy } from "lodash";
 import { ORDER_STATUS_NAME, ORDER_TYPE } from "../helper/OrderConstant";
 import { IOrder, IOrderDetail } from "../redux/types";
 import { getTotalAmount } from "utils/utility";
-import { parseToNumber } from "utils/formatNumber";
+import { parseToNumber, normalizeToNumber } from "utils/formatNumber";
 import { LoadingButton } from "@mui/lab";
 import { getImageToAws } from "utils/imageHandler";
 import { useOrderCreate } from "../hooks/useOrderCreate";
@@ -395,27 +395,27 @@ export default function OrderNewEditForm({
     const order = {
       unit_price:
         typeof unit_price === "string"
-          ? parseToNumber(unit_price?.replaceAll(",", "") || "0")
+          ? normalizeToNumber(unit_price || "0")
           : unit_price,
       template_number:
         typeof template_number === "string"
-          ? parseToNumber(template_number?.replaceAll(",", "") || "0")
+          ? normalizeToNumber(template_number || "0")
           : template_number,
       quantity:
         typeof quantity === "string"
-          ? parseToNumber(quantity?.replaceAll(",", "") || "0")
+          ? normalizeToNumber(quantity || "0")
           : quantity,
       design_fee:
         typeof design_fee === "string"
-          ? parseToNumber(design_fee?.replaceAll(",", "") || "0")
+          ? normalizeToNumber(design_fee || "0")
           : design_fee,
       shipping_fee:
         typeof shipping_fee === "string"
-          ? parseToNumber(shipping_fee?.replaceAll(",", "") || "0")
+          ? normalizeToNumber(shipping_fee || "0")
           : shipping_fee,
       deposite:
         typeof deposite === "string"
-          ? parseToNumber(deposite?.replaceAll(",", "") || "0")
+          ? normalizeToNumber(deposite || "0")
           : deposite,
     } as IOrder;
     const totalAmount = getTotalAmount(order);

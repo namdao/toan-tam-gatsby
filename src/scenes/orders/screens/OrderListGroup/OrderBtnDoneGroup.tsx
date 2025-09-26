@@ -104,24 +104,31 @@ const OrderBtnDoneGroup: FC<IOrderBtnAccept> = ({
     formState: { isSubmitting },
   } = methods;
 
+  const onFakeSubmit = async(data: FormValuesGroupProps) => {
+    const payload: IReqUpdateOrderPrinted = {
+      notes: data.note,
+      outsource_date: format(
+        new Date(data?.outsource_date || ""),
+        "yyyy-MM-dd hh:mm:ss"
+      ),
+      status: STATUS_ORDER_GROUP.PRINTED_GROUP,
+      printed_orders: idsOrder,
+      group_type: groupType,
+    };
+    const status = await onUpdateOrderGroup(idGroup, payload);
+    if (status) {
+      handleClose();
+      magicTablePrintingRef.current?.refreshList();
+      reset();
+      refetch();
+    }
+  }
+
   const handleAcceptOrder = async (data: FormValuesGroupProps) => {
-    // const payload: IReqUpdateOrderPrinted = {
-    //   notes: data.note,
-    //   outsource_date: format(
-    //     new Date(data?.outsource_date || ""),
-    //     "yyyy-MM-dd hh:mm:ss"
-    //   ),
-    //   status: STATUS_ORDER_GROUP.PRINTED_GROUP,
-    //   printed_orders: idsOrder,
-    //   group_type: groupType,
-    // };
-    // const status = await onUpdateOrderGroup(idGroup, payload);
-    // if (status) {
-    //   handleClose();
-    //   magicTablePrintingRef.current?.refreshList();
-    //   reset();
-    //   refetch();
-    // }
+    if (process.env.IS_TEST_MODE === "true") {
+      onFakeSubmit(data)
+      return;
+    }
     const isUploadSuccess = await onCompleteOrderGroup(idGroup, data);
     if (isUploadSuccess) {
       const payload: IReqUpdateOrderPrinted = {

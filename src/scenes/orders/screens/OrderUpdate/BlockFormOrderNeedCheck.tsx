@@ -18,7 +18,7 @@ import FormProvider, {
   RHFNumberFormat,
   RHFRadioGroup,
 } from "components/hook-form";
-import { parseToNumber } from "utils/formatNumber";
+import { parseToNumber, normalizeToNumber } from "utils/formatNumber";
 import { LoadingButton } from "@mui/lab";
 import {
   listPayment,
@@ -156,11 +156,11 @@ const BlockFormOrderNeedCheck: FC<IPropsForm> = ({
 
   const onSubmit = async (data: FormValuesProps) => {
     const payload = {
-      cod: parseToNumber(data?.cod?.replaceAll(",", "")),
+      cod: normalizeToNumber(data?.cod),
       note: data.note,
-      deposite: parseToNumber(data?.deposite?.replaceAll(",", "")),
+      deposite: normalizeToNumber(data?.deposite),
       payment_method: data.payment_method,
-      cash: parseToNumber((data?.cash.toString() || "0")?.replaceAll(",", "")),
+      cash: normalizeToNumber(data?.cash.toString() || "0"),
       done: data.done,
       debt: data.debt,
       need_check: data.need_check,
@@ -171,7 +171,7 @@ const BlockFormOrderNeedCheck: FC<IPropsForm> = ({
         LIST_MONEY_SOURCE.CASH
           ? data.who_collect_money
           : "",
-      company_debit: parseToNumber(data.company_debit.replaceAll(",", "")),
+      company_debit: normalizeToNumber(data.company_debit),
     };
     onUpdateOrder(payload, onCallbackSuccess);
   };

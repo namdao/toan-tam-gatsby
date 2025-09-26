@@ -17,7 +17,7 @@ import FormProvider, {
   RHFTextField,
   RHFNumberFormat,
 } from "components/hook-form";
-import { parseToNumber } from "utils/formatNumber";
+import { parseToNumber, normalizeToNumber } from "utils/formatNumber";
 import { LoadingButton } from "@mui/lab";
 import { listPayment } from "scenes/orders/helper/OrderConstant";
 import { getTotalAmount, getTotalBasicFee } from "utils/utility";
@@ -91,9 +91,9 @@ const BlockFormOrderProcessing: FC<IPropsForm> = ({
 
   const onSubmit = async (data: FormValuesProps) => {
     const payload = {
-      cod: parseToNumber(data?.cod?.replaceAll(",", "")),
+      cod: normalizeToNumber(data?.cod),
       note: data.note,
-      deposite: parseToNumber(data?.deposite?.replaceAll(",", "")),
+      deposite: normalizeToNumber(data?.deposite),
       payment_method: data.payment_method,
     };
     onUpdateOrder(payload, onCallbackSuccess);
