@@ -178,7 +178,10 @@ export const OrderBaseColumns = (
       field: "cod",
       headerName: "Còn lại",
       minWidth: 100,
-      valueGetter: ({ value }) => (value ? fNumber(value) : "-"),
+      renderCell: ({ row }: GridRenderCellParams<IOrder>) => {
+        if(row.cod === 0 || row.cod === row.cash) return "-";
+        return  (row.cod ? fNumber(row.cod) : "-");
+      },
     },
     {
       field: "cash",
