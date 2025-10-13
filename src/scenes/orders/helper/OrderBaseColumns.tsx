@@ -179,6 +179,7 @@ export const OrderBaseColumns = (
       headerName: "Còn lại",
       minWidth: 100,
       renderCell: ({ row }: GridRenderCellParams<IOrder>) => {
+        // Cần tìm lại logic vì sao cod không bằng 0 mà lại bằng với cash.
         if(row.cod === 0 || row.cod === row.cash) return "-";
         return  (row.cod ? fNumber(row.cod) : "-");
       },
