@@ -192,6 +192,7 @@ export type IRequestUpdateOrder = {
   payment_method?: string;
   deposite?: number;
   cash?: number;
+  cod?: number;
   code?: number;
   done?: boolean;
   debt?: boolean;

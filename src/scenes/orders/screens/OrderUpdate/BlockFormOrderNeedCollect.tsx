@@ -10,7 +10,7 @@ import {
 import { useLocales } from "locales";
 import React, { FC, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { IOrderDetail } from "scenes/orders/redux/types";
+import { IOrderDetail, IRequestUpdateOrder } from "scenes/orders/redux/types";
 import * as Yup from "yup";
 import FormProvider, {
   RHFSelect,
@@ -33,10 +33,15 @@ import { format, parseISO } from "date-fns";
 import { useAppSelector } from "store";
 import { AuthSelector } from "scenes/auth/redux/slice";
 import { magicTableNeedCollectRef } from "../OrderNeedCollect/OrderList";
+import { useMemo } from "react";
+import { apiOrderUpdate } from "scenes/orders/redux/api";
+import { useSnackbar } from "notistack";
+import { isNumber } from "lodash";
 
 type IPropsForm = {
   handleClose: (open: boolean) => void;
-  orderDetail: IOrderDetail | undefined;
+  orderDetail?: IOrderDetail;
+  orderDetails?: IOrderDetail[];
 };
 type FormValuesProps = {
   payment_method: string;
@@ -55,9 +60,19 @@ type FormValuesProps = {
 const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
   handleClose,
   orderDetail,
+  orderDetails,
 }) => {
   const { translate } = useLocales();
-  const { onUpdateOrder } = useOrderUpdate(orderDetail?.id || -1);
+  const { enqueueSnackbar } = useSnackbar();
+  const orders = useMemo(() => {
+    if (Array.isArray(orderDetails) && orderDetails.length > 0) {
+      return orderDetails;
+    }
+    return orderDetail ? [orderDetail] : [];
+  }, [orderDetails, orderDetail]);
+  const primaryOrder = orders[0];
+  const isMultiOrder = orders.length > 1;
+  const { onUpdateOrder } = useOrderUpdate(primaryOrder?.id || -1);
   const user = useAppSelector(AuthSelector.getProfile);
   const OrderUpdateSchema = Yup.object().shape({
     deposite: Yup.string().typeError(
@@ -84,28 +99,41 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
   const defaultValues = {
     payment_method:
       // convert value from tiền mặt to Tiền mặt
-      orderDetail?.payment_method === "tiền mặt"
+      primaryOrder?.payment_method === "tiền mặt"
         ? listPayment[2]
-        : orderDetail?.payment_method,
-    deposite: orderDetail?.deposite.toString(),
-    cod: orderDetail?.cod.toString(),
-    cash: orderDetail && orderDetail.cash,
+        : primaryOrder?.payment_method,
+    deposite: orders
+      .reduce((sum, order) => sum + (isNumber(order.deposite) ? order.deposite : 0), 0)
+      .toString(),
+    cod: orders
+      .reduce((sum, order) => sum + (isNumber(order.cod) ? order.cod : 0), 0)
+      .toString(),
+    cash: primaryOrder && primaryOrder.cash,
     note: "",
-    totalAmount: orderDetail && getTotalBasicFee(orderDetail),
+    totalAmount: orders.reduce((sum, order) => sum + getTotalBasicFee(order), 0),
     paymentType: "",
     // date collect money trả về là getTime
-    date_collect_money: orderDetail?.date_collect_money
-      ? parseISO(format(orderDetail.date_collect_money * 1000, "yyyy-MM-dd"))
+    date_collect_money: primaryOrder?.date_collect_money
+      ? parseISO(format(primaryOrder.date_collect_money * 1000, "yyyy-MM-dd"))
       : new Date(),
-    who_collect_money: orderDetail?.who_collect_money,
-    money_source: orderDetail?.money_source || "VIB_PERSON",
-    done: orderDetail?.done,
-    debt: orderDetail?.debt,
-    need_check: orderDetail?.need_check,
-    otherFee: orderDetail?.other_fee?.toString() || "",
-    vatFee: orderDetail?.vat_fee?.toString() || "",
-    vatFeeNumber: getTotalVatFee(orderDetail || ({} as IOrderDetail)).toString() || "",
-    discount: orderDetail?.discount?.toString() || "",
+    who_collect_money: primaryOrder?.who_collect_money,
+    money_source: primaryOrder?.money_source || "VIB_PERSON",
+    done: primaryOrder?.done,
+    debt: primaryOrder?.debt,
+    need_check: primaryOrder?.need_check,
+    otherFee: orders
+      .reduce((sum, order) => sum + (isNumber(order.other_fee) ? order.other_fee : 0), 0)
+      .toString(),
+    vatFee:
+      orders.length === 1
+        ? (primaryOrder?.vat_fee?.toString() || "")
+        : "",
+    vatFeeNumber: orders
+      .reduce((sum, order) => sum + getTotalVatFee(order), 0)
+      .toString(),
+    discount: orders
+      .reduce((sum, order) => sum + (isNumber(order.discount) ? order.discount : 0), 0)
+      .toString(),
   };
 
   const methods = useForm<FormValuesProps>({
@@ -123,10 +151,11 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
 
   const [paymentType, money_source] = watch(["paymentType", "money_source"]);
   useEffect(() => {
-    if (orderDetail && paymentType) {
+    if (primaryOrder && paymentType) {
       // Đơn đã thu đủ
       if (paymentType === "done") {
-        setValue("cash", orderDetail?.cod.toString());
+        // In multi-order mode we will set cash per-order on submit.
+        setValue("cash", isMultiOrder ? "0" : primaryOrder?.cod?.toString());
         setValue("done", true);
         setValue("debt", false);
         setValue("need_check", false);
@@ -142,7 +171,7 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
         setValue("need_check", true);
       }
     }
-  }, [paymentType]);
+  }, [paymentType, primaryOrder, isMultiOrder]);
 
   useEffect(() => {
     if (
@@ -159,6 +188,25 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
     magicTableNeedCollectRef.current?.onRefreshOrderList();
   };
 
+  type MultiOrderPayloadBase = Omit<
+    IRequestUpdateOrder,
+    "cod" | "deposite" | "cash" | "code"
+  >;
+
+  const updateMultiOrders = async (payloadBase: MultiOrderPayloadBase) => {
+    for (const order of orders) {
+      const cashValue = payloadBase.done
+        ? normalizeToNumber((order.cod || 0).toString())
+        : normalizeToNumber((order.cash || 0).toString());
+      await apiOrderUpdate(order.id, {
+        ...payloadBase,
+        cod: normalizeToNumber((order.cod || 0).toString()),
+        deposite: normalizeToNumber((order.deposite || 0).toString()),
+        cash: cashValue,
+      });
+    }
+  };
+
   const onSubmit = async (data: FormValuesProps) => {
     let note = data.note;
     if (data.done) {
@@ -168,12 +216,9 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
     } else if (data.need_check) {
       note += ` (${user.firstName} ${user.lastName} đã xác nhận là ${listPaymentTypeViaNeedCollect[2].label})`;
     }
-    const payload = {
-      cod: normalizeToNumber(data?.cod),
+    const payloadBase = {
       note,
-      deposite: normalizeToNumber(data?.deposite),
       payment_method: data.payment_method,
-      cash: normalizeToNumber(data?.cash?.toString() || "0"),
       done: data.done,
       debt: data.debt,
       need_check: data.need_check,
@@ -185,7 +230,27 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
           ? data.who_collect_money
           : "",
     };
-    onUpdateOrder(payload, onCallbackSuccess);
+
+    if (!isMultiOrder) {
+      const payload = {
+        ...payloadBase,
+        cod: normalizeToNumber(data?.cod),
+        deposite: normalizeToNumber(data?.deposite),
+        cash: normalizeToNumber(data?.cash?.toString() || "0"),
+      };
+      onUpdateOrder(payload, onCallbackSuccess);
+      return;
+    }
+
+    try {
+      await updateMultiOrders(payloadBase);
+      enqueueSnackbar(translate("orders.orderUpdate.success.orderProcessing"));
+      onCallbackSuccess();
+    } catch (error) {
+      enqueueSnackbar((error as Error)?.message || "updateMultiOrders error", {
+        variant: "error",
+      });
+    }
   };
   const isShowWhoCollect =
     LIST_MONEY_SOURCE[money_source as keyof typeof LIST_MONEY_SOURCE] ===

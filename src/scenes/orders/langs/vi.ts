@@ -130,6 +130,7 @@ const OrderLangs = {
     title: "Đơn hàng cần thanh toán",
     totalMoneyReceive: "Tổng tiền phải thu: ",
     filterCustomer: "Lọc khách hàng",
+    pay: "Thanh toán",
     debit: "Công nợ",
     emailDebit: "Gửi email công nợ",
     error: {

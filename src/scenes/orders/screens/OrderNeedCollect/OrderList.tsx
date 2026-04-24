@@ -119,6 +119,13 @@ const OrderTable: React.FC = () => {
   };
 
   const onRowSelect = (listIds: GridRowSelectionModel) => {
+    if (!listIds || listIds.length < 1) {
+      buttonRef?.current?.disablePrintPdf();
+      buttonRef?.current?.disableSendEmail();
+      buttonRef?.current?.disablePayment();
+      buttonRef?.current?.setListIds([]);
+      return;
+    }
     if (isSameCustomer(listIds)) {
       enqueueSnackbar({
         message: translate(
@@ -128,9 +135,11 @@ const OrderTable: React.FC = () => {
       });
       buttonRef?.current?.disablePrintPdf();
       buttonRef?.current?.disableSendEmail();
+      buttonRef?.current?.disablePayment();
     } else {
       buttonRef?.current?.enablePrintPdf();
       buttonRef?.current?.enableSendEmail();
+      buttonRef?.current?.enablePayment();
       buttonRef?.current?.setListIds(listIds as number[]);
     }
   };
