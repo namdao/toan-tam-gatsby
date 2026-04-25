@@ -17,6 +17,7 @@ const appConstant = {
     ORDER_DETAILS_LIST: "/order-detail",
     SEND_EMAIL: "/send-receipt",
     ORDERS4: "/orders4",
+    ORDERS4_COUNTS_BY_PAPER: "/orders4/counts-by-paper",
     SEARCH: "/search",
     USERS: "/users",
     REPORTS_EMPLOYEE: "/reports/employee",

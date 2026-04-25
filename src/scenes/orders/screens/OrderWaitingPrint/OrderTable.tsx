@@ -2,7 +2,6 @@ import React, {
   createRef,
   useEffect,
   useImperativeHandle,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -34,20 +33,6 @@ import { IPaperTabs, PAPER_TABS } from "scenes/papers/helper/PaperConstant";
 import { Tab, Tabs } from "@mui/material";
 import Label from "components/label";
 
-const tabChild = (tab: IPaperTabs) => {
-  const { onGetOrderPaperOrCategory, total } = useOrderWaitingPrint(tab);
-  useEffect(() => {
-    onGetOrderPaperOrCategory();
-  }, [tab]);
-  return (
-    <Tab
-      key={tab.value}
-      value={tab}
-      label={tab.label}
-      icon={<Label sx={{ mr: 1 }}>{total}</Label>}
-    />
-  );
-};
 const MemoizedRow = React.memo(GridRow);
 
 const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
@@ -61,13 +46,17 @@ type IPropsOrderTable = {
   onSelectOrder: (val: IOrderDetail[]) => void;
   onTabChange?: () => void;
   listTotalSelection?: IOrderDetail[];
+  printTypeName?: string;
 };
 const OrderTable: React.FC<IPropsOrderTable> = ({
   onSelectOrder,
   onTabChange,
   listTotalSelection,
+  printTypeName,
 }) => {
   const [tabSelected, setSelectedTab] = useState<IPaperTabs>(PAPER_TABS[0]);
+  const [tabTotals, setTabTotals] = useState<Record<string, number>>({});
+  const [displayTotal, setDisplayTotal] = useState<number>(0);
   const [selectionModel, setSelectionModel] = React.useState<GridRowId[]>([]);
   const {
     onGetOrderPaperOrCategory,
@@ -77,11 +66,36 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
     total,
     orderList,
     pageModel,
-  } = useOrderWaitingPrint(tabSelected);
+    loading,
+    paperTypeCounts,
+  } = useOrderWaitingPrint(tabSelected, printTypeName);
+
+  // Use batch counts from API instead of individual tab fetches
+  useEffect(() => {
+    if (Object.keys(paperTypeCounts).length > 0) {
+      setTabTotals(paperTypeCounts);
+    }
+  }, [paperTypeCounts]);
+
+  // Update display total: use batch counts from API
+  useEffect(() => {
+    if (loading) {
+      // While loading, show cached value if available
+      const cached = tabTotals[tabSelected.value];
+      if (cached !== undefined && cached > 0) {
+        setDisplayTotal(cached);
+      }
+    } else {
+      // When not loading, use batch counts
+      const count = tabTotals[tabSelected.value];
+      setDisplayTotal(count ?? 0);
+    }
+  }, [loading, tabSelected.value, tabTotals]);
+
   useEffect(() => {
     onGetOrderPaperOrCategory();
     onTabChange && onTabChange();
-  }, [tabSelected]);
+  }, [tabSelected, printTypeName]);
   const onChangeTab = (
     _event: React.SyntheticEvent<Element, Event>,
     newValue: IPaperTabs
@@ -133,6 +147,11 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
   }));
 
   const setPagination = (model: GridPaginationModel) => {
+    // DataGridPro may emit an initial onPaginationModelChange on mount/prop sync.
+    // Guard to avoid duplicate fetches (and potential update loops) when nothing changed.
+    if (model.page === pageModel.page && model.pageSize === pageModel.pageSize) {
+      return;
+    }
     onNextPage(model.page, model.pageSize);
   };
 
@@ -166,12 +185,24 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
           bgcolor: "background.neutral",
         }}
       >
-        {PAPER_TABS.map((tab) => tabChild(tab))}
+        {PAPER_TABS.map((tab) => (
+          <Tab
+            key={tab.value}
+            value={tab}
+            label={tab.label}
+            icon={
+              <Label sx={{ mr: 1 }}>
+                {tabSelected.value === tab.value ? displayTotal : tabTotals[tab.value] ?? 0}
+              </Label>
+            }
+          />
+        ))}
       </Tabs>
       <Box sx={{ height: "100vh", width: "100%" }}>
         <DataGridPro
           rows={orderList}
           rowCount={total}
+          loading={loading}
           checkboxSelection
           columns={OrderWaitingTableColumns}
           onRowSelectionModelChange={onRowSelect}
@@ -181,7 +212,6 @@ const OrderTable: React.FC<IPropsOrderTable> = ({
             pinnedColumns: {
               left: pinOrderLeft,
             },
-            pagination: { paginationModel: pageModel },
           }}
           pageSizeOptions={[20, 50, 100]}
           components={{

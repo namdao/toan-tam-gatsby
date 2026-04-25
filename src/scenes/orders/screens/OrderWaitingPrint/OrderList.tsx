@@ -4,7 +4,11 @@ import OrderTable, { magicTableWaitingRef } from "./OrderTable";
 import OrderCreateGroup, { IPropsGroup } from "./OrderCreateGroup";
 import { IOrderDetail } from "scenes/orders/redux/types";
 
-const OrderList = () => {
+type IProps = {
+  printTypeName?: string;
+};
+
+const OrderList: React.FC<IProps> = ({ printTypeName }) => {
   const btnGroupRef = useRef<IPropsGroup>(null);
 
   const onSelectOrder = (item: IOrderDetail[]) => {
@@ -24,7 +28,11 @@ const OrderList = () => {
         onRefreshList={onRefreshList}
         onSearching={onSearching}
       />
-      <OrderTable onSelectOrder={onSelectOrder} onTabChange={onTabChange} />
+      <OrderTable
+        onSelectOrder={onSelectOrder}
+        onTabChange={onTabChange}
+        printTypeName={printTypeName}
+      />
     </Card>
   );
 };

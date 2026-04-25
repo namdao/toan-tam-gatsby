@@ -155,6 +155,16 @@ export const apiOrderPaper = (
     },
   });
 
+export const apiGetOrderCountsByPaper = (
+  printTypeName?: string
+): Promise<IResponseType<Record<string, number>>> =>
+  axios.get(API_URL.ORDERS4_COUNTS_BY_PAPER, {
+    params: {
+      status: `${ORDER_STATUS_NAME.DESIGNED},${ORDER_STATUS_NAME.SALE}`,
+      ...(printTypeName ? { print_type_name: printTypeName } : {}),
+    },
+  });
+
 export const apiUploadImageGroup = (
   idGroup: number,
   body: IReqOrderGroupComplete

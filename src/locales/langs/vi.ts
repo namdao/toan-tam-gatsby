@@ -81,6 +81,8 @@ const vi = {
     needConfirm: "ĐH cần xác nhận",
     stored: "ĐH lưu kho",
     waitingPrint: "ĐH chờ in",
+    waitingPrintKts: "KTS",
+    waitingPrintOffset: "Offset",
     printing: "DS bình bài",
     printed: "ĐH đã in",
   },

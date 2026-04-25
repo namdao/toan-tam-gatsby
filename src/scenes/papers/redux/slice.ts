@@ -34,12 +34,11 @@ const getListPaper = (state: RootState) => state.data.paperType.list;
 const getListIdPaperLikeName = (state: RootState, groupPaperName: string) => {
   const listPaper = getListPaper(state);
   const listIds: number[] = [];
-  const itemPaper = groupPaperName.split("-");
+  // Use explicit keywords from PAPER_TABS if defined, otherwise split by "-"
+  const tab = PAPER_TABS.find((t) => t.value === groupPaperName);
+  const keywords = tab?.keywords ?? groupPaperName.split("-");
   listPaper.forEach((e) => {
-    if (
-      e.paper_name.includes(itemPaper?.[0]) ||
-      e.paper_name.includes(itemPaper?.[1])
-    ) {
+    if (keywords.some((kw) => kw && e.paper_name.includes(kw))) {
       listIds.push(e.id);
     }
   });
@@ -49,14 +48,16 @@ const getListIdPaperLikeName = (state: RootState, groupPaperName: string) => {
 
 const getListIdPaperOther2 = (state: RootState) => {
   const listPaper = getListPaper(state);
-  const listPaperTabs = PAPER_TABS.filter((e) => e.value !== "other").map(
-    (e) => e.value
-  );
+  // Collect all keywords used by named tabs (everything except "other")
   const listPaperSplit: string[] = [];
-  listPaperTabs.forEach((e) => {
-    const itemPaper = e.split("-");
-    if (itemPaper?.[0]) listPaperSplit.push(itemPaper?.[0]);
-    if (itemPaper?.[1]) listPaperSplit.push(itemPaper?.[1]);
+  PAPER_TABS.filter((e) => e.value !== "other").forEach((tab) => {
+    if (tab.keywords) {
+      tab.keywords.forEach((kw) => listPaperSplit.push(kw));
+    } else {
+      const itemPaper = tab.value.split("-");
+      if (itemPaper?.[0]) listPaperSplit.push(itemPaper?.[0]);
+      if (itemPaper?.[1]) listPaperSplit.push(itemPaper?.[1]);
+    }
   });
   const listIdPaperWithTab = listPaper
     .map((e) => {

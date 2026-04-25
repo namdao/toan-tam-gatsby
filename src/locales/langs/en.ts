@@ -43,6 +43,11 @@ const en = {
     needCheck: "Order need check",
     needConfirm: "Order need confirm",
     stored: "Order stored",
+    waitingPrint: "Waiting print",
+    waitingPrintKts: "KTS",
+    waitingPrintOffset: "Offset",
+    printing: "Printing",
+    printed: "Printed",
   },
 };
 

@@ -33,25 +33,17 @@ const AppPages = () => {
       const pathNav = e.path;
       if (e.children.length >= 1) {
         return (
-          <AuthGuard
-            key={pathNav}
-            path={pathNav}
-            component={e.component}
-            roles={e.roles}
-          >
-            {e.children.map((child) => {
-              const subPath = child.path.replace(pathNav, "");
-              const subComponent = child?.component;
-              return (
-                <AuthGuard
-                  key={subPath}
-                  path={subPath}
-                  component={subComponent}
-                  roles={e.roles}
-                />
-              );
-            })}
-          </AuthGuard>
+          <React.Fragment key={pathNav}>
+            <AuthGuard path={pathNav} component={e.component} roles={e.roles} />
+            {e.children.map((child) => (
+              <AuthGuard
+                key={child.path}
+                path={child.path}
+                component={child.component}
+                roles={child.roles || e.roles}
+              />
+            ))}
+          </React.Fragment>
         );
       }
       return (

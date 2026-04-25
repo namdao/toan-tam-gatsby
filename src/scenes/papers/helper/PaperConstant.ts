@@ -24,8 +24,11 @@ export enum PAPER_OTHERS {
 export type IPaperTabs = {
   value: string;
   label: string;
+  /** Explicit keyword list for paper name matching. When defined, these are
+   *  used instead of splitting `value` by "-". */
+  keywords?: string[];
 };
-export const PAPER_TABS = [
+export const PAPER_TABS: IPaperTabs[] = [
   {
     value: "Bristol-Couche",
     label: "Bristol - Couche",
@@ -49,6 +52,7 @@ export const PAPER_TABS = [
   {
     value: "MT",
     label: "Mỹ thuật",
+    keywords: ["Mỹ Thuật", "My Thuat"],
   },
   {
     value: "other",

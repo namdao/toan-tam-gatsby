@@ -2,14 +2,14 @@ import { IResponseType } from "constant/commonType";
 import { useLocales } from "locales";
 import { isArray, isNumber } from "lodash";
 import { enqueueSnackbar } from "notistack";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { CategoriesSelector } from "scenes/categories/redux/slice";
 import { IPaperTabs, PAPER_TABS } from "scenes/papers/helper/PaperConstant";
 import { PaperTypeSelector } from "scenes/papers/redux/slice";
 import { useAppSelector } from "store";
 import { ORDER_STATUS_NAME } from "../helper/OrderConstant";
 import { getListCategoryId } from "../helper/OrderWaitingPrint";
-import { apiAssignOrder, apiOrderCategory, apiOrderPaper } from "../redux/api";
+import { apiAssignOrder, apiOrderCategory, apiOrderPaper, apiGetOrderCountsByPaper } from "../redux/api";
 import {
   IOrderDetail,
   IReqOrderCategoryStatus,
@@ -23,7 +23,8 @@ export type IPage = {
   pageSize: number;
 };
 export const useOrderWaitingPrint = (
-  tabSelected: IPaperTabs = PAPER_TABS[0]
+  tabSelected: IPaperTabs = PAPER_TABS[0],
+  printTypeName?: string
 ) => {
   // const dataCategory = useAppSelector(CategoriesSelector.getListCategories);
 
@@ -39,11 +40,32 @@ export const useOrderWaitingPrint = (
   // const categoriesByValue = getListCategoryId(dataCategory, categoryValue);
   const [orderList, setOrderList] = useState<IOrderDetail[]>([]);
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [total, setTotal] = useState<number>(0);
   const [pageModel, setPageModel] = useState<IPage>({
     page: 0,
     pageSize: 20,
   });
+  
+  // Store counts for all paper types (loaded once to avoid UI lag)
+  const [paperTypeCounts, setPaperTypeCounts] = useState<Record<string, number>>({});
+  
+  // Fetch counts for all paper types on initial load and when printTypeName changes
+  const fetchPaperTypeCounts = useCallback(async () => {
+    try {
+      const result = await apiGetOrderCountsByPaper(printTypeName);
+      if (result?.data) {
+        setPaperTypeCounts(result.data);
+      }
+    } catch (error) {
+      console.error("Error fetching paper type counts:", error);
+    }
+  }, [printTypeName]);
+  
+  useEffect(() => {
+    fetchPaperTypeCounts();
+  }, [fetchPaperTypeCounts]);
   const { translate } = useLocales();
   // const isTabsCategory = tabSelected.value === "Sticker";
   const isTabsOther = tabSelected.value === "other";
@@ -89,10 +111,12 @@ export const useOrderWaitingPrint = (
     search?: string
   ) => {
     try {
+      setLoading(true);
       let payload: IReqOrderPaperList | IReqOrderPaperSearch = {
         paper_ids: listIdPaper,
         page: pageReqModel.page === 0 ? 1 : pageReqModel.page,
         per_page: pageReqModel.pageSize,
+        ...(printTypeName ? { print_type_name: printTypeName } : {}),
       };
       if (search) {
         payload = {
@@ -100,6 +124,7 @@ export const useOrderWaitingPrint = (
           search,
           page: 1,
           per_page: 20,
+          ...(printTypeName ? { print_type_name: printTypeName } : {}),
         };
       }
       const result: IResponseType<IResOrderByCategory> = await apiOrderPaper(
@@ -115,6 +140,8 @@ export const useOrderWaitingPrint = (
       enqueueSnackbar((error as Error)?.message || "onOrderWithStatus error", {
         variant: "error",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -170,5 +197,7 @@ export const useOrderWaitingPrint = (
     orderList,
     total,
     pageModel,
+    loading,
+    paperTypeCounts,
   };
 };
