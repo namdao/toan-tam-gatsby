@@ -33,6 +33,7 @@ import useOrderGroup from "scenes/orders/hooks/useOrderGroup";
 import OrderBtnApproveGroup from "./OrderBtnApproveGroup";
 import appconstants from "constant/appConstant";
 import { SettingsSelector } from "services/settings/redux/slice";
+import ProductionProcessPanel from "./ProductionProcessPanel";
 
 const { ROLES } = appconstants;
 type IProps = {
@@ -47,6 +48,7 @@ const OrderListGroup: FC<IProps> = ({ screen }) => {
   const rolePrinter = roleUser[0].name === ROLES.PRINTER;
   const roleStore = roleUser[0].name === ROLES.STORE;
   const roleAdmin = roleUser[0].name === ROLES.ADMIN;
+  const canEditProcesses = rolePrinter || roleAdmin;
   const themeMode = useAppSelector(SettingsSelector.getThemeMode);
   const queryOrder = async ({ pageParam = 1 }) => {
     switch (screen) {
@@ -346,6 +348,10 @@ const OrderListGroup: FC<IProps> = ({ screen }) => {
                   );
                 })}
               </Grid>
+              <ProductionProcessPanel
+                groupId={item.id}
+                canEdit={canEditProcesses}
+              />
               <Divider sx={{ borderStyle: "dashed", my: 2 }} />
             </Box>
           );

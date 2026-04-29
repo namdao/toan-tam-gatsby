@@ -440,6 +440,7 @@ export type IOrderGroup = {
   orders: IOrderDetail[];
   images?: string[];
   group_no: string;
+  production_processes?: IProductionProcess[];
 };
 export type IResGetOrderGroup = {
   items: IOrderGroup[];
@@ -466,4 +467,44 @@ export type IGroupByOrder = {
 export type IResGroupByOrder = {
   items: IGroupByOrder[];
   total: number;
+};
+
+export type IProductionProcess = {
+  id: number;
+  group_id: number;
+  process_type: string;
+  process_subtype: string | null;
+  assigned_user_id: number | null;
+  assigned_user: { id: number; first_name: string; last_name: string } | null;
+  received_at: string | null;
+  completed_at: string | null;
+  status: number;
+  sort_order: number;
+  notes: string | null;
+  images: string[];
+  created_time: string;
+  updated_time: string;
+  group?: { id: number; group_name: string; group_no: string | null } | null;
+};
+
+export type ISimpleGroup = {
+  id: number;
+  group_name: string;
+  group_type: number;
+  status: number;
+  images: string[] | null;
+  group_no: string | null;
+  created_time: string;
+  updated_time: string;
+};
+
+export type IReqCreateProcess = {
+  process_type: string;
+  process_subtype?: string;
+  assigned_user_id?: number;
+  received_at?: string;
+  completed_at?: string;
+  status?: number;
+  sort_order?: number;
+  notes?: string;
 };

@@ -5,6 +5,7 @@ import Helmet from "react-helmet";
 import BlockInfoCustomer from "./BlockInfoCustomer";
 import { useOrderDetail } from "scenes/orders/hooks/useOrderDetail";
 import BlockInfoOrder from "./BlockInfoOrder";
+import BlockProductionProcesses from "./BlockProductionProcesses";
 type IProps = {
   orderId: number;
 };
@@ -26,6 +27,9 @@ const OrderDetail: FC<IProps> = ({ orderId }) => {
       {/* <BlockHeader orderId={orderId} /> */}
       <BlockInfoCustomer data={orderDetail} loading={loading} />
       <BlockInfoOrder data={orderDetail} loading={loading} />
+      {!loading && orderDetail && (
+        <BlockProductionProcesses orderId={orderId} />
+      )}
       {/* <BlockTimeLine data={orderDetail} loading={loading} /> */}
     </Container>
   );

@@ -27,6 +27,9 @@ import {
   IResOrderGroupComplete,
   IResOrderListDetail,
   IResUrlUpload,
+  IProductionProcess,
+  IReqCreateProcess,
+  ISimpleGroup,
 } from "./types";
 
 const { API_URL } = appConstant;
@@ -65,7 +68,9 @@ export const apiOrderListNeedCheck = (payload: IReqOrderListCollect) =>
       ...payload,
     },
   });
-export const apiOrderDetailList = (payload: { order_ids: number[] }): Promise<IResponseType<IResOrderListDetail[]>>  =>
+export const apiOrderDetailList = (payload: {
+  order_ids: number[];
+}): Promise<IResponseType<IResOrderListDetail[]>> =>
   axios.post(API_URL.ORDER_DETAILS_LIST, payload);
 
 export const apiSendEmailOrder = (payload: { order_ids: number[] }) =>
@@ -138,7 +143,7 @@ export const apiGetOrderByCustomer = (
   axios.get(API_URL.ORDER_BY_CUSTOMERS_ID(customerId), {
     params: {
       status,
-      per_page: 50
+      per_page: 50,
     },
   });
 
@@ -175,3 +180,52 @@ export const apiGetGroupByOrder = (
   params: IReqGroupByOrder
 ): Promise<IResponseType<IResGroupByOrder>> =>
   axios.get(API_URL.GET_LIST_GROUP_BY_ORDER, { params });
+
+export const apiGetGroupsByOrder = (
+  orderId: number
+): Promise<IResponseType<{ groups: ISimpleGroup[] }>> =>
+  axios.get(`/orders/${orderId}/groups`);
+
+export const apiGetGroupProcesses = (
+  groupId: number
+): Promise<IResponseType<IProductionProcess[]>> =>
+  axios.get(appConstant.API_URL.GROUP_PROCESSES(groupId));
+
+export const apiCreateGroupProcess = (
+  groupId: number,
+  data: IReqCreateProcess
+): Promise<IResponseType<IProductionProcess>> =>
+  axios.post(appConstant.API_URL.GROUP_PROCESSES(groupId), data);
+
+export const apiUpdateGroupProcess = (
+  groupId: number,
+  processId: number,
+  data: Partial<IReqCreateProcess>
+): Promise<IResponseType<IProductionProcess>> =>
+  axios.put(appConstant.API_URL.UPDATE_GROUP_PROCESS(groupId, processId), data);
+
+export const apiDeleteGroupProcess = (
+  groupId: number,
+  processId: number
+): Promise<IResponseType<{ message: string }>> =>
+  axios.delete(appConstant.API_URL.UPDATE_GROUP_PROCESS(groupId, processId));
+
+export const apiRemoveProcessImage = (
+  groupId: number,
+  processId: number,
+  image_name: string
+): Promise<IResponseType<{ message: string; images: string[] }>> =>
+  axios.delete(appConstant.API_URL.REMOVE_PROCESS_IMAGE(groupId, processId), {
+    data: { image_name },
+  });
+
+export const apiRequestUploadProcessImage = (
+  groupId: number,
+  processId: number,
+  filename: string,
+  content_type?: string
+): Promise<IResponseType<{ upload_url: string; content_type: string }>> =>
+  axios.post(appConstant.API_URL.UPLOAD_PROCESS_IMAGE(groupId, processId), {
+    filename,
+    content_type,
+  });

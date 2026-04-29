@@ -52,6 +52,15 @@ const appConstant = {
       `/orders/groups/${idGroup}/complete`,
     // Get ds group by order
     GET_LIST_GROUP_BY_ORDER: "/orders/group-poly",
+    ORDER_GROUPS_BY_ORDER_ID: (orderId: number) => `/orders/${orderId}/groups`,
+    // Quy trình gia công sau in
+    GROUP_PROCESSES: (groupId: number) => `/orders/groups/${groupId}/processes`,
+    UPDATE_GROUP_PROCESS: (groupId: number, processId: number) =>
+      `/orders/groups/${groupId}/processes/${processId}`,
+    UPLOAD_PROCESS_IMAGE: (groupId: number, processId: number) =>
+      `/orders/groups/${groupId}/processes/${processId}/upload`,
+    REMOVE_PROCESS_IMAGE: (groupId: number, processId: number) =>
+      `/orders/groups/${groupId}/processes/${processId}/remove-image`,
   },
   LANGS_DEFAULT: "vi",
   ROLES: {
