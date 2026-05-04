@@ -6,17 +6,24 @@ import {
   DialogContentText,
   MenuItem,
   Stack,
+  Card,
+  CardHeader,
 } from "@mui/material";
 import { useLocales } from "locales";
-import React, { FC, useEffect } from "react";
+import React, { FC, useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { IOrderDetail, IRequestUpdateOrder } from "scenes/orders/redux/types";
+import {
+  IOrderDetail,
+  IRequestUpdateOrder,
+  IResUrlUpload,
+} from "scenes/orders/redux/types";
 import * as Yup from "yup";
 import FormProvider, {
   RHFSelect,
   RHFTextField,
   RHFNumberFormat,
   RHFRadioGroup,
+  RHFUpload,
 } from "components/hook-form";
 import { normalizeToNumber } from "utils/formatNumber";
 import { LoadingButton } from "@mui/lab";
@@ -26,22 +33,24 @@ import {
   listPaymentTypeViaNeedCollect,
   LIST_MONEY_SOURCE_NEW,
 } from "scenes/orders/helper/OrderConstant";
-import { getTotalAmount, getTotalBasicFee, getTotalVatFee } from "utils/utility";
+import { getTotalBasicFee, getTotalVatFee } from "utils/utility";
 import { useOrderUpdate } from "scenes/orders/hooks/useOrderUpdate";
 import RHFDatePicker from "components/hook-form/RHFDatePicker";
 import { format, parseISO } from "date-fns";
 import { useAppSelector } from "store";
 import { AuthSelector } from "scenes/auth/redux/slice";
 import { magicTableNeedCollectRef } from "../OrderNeedCollect/OrderList";
-import { useMemo } from "react";
-import { apiOrderUpdate } from "scenes/orders/redux/api";
+import { apiOrderUpdate, apiRequestUploadImg } from "scenes/orders/redux/api";
 import { useSnackbar } from "notistack";
 import { isNumber } from "lodash";
+import { uploadImageToAws } from "utils/imageHandler";
+import { IResponseType } from "constant/commonType";
 
 type IPropsForm = {
   handleClose: (open: boolean) => void;
   orderDetail?: IOrderDetail;
   orderDetails?: IOrderDetail[];
+  onSuccess?: () => void;
 };
 type FormValuesProps = {
   payment_method: string;
@@ -56,11 +65,13 @@ type FormValuesProps = {
   done: boolean;
   debt: boolean;
   need_check: boolean;
+  evidenceImage: File | null;
 };
 const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
   handleClose,
   orderDetail,
   orderDetails,
+  onSuccess,
 }) => {
   const { translate } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
@@ -103,14 +114,20 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
         ? listPayment[2]
         : primaryOrder?.payment_method,
     deposite: orders
-      .reduce((sum, order) => sum + (isNumber(order.deposite) ? order.deposite : 0), 0)
+      .reduce(
+        (sum, order) => sum + (isNumber(order.deposite) ? order.deposite : 0),
+        0
+      )
       .toString(),
     cod: orders
       .reduce((sum, order) => sum + (isNumber(order.cod) ? order.cod : 0), 0)
       .toString(),
     cash: primaryOrder && primaryOrder.cash,
     note: "",
-    totalAmount: orders.reduce((sum, order) => sum + getTotalBasicFee(order), 0),
+    totalAmount: orders.reduce(
+      (sum, order) => sum + getTotalBasicFee(order),
+      0
+    ),
     paymentType: "",
     // date collect money trả về là getTime
     date_collect_money: primaryOrder?.date_collect_money
@@ -122,18 +139,22 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
     debt: primaryOrder?.debt,
     need_check: primaryOrder?.need_check,
     otherFee: orders
-      .reduce((sum, order) => sum + (isNumber(order.other_fee) ? order.other_fee : 0), 0)
+      .reduce(
+        (sum, order) => sum + (isNumber(order.other_fee) ? order.other_fee : 0),
+        0
+      )
       .toString(),
-    vatFee:
-      orders.length === 1
-        ? (primaryOrder?.vat_fee?.toString() || "")
-        : "",
+    vatFee: orders.length === 1 ? primaryOrder?.vat_fee?.toString() || "" : "",
     vatFeeNumber: orders
       .reduce((sum, order) => sum + getTotalVatFee(order), 0)
       .toString(),
     discount: orders
-      .reduce((sum, order) => sum + (isNumber(order.discount) ? order.discount : 0), 0)
+      .reduce(
+        (sum, order) => sum + (isNumber(order.discount) ? order.discount : 0),
+        0
+      )
       .toString(),
+    evidenceImage: null,
   };
 
   const methods = useForm<FormValuesProps>({
@@ -145,6 +166,7 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
     reset,
     handleSubmit,
     setValue,
+    getValues,
     watch,
     formState: { isSubmitting },
   } = methods;
@@ -184,8 +206,12 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
 
   const onCallbackSuccess = () => {
     reset();
-    handleClose(false);
-    magicTableNeedCollectRef.current?.onRefreshOrderList();
+    if (onSuccess) {
+      onSuccess();
+    } else {
+      handleClose(false);
+      magicTableNeedCollectRef.current?.onRefreshOrderList();
+    }
   };
 
   type MultiOrderPayloadBase = Omit<
@@ -231,6 +257,18 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
           : "",
     };
 
+    // Upload image only to the primary (first) order - avoids storage waste
+    const evidenceImage = getValues("evidenceImage");
+    if (evidenceImage && evidenceImage instanceof File && primaryOrder?.id) {
+      const uploaded = await uploadOrderImage(primaryOrder.id, evidenceImage);
+      if (!uploaded) {
+        enqueueSnackbar(
+          "Upload hình ảnh thất bại, vui lòng chỉnh sửa đơn để cập nhật lại hình ảnh",
+          { variant: "warning" }
+        );
+      }
+    }
+
     if (!isMultiOrder) {
       const payload = {
         ...payloadBase,
@@ -242,6 +280,7 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
       return;
     }
 
+    // Multi-order: update all orders (image already saved on primary order)
     try {
       await updateMultiOrders(payloadBase);
       enqueueSnackbar(translate("orders.orderUpdate.success.orderProcessing"));
@@ -255,6 +294,42 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
   const isShowWhoCollect =
     LIST_MONEY_SOURCE[money_source as keyof typeof LIST_MONEY_SOURCE] ===
     LIST_MONEY_SOURCE.CASH;
+
+  // Image upload handlers
+  const handleDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+      if (file) {
+        const newFile = Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        });
+        setValue("evidenceImage", newFile);
+      }
+    },
+    [setValue]
+  );
+
+  const handleRemoveFile = () => {
+    setValue("evidenceImage", null);
+  };
+
+  const uploadOrderImage = async (
+    orderId: number,
+    file: File
+  ): Promise<boolean> => {
+    try {
+      const dataUpload: IResponseType<IResUrlUpload> =
+        await apiRequestUploadImg(orderId, file.name);
+      if (dataUpload.data && dataUpload.data.upload_url) {
+        return await uploadImageToAws(dataUpload.data.upload_url, file);
+      }
+      return false;
+    } catch (error) {
+      console.error("Upload image error:", error);
+      return false;
+    }
+  };
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <DialogContent>
@@ -346,6 +421,24 @@ const BlockFormOrderNeedCollect: FC<IPropsForm> = ({
                 label={translate("orders.orderUpdate.form.whoCollectionMoney")}
               />
             )}
+            <Card>
+              <CardHeader
+                title={translate("orders.orderUpdate.form.uploadEvidence")}
+                sx={{ color: (theme) => theme.palette.primary.main }}
+              />
+              <Stack sx={{ px: 3, py: 2 }} alignItems="center">
+                <RHFUpload
+                  name="evidenceImage"
+                  maxSize={3145728}
+                  onDrop={handleDrop}
+                  onDelete={handleRemoveFile}
+                  sx={{
+                    height: 300,
+                    display: "flex",
+                  }}
+                />
+              </Stack>
+            </Card>
             <RHFTextField
               name="note"
               label={translate("orders.orderUpdate.form.note")}

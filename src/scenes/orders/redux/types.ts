@@ -205,6 +205,7 @@ export type IRequestUpdateOrder = {
   deliver_provider?: string;
   tracking_id?: string;
   status?: ORDER_STATUS_NAME;
+  images?: string[];
 };
 
 export type IResUpdateOrder = {

@@ -60,6 +60,7 @@ const OrderLangs = {
       deposite: "Tạm ứng",
       amount: "Thành tiền:",
     },
+    titleImage: "Order images",
     employee: {
       title: "Thông tin phụ trách đơn hàng",
       creator: "Nhân viên tạo PO:",
@@ -91,6 +92,7 @@ const OrderLangs = {
       deposite: "Tạm ứng",
       note: "Ghi chú",
       cod: "Còn lại phải thu",
+      uploadEvidence: "Payment image",
       cash: "Đã thu tiền",
       dayCollectMoney: "Ngày thu",
       moneySource: "Nguồn thu",
@@ -131,7 +133,7 @@ const OrderLangs = {
     tabDelivery: "Đang giao hàng",
     btnBillDelivery: "Biên bản GH",
     btnBillDelivery2: "Biên bản GH V2",
-    btnRetailBill: "Hoá đơn bán hàng"
+    btnRetailBill: "Hoá đơn bán hàng",
   },
   orderSearch: {
     title: "Tìm kiếm đơn hàng",

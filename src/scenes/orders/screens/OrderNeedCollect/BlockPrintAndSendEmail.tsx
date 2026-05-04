@@ -1,13 +1,9 @@
 import { LoadingButton } from "@mui/lab";
-import {
-  Box,
-  Dialog,
-  DialogTitle,
-  Stack,
-} from "@mui/material";
+import { Box, Dialog, DialogTitle, Stack } from "@mui/material";
 import { useLocales } from "locales";
 import React, {
   Ref,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useRef,
@@ -18,6 +14,7 @@ import { useOrderDetailList } from "scenes/orders/hooks/useOrderDetail";
 import PrintOrdersV2 from "./PrintOrdersV2";
 import BlockFormOrderNeedCollect from "../OrderUpdate/BlockFormOrderNeedCollect";
 import { IOrderDetail } from "scenes/orders/redux/types";
+import { magicTableNeedCollectRef } from "./OrderList";
 
 export type IPropsPrint = {
   disablePrintPdf: () => void;
@@ -76,6 +73,11 @@ const BlockPrintAndSendEmail = React.forwardRef(
         setOpenPayment(true);
       }
     };
+
+    const handlePaymentSuccess = useCallback(() => {
+      setOpenPayment(false);
+      magicTableNeedCollectRef.current?.onRefreshOrderList();
+    }, []);
 
     const actionParent = () => ({
       disablePrintPdf: () => setDisablePrint(true),
@@ -141,6 +143,7 @@ const BlockPrintAndSendEmail = React.forwardRef(
           <BlockFormOrderNeedCollect
             handleClose={setOpenPayment}
             orderDetails={paymentOrders}
+            onSuccess={handlePaymentSuccess}
           />
         </Dialog>
       </>

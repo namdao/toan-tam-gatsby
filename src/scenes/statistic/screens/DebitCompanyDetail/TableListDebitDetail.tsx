@@ -41,7 +41,8 @@ const MemoizedColumnHeaders = React.memo(GridColumnHeaders);
 export type IMagicTableNeedCollectRef = {
   onRefreshOrderList: () => void;
 };
-export const magicTableDebitCompanyDetailRef = createRef<IMagicTableNeedCollectRef>();
+export const magicTableDebitCompanyDetailRef =
+  createRef<IMagicTableNeedCollectRef>();
 
 const ButtonMoney = ({ money, title }: { money: number; title: string }) => (
   <Button variant="outlined" size="large">
@@ -57,8 +58,9 @@ const TableListDebitDetail: React.FC<{
   // totalDebit: number;
   // totalPaid: number;
   // delta: number;
-}> = ({ companyId, 
-  // totalDebit, totalPaid, delta 
+}> = ({
+  companyId,
+  // totalDebit, totalPaid, delta
 }) => {
   const {
     onNextPage,
@@ -78,9 +80,9 @@ const TableListDebitDetail: React.FC<{
   const currentUser = useAppSelector(AuthSelector.getProfile);
   useImperativeHandle(magicTableDebitCompanyDetailRef, () => ({
     onRefreshOrderList: () => {
-      onGetOrdetListDebitByCompany()
-      getListCustomerDebit({ company_id: companyId.toString() })
-    }
+      onGetOrdetListDebitByCompany();
+      getListCustomerDebit({ company_id: companyId.toString() });
+    },
   }));
   const paginationModel = pageModel;
   const pinOrderLeft = useMemo(
@@ -110,9 +112,11 @@ const TableListDebitDetail: React.FC<{
     if (listIds.length > 0) {
       buttonRef?.current?.enablePrintPdf();
       buttonRef?.current?.enableSendEmail();
+      buttonRef?.current?.enablePayment();
     } else {
       buttonRef?.current?.disablePrintPdf();
       buttonRef?.current?.disableSendEmail();
+      buttonRef?.current?.disablePayment();
     }
     buttonRef?.current?.setListIds(listIds as number[]);
   };
@@ -139,9 +143,18 @@ const TableListDebitDetail: React.FC<{
       >
         <BlockPrintAndSendEmail ref={buttonRef} />
         <Stack direction="row" spacing={2}>
-          <ButtonMoney money={listCustomerDebit[0]?.total_debit || 0} title="Tổng nợ" />
-          <ButtonMoney money={listCustomerDebit[0]?.total_paid || 0} title="Tổng thu" />
-          <ButtonMoney money={listCustomerDebit[0]?.delta || 0} title="Còn lại" />
+          <ButtonMoney
+            money={listCustomerDebit[0]?.total_debit || 0}
+            title="Tổng nợ"
+          />
+          <ButtonMoney
+            money={listCustomerDebit[0]?.total_paid || 0}
+            title="Tổng thu"
+          />
+          <ButtonMoney
+            money={listCustomerDebit[0]?.delta || 0}
+            title="Còn lại"
+          />
         </Stack>
       </Stack>
       <Box sx={{ height: "100vh", width: "100%" }}>

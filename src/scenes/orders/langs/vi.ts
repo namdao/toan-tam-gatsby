@@ -68,6 +68,7 @@ const OrderLangs = {
     outsource: {
       title: "Gia công sau in",
     },
+    titleImage: "Hình ảnh đơn hàng",
     employee: {
       title: "Thông tin phụ trách đơn hàng",
       creator: "Người tạo đơn:",
@@ -113,6 +114,7 @@ const OrderLangs = {
       deposite: "Tạm ứng",
       note: "Ghi chú",
       cod: "Còn lại phải thu",
+      uploadEvidence: "Ảnh thanh toán",
       cash: "Nhập số tiền thu",
       casheNumber: "Số tiền đã thu",
       dayCollectMoney: "Ngày thu",
@@ -174,7 +176,7 @@ const OrderLangs = {
     cancelDelivery: "Huỷ giao",
     messageDone: "{{name}} đã giao hàng thành công",
     cancel: "Huỷ đơn",
-    btnRetailBill: "Hoá đơn bán hàng"
+    btnRetailBill: "Hoá đơn bán hàng",
   },
   orderSearch: {
     title: "Tên đơn hàng",
