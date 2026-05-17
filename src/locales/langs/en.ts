@@ -46,6 +46,7 @@ const en = {
     waitingPrint: "Waiting print",
     waitingPrintKts: "KTS",
     waitingPrintOffset: "Offset",
+    waitingPrintOther: "Other",
     printing: "Printing",
     printed: "Printed",
   },

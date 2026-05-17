@@ -11,6 +11,7 @@ import { useLocation } from "@reach/router";
 const WAITING_PRINT_TYPE_TABS = [
   { value: "kts", label: "KTS" },
   { value: "offset", label: "Offset" },
+  { value: "khac", label: "Khác" },
 ] as const;
 
 const OrderWaitingPrint = () => {
@@ -18,11 +19,12 @@ const OrderWaitingPrint = () => {
   const { translate } = useLocales();
 
   const location = useLocation();
-  const initialTab = useMemo(
-    () => (location.pathname.includes("/offset") ? "offset" : "kts"),
-    [location.pathname]
-  );
-  const [printTypeName, setPrintTypeName] = useState<"kts" | "offset">(
+  const initialTab = useMemo(() => {
+    if (location.pathname.includes("/offset")) return "offset";
+    if (location.pathname.includes("/khac")) return "khac";
+    return "kts";
+  }, [location.pathname]);
+  const [printTypeName, setPrintTypeName] = useState<"kts" | "offset" | "khac">(
     initialTab
   );
 

@@ -82,6 +82,7 @@ export const PATH_APP = {
     waitingPrint: `${ROOT_ORDER}/don-hang-cho-in`,
     waitingPrintKts: `${ROOT_ORDER}/don-hang-cho-in/kts`,
     waitingPrintOffset: `${ROOT_ORDER}/don-hang-cho-in/offset`,
+    waitingPrintOther: `${ROOT_ORDER}/don-hang-cho-in/khac`,
     waitingPrintOffsetOld: `${ROOT_ORDER}/don-hang-cho-in-offset`,
     printing: `${ROOT_ORDER}/don-hang-dang-in`,
     printed: `${ROOT_ORDER}/don-hang-da-in`,

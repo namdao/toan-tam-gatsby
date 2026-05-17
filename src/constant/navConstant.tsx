@@ -221,6 +221,14 @@ const navConfig = [
         roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.PRINTER, ROLES.MANAGER],
       },
       {
+        title: "order.waitingPrintOther",
+        path: PATH_APP.order.waitingPrintOther,
+        hideMenu: true,
+        component: OrderWaitingPrint,
+        children: [],
+        roles: [ROLES.ADMIN, ROLES.ACCOUNTANT, ROLES.PRINTER, ROLES.MANAGER],
+      },
+      {
         title: "order.waitingPrintOffset",
         path: PATH_APP.order.waitingPrintOffsetOld,
         hideMenu: true,

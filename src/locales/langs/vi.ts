@@ -83,6 +83,7 @@ const vi = {
     waitingPrint: "ĐH chờ in",
     waitingPrintKts: "KTS",
     waitingPrintOffset: "Offset",
+    waitingPrintOther: "Khác",
     printing: "DS bình bài",
     printed: "ĐH đã in",
   },
