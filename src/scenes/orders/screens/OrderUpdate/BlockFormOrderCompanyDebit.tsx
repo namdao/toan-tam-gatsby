@@ -7,17 +7,23 @@ import {
   MenuItem,
   Stack,
   Typography,
+  Card,
+  CardHeader,
 } from "@mui/material";
 import { useLocales } from "locales";
-import React, { FC, useEffect } from "react";
+import React, { FC, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { IOrderDetail } from "scenes/orders/redux/types";
+import {
+  IOrderDetail,
+  IResUrlUpload,
+} from "scenes/orders/redux/types";
 import * as Yup from "yup";
 import FormProvider, {
   RHFSelect,
   RHFTextField,
   RHFNumberFormat,
   RHFRadioGroup,
+  RHFUpload,
 } from "components/hook-form";
 import { fNumber, normalizeToNumber, parseToNumber } from "utils/formatNumber";
 import { LoadingButton } from "@mui/lab";
@@ -36,6 +42,10 @@ import { AuthSelector } from "scenes/auth/redux/slice";
 import { magicTableNeedCollectRef } from "../OrderNeedCollect/OrderList";
 import Label from "components/label";
 import { magicTableDebitCompanyDetailRef } from "scenes/statistic/screens/DebitCompanyDetail/TableListDebitDetail";
+import { apiRequestUploadImg } from "scenes/orders/redux/api";
+import { useSnackbar } from "notistack";
+import { uploadImageToAws } from "utils/imageHandler";
+import { IResponseType } from "constant/commonType";
 
 type IPropsForm = {
   handleClose: (open: boolean) => void;
@@ -58,12 +68,14 @@ type FormValuesProps = {
   vatFee: string;
   discount: string;
   vatFeeNumber: string;
+  evidenceImage: File | null;
 };
 const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
   handleClose,
   orderDetail,
 }) => {
   const { translate } = useLocales();
+  const { enqueueSnackbar } = useSnackbar();
   const { onUpdateOrder } = useOrderUpdate(orderDetail?.id || -1);
   const user = useAppSelector(AuthSelector.getProfile);
   const OrderUpdateSchema = Yup.object().shape({
@@ -121,6 +133,7 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
     vatFee: orderDetail?.vat_fee?.toString() || "",
     vatFeeNumber: getTotalVatFee(orderDetail || ({} as IOrderDetail)).toString() || "",
     discount: orderDetail?.discount?.toString() || "",
+    evidenceImage: null,
   };
 
   const methods = useForm<FormValuesProps>({
@@ -189,6 +202,41 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
     }
   }, [money_source]);
 
+  // Image upload handlers
+  const handleDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+      if (file) {
+        const newFile = Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        });
+        setValue("evidenceImage", newFile);
+      }
+    },
+    [setValue]
+  );
+
+  const handleRemoveFile = () => {
+    setValue("evidenceImage", null);
+  };
+
+  const uploadOrderImage = async (
+    orderId: number,
+    file: File
+  ): Promise<boolean> => {
+    try {
+      const dataUpload: IResponseType<IResUrlUpload> =
+        await apiRequestUploadImg(orderId, file.name);
+      if (dataUpload.data && dataUpload.data.upload_url) {
+        return await uploadImageToAws(dataUpload.data.upload_url, file);
+      }
+      return false;
+    } catch (error) {
+      console.error("Upload image error:", error);
+      return false;
+    }
+  };
+
   const onCallbackSuccess = () => {
     reset();
     handleClose(false);
@@ -232,6 +280,17 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
       discount: normalizeToNumber(data?.discount),
     };
     console.log(payload)
+    // Upload evidence image
+    const evidenceImage = getValues("evidenceImage");
+    if (evidenceImage && evidenceImage instanceof File && orderDetail?.id) {
+      const uploaded = await uploadOrderImage(orderDetail.id, evidenceImage);
+      if (!uploaded) {
+        enqueueSnackbar(
+          "Upload hình ảnh thất bại, vui lòng chỉnh sửa đơn để cập nhật lại hình ảnh",
+          { variant: "warning" }
+        );
+      }
+    }
     onUpdateOrder(payload, onCallbackSuccess);
   };
   const isShowWhoCollect =
@@ -345,6 +404,24 @@ const BlockFormOrderCompanyDebit: FC<IPropsForm> = ({
                 label={translate("orders.orderUpdate.form.whoCollectionMoney")}
               />
             )}
+            <Card>
+              <CardHeader
+                title={translate("orders.orderUpdate.form.uploadEvidence")}
+                sx={{ color: (theme) => theme.palette.primary.main }}
+              />
+              <Stack sx={{ px: 3, py: 2 }} alignItems="center">
+                <RHFUpload
+                  name="evidenceImage"
+                  maxSize={3145728}
+                  onDrop={handleDrop}
+                  onDelete={handleRemoveFile}
+                  sx={{
+                    height: 300,
+                    display: "flex",
+                  }}
+                />
+              </Stack>
+            </Card>
             <RHFTextField
               name="note"
               label={translate("orders.orderUpdate.form.note")}
