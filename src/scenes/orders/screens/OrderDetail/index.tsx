@@ -6,6 +6,7 @@ import BlockInfoCustomer from "./BlockInfoCustomer";
 import { useOrderDetail } from "scenes/orders/hooks/useOrderDetail";
 import BlockInfoOrder from "./BlockInfoOrder";
 import BlockProductionProcesses from "./BlockProductionProcesses";
+import BlockPaymentHistory from "./BlockPaymentHistory";
 type IProps = {
   orderId: number;
 };
@@ -28,7 +29,10 @@ const OrderDetail: FC<IProps> = ({ orderId }) => {
       <BlockInfoCustomer data={orderDetail} loading={loading} />
       <BlockInfoOrder data={orderDetail} loading={loading} />
       {!loading && orderDetail && (
-        <BlockProductionProcesses orderId={orderId} />
+        <>
+          <BlockPaymentHistory orderId={orderId} />
+          <BlockProductionProcesses orderId={orderId} />
+        </>
       )}
       {/* <BlockTimeLine data={orderDetail} loading={loading} /> */}
     </Container>

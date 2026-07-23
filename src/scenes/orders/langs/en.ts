@@ -71,6 +71,9 @@ const OrderLangs = {
       dateHandlerPO: "Ngày xử lý:",
       dateStorePO: "Ngày lưu kho:",
     },
+    paymentHistory: {
+      title: "Lịch sử thanh toán",
+    },
   },
   orderUpdate: {
     error: {

@@ -30,6 +30,7 @@ import {
   IProductionProcess,
   IReqCreateProcess,
   ISimpleGroup,
+  IPaymentHistory,
 } from "./types";
 
 const { API_URL } = appConstant;
@@ -229,3 +230,8 @@ export const apiRequestUploadProcessImage = (
     filename,
     content_type,
   });
+
+export const apiPaymentHistory = (
+  orderId: number
+): Promise<IResponseType<IPaymentHistory[]>> =>
+  axios.get(`/orders/${orderId}/payment-history`);

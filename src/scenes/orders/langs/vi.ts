@@ -92,6 +92,9 @@ const OrderLangs = {
       deposite: "Tạm ứng:",
       remainingAmount: `Còn lại phải thu:`,
     },
+    paymentHistory: {
+      title: "Lịch sử thanh toán",
+    },
   },
   orderUpdate: {
     error: {

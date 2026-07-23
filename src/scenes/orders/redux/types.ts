@@ -161,6 +161,7 @@ export type IOrderDetail = {
   paper: IPaper;
   paper_id: number;
   payment_method: string;
+  payment_histories: IPaymentHistory[];
   print_type_ids: number[];
   print_types: IPrintTypes[];
   quantity: number;
@@ -508,4 +509,23 @@ export type IReqCreateProcess = {
   status?: number;
   sort_order?: number;
   notes?: string;
+};
+
+export type IPaymentHistoryChange = {
+  field: string;
+  action: string;
+  display_name: string;
+  old_value: string;
+  new_value: string;
+};
+
+export type IPaymentHistory = {
+  id: number;
+  order_id: number;
+  action: string;
+  changes: IPaymentHistoryChange[];
+  description: string;
+  note: string | null;
+  created_time: string;
+  user: IResUser | null;
 };
